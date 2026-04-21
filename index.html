@@ -62,6 +62,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .find-label { flex: 1; font-weight: 500; }
 
 /* ── MAIN ── */
+.main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 .main { flex: 1; overflow-y: auto; min-width: 0; }
 .main::-webkit-scrollbar { width: 4px; }
 .main::-webkit-scrollbar-thumb { background: #e8e6e0; border-radius: 2px; }
@@ -151,10 +152,21 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .lesson-row:last-child { border-bottom: none; }
 .lesson-row:hover { background: #f0f7fe; }
 .l-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+/* Circle checkbox for taught state */
+.l-check { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #ddd; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .15s; cursor: pointer; }
+.l-check:hover:not(.taught) { border-color: #185FA5; background: #f0f7fe; }
+.l-check:hover.taught { border-color: #993556; background: #FBEAF0; }
+.l-check:hover.taught svg path { stroke: #993556; }
+.l-check.taught { background: #EAF3DE; border-color: #3B6D11; }
+.lesson-row:hover .l-check:not(.taught) { border-color: #185FA5; }
 .l-info { flex: 1; }
 .l-name { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 2px; }
 .l-desc { font-size: 11px; color: #bbb; line-height: 1.4; }
-.l-open { font-size: 11px; color: #185FA5; opacity: 0; font-weight: 500; white-space: nowrap; flex-shrink: 0; }
+.l-taught { width: 16px; height: 16px; border-radius: 50%; background: #EAF3DE; border: 0.5px solid #3B6D11; display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: 0; transition: opacity .15s; }
+.l-taught.visible { opacity: 1; }
+
+/* Taught indicator on lesson page */
+.l-open { font-size: 11px; color: #185FA5; opacity: 0; font-weight: 500; white-space: nowrap; flex-shrink: 0; transition: opacity .12s; }
 .lesson-row:hover .l-open { opacity: 1; }
 
 /* ── UNIT RESOURCES ── */
@@ -280,13 +292,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .pr-dl:hover { background: #E6F1FB; }
 
 /* ── ACTIVE CLASS BANNER ── */
-.active-class-banner { background: #fff; border-bottom: 0.5px solid #e8e6e0; padding: 7px 40px; display: none; align-items: center; gap: 8px; flex-shrink: 0; max-width: 900px; margin: 0 auto; width: 100%; }
+.active-class-banner { background: #fff; border-bottom: 0.5px solid #e8e6e0; padding: 0 20px; height: 36px; display: none; align-items: center; gap: 6px; flex-shrink: 0; width: 100%; }
 .active-class-banner.visible { display: flex; }
-.acb-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.acb-label { font-size: 11px; color: #bbb; }
-.acb-name { font-size: 11px; font-weight: 500; color: #1a1a1a; }
-.acb-view { font-size: 11px; color: #185FA5; cursor: pointer; margin-left: auto; }
-.acb-view:hover { text-decoration: underline; }
+.acb-label { font-size: 11px; color: #bbb; flex-shrink: 0; }
+.acb-name { font-size: 11px; font-weight: 500; color: #185FA5; cursor: pointer; }
+.acb-name:hover { text-decoration: underline; }
 
 /* Class nav items in sidebar */
 .class-nav-item { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 7px; font-size: 12px; color: #888; cursor: pointer; margin-bottom: 1px; transition: background .1s; }
@@ -330,6 +340,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .class-sec-title { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 12px; }
 .unit-prog-row { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 14px; margin-bottom: 8px; cursor: pointer; transition: border-color .12s; }
 .unit-prog-row:hover { border-color: #185FA5; }
+.unit-prog-row:hover .up-arrow { opacity: 1; }
+.up-arrow { font-size: 11px; color: #185FA5; opacity: 0; transition: opacity .12s; flex-shrink: 0; }
+.prog-grade-label { font-size: 11px; font-weight: 500; color: #bbb; text-transform: uppercase; letter-spacing: 0.07em; padding: 4px 0 6px; margin-top: 14px; display: block; }
+.prog-grade-label:first-child { margin-top: 0; }
 .up-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
 .up-name { font-size: 13px; font-weight: 500; color: #1a1a1a; flex: 1; }
 .up-bar-wrap { width: 120px; background: #f5f4f0; border-radius: 10px; height: 5px; overflow: hidden; flex-shrink: 0; }
@@ -436,6 +450,35 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .mdoc-list { list-style: none; }
 .mdoc-list li { font-size: 12px; color: #666; padding: 2px 0; display: flex; gap: 5px; line-height: 1.5; }
 .mdoc-list li::before { content: '·'; color: #bbb; flex-shrink: 0; }
+
+/* ── SLIDES PLAYER ── */
+.slides-overlay { position: fixed; inset: 0; background: #111; z-index: 300; display: none; flex-direction: column; }
+.slides-overlay.open { display: flex; }
+.slides-bar { height: 50px; background: #1a1a1a; border-bottom: 0.5px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; }
+.slides-bar-title { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.7); }
+.slides-bar-right { display: flex; align-items: center; gap: 16px; }
+.slides-nav-row { display: flex; align-items: center; gap: 10px; }
+.slides-nav-btn { width: 34px; height: 34px; border-radius: 8px; border: 0.5px solid rgba(255,255,255,0.2); background: transparent; cursor: pointer; color: rgba(255,255,255,0.6); display: flex; align-items: center; justify-content: center; transition: all .12s; }
+.slides-nav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.slides-counter { font-size: 12px; color: rgba(255,255,255,0.4); min-width: 80px; text-align: center; }
+.slides-close { display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255,255,255,0.5); cursor: pointer; padding: 6px 14px; border-radius: 7px; border: 0.5px solid rgba(255,255,255,0.15); transition: all .12s; }
+.slides-close:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.slides-stage { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px; }
+.slides-slide { background: #fff; border-radius: 8px; box-shadow: 0 8px 40px rgba(0,0,0,0.5); width: min(900px, 90vw); aspect-ratio: 16/9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 60px; text-align: center; }
+.slide-s-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; color: #bbb; }
+.slide-s-title { font-size: 38px; font-weight: 500; color: #1a1a1a; line-height: 1.2; }
+.slide-s-body { font-size: 18px; color: #666; line-height: 1.5; max-width: 600px; }
+.slide-s-num { font-size: 12px; color: #ccc; margin-top: 8px; }
+/* Sidebar toggle */
+.sidebar-top-bar { height: 36px; padding: 0 12px; display: flex; align-items: center; justify-content: flex-end; flex-shrink: 0; border-bottom: 0.5px solid #e8e6e0; }
+.sb-toggle-btn { width: 30px; height: 30px; border-radius: 7px; border: none; background: transparent; cursor: pointer; color: #888; display: flex; align-items: center; justify-content: center; transition: background .12s; }
+.sb-toggle-btn:hover { background: #f5f4f0; color: #185FA5; }
+.sidebar { transition: width .2s ease; }
+.sidebar.collapsed { width: 48px; overflow: hidden; }
+.sidebar.collapsed .sb-scroll { visibility: hidden; }
+.sidebar.collapsed .sidebar-top-bar { justify-content: center; padding: 8px 0 0; }
+.sidebar.collapsed .sb-footer { visibility: hidden; }
+
 </style>
 </head>
 <body>
@@ -443,7 +486,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 <div class="app">
 
   <!-- ══════════════ SIDEBAR ══════════════ -->
-  <div class="sidebar">
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-top-bar" id="sidebarTopBar">
+      <button class="sb-toggle-btn" onclick="toggleSidebar()" title="Toggle sidebar">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
     <div class="sb-scroll" id="sbScroll">
 
       <div class="sb-section">
@@ -484,18 +532,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   </div>
 
   <!-- ══════════════ MAIN ══════════════ -->
-  <div class="main" id="mainArea">
-
-    <!-- Active class banner — shows when any class is active -->
+  <div class="main-wrapper">
     <div class="active-class-banner" id="activeBanner">
-      <div class="acb-dot" id="acbDot" style="background:#185FA5;"></div>
-      <div class="acb-label">Teaching with:</div>
-      <div class="acb-name" id="acbName">Grade 4B</div>
-      <div class="acb-view" onclick="navMyClasses()">View class →</div>
+      <span class="acb-label">Teaching with:</span>
+      <span class="acb-name" id="acbName" onclick="navMyClasses()">Grade 4B</span>
     </div>
+    <div class="main" id="mainArea">
 
     <!-- ── OVERVIEW ── -->
-    <div class="view active cw" id="view-overview">
+    <div class="view cw" id="view-overview">
       <div class="welcome-banner" id="welcomeBanner">
         <div class="wb-icon"><svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 2l1.8 4.2 4.5.5-3.3 3.1.9 4.7L9 12l-3.9 2.5.9-4.7L2.7 6.7l4.5-.5L9 2z" stroke="#185FA5" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
         <div class="wb-body">
@@ -567,6 +612,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span id="markDoneLabel">Mark as done</span>
         </div>
+
       </div>
       <div class="lesson-body">
         <div class="lesson-cw lesson-intro">
@@ -673,7 +719,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
                     <div class="t-card-title" id="slideCardTitle"></div>
                     <div class="t-card-desc">12 slides ready to project. Includes discussion prompts and activities.</div>
                   </div>
-                  <div class="t-card-btn">Open in Slides →</div>
+                  <div class="t-card-btn" onclick="openSlidesPlayer()">Present →</div>
                 </div>
               </div>
               <div class="t-card">
@@ -726,20 +772,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           </div>
           <div class="class-detail-meta" id="classDetailMeta">Grade 3–5 · 0 lessons taught</div>
         </div>
-        <div class="class-edit-btn">Edit class</div>
+        <div class="class-edit-btn" onclick="openEditClass()">Edit class</div>
       </div>
 
       <!-- Resume card -->
       <div id="resumeCardWrap">
         <div class="no-resume" id="noResume">
-          <div class="no-resume-text">No lessons opened yet</div>
-          <div class="no-resume-sub">Open any lesson from the curriculum to get started. It will appear here when you return.</div>
+          <div class="no-resume-text">Ready to start teaching?</div>
+          <div class="no-resume-sub">Pick any unit below to get started. Your last lesson will appear here when you return.</div>
         </div>
         <div class="resume-card" id="resumeCard" style="display:none;background:#185FA5;">
           <div style="flex:1;">
             <div class="resume-eyebrow">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h5M5 2l3 3-3 3" stroke="rgba(255,255,255,0.7)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Resume
+              Continue where you left off
             </div>
             <div class="resume-title" id="resumeTitle">What are feelings?</div>
             <div class="resume-path" id="resumePath">Emotional intelligence · Naming my feelings · Lesson 1</div>
@@ -750,14 +796,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
       <!-- Progress by unit -->
       <div class="class-sec-title">Progress by unit</div>
-      <div id="unitProgressList">
-        <div class="unit-prog-row"><div class="up-swatch" style="background:#185FA5;"></div><div class="up-name">Emotional intelligence</div><div class="up-bar-wrap"><div class="up-bar" id="bar-ei" style="width:0%;background:#185FA5;"></div></div><div class="up-frac" id="frac-ei">0 taught</div></div>
-        <div class="unit-prog-row"><div class="up-swatch" style="background:#3B6D11;"></div><div class="up-name">Growth mindset</div><div class="up-bar-wrap"><div class="up-bar" id="bar-gm" style="width:0%;background:#3B6D11;"></div></div><div class="up-frac" id="frac-gm">0 taught</div></div>
-        <div class="unit-prog-row"><div class="up-swatch" style="background:#993556;"></div><div class="up-name">Resilience</div><div class="up-bar-wrap"><div class="up-bar" id="bar-res" style="width:0%;background:#993556;"></div></div><div class="up-frac" id="frac-res">0 taught</div></div>
-        <div class="unit-prog-row"><div class="up-swatch" style="background:#534AB7;"></div><div class="up-name">Adaptability</div><div class="up-bar-wrap"><div class="up-bar" id="bar-ada" style="width:0%;background:#534AB7;"></div></div><div class="up-frac" id="frac-ada">0 taught</div></div>
-        <div class="unit-prog-row"><div class="up-swatch" style="background:#854F0B;"></div><div class="up-name">Confidence</div><div class="up-bar-wrap"><div class="up-bar" id="bar-con" style="width:0%;background:#854F0B;"></div></div><div class="up-frac" id="frac-con">0 taught</div></div>
-      </div>
+      <div id="unitProgressList"></div>
     </div>
+
+  </div><!-- end main -->
+  </div><!-- end main-wrapper -->
+</div><!-- end app -->
 
 <!-- ══ ABOUT PANEL ══ -->
 <div class="about-overlay" id="aboutOverlay" onclick="closeAbout()"></div>
@@ -831,8 +875,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 <div class="cc-modal-overlay" id="ccModalOverlay" onclick="if(event.target===this)closeCreateClass()">
   <div class="cc-modal">
     <div class="cc-modal-hdr">
-      <div class="cc-modal-title">Create a class</div>
-      <div class="cc-modal-sub">A class can be a whole classroom, a small group, or one student — just give it a name.</div>
+      <div class="cc-modal-title" id="ccModalTitle">Create a class</div>
+      <div class="cc-modal-sub" id="ccModalSub">A class can be a whole classroom, a small group, or one student — just give it a name.</div>
     </div>
     <div class="cc-modal-body">
       <label class="cc-form-label">Class name</label>
@@ -844,10 +888,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         <div class="cc-grade-opt" onclick="ccSelectGrade(this)">6–8</div>
         <div class="cc-grade-opt" onclick="ccSelectGrade(this)">9–12</div>
       </div>
+      <div style="font-size:11px;color:#bbb;margin-top:8px;">This sets your starting grade. You can teach from any grade.</div>
     </div>
     <div class="cc-modal-footer">
       <div class="cc-btn-cancel" onclick="closeCreateClass()">Cancel</div>
-      <div class="cc-btn-create" onclick="createClass()">Create class</div>
+      <div class="cc-btn-create" id="ccSubmitBtn" onclick="submitClassModal()">Create class</div>
     </div>
   </div>
 </div>
@@ -946,8 +991,16 @@ let currentLessonIdx = null;
 function init() {
   buildNavTree();
   buildOverview();
-  navOverview();
   updateClassesSidebar();
+
+  // Returning experience:
+  // If a class exists → land on class view (Resume front and center)
+  // If no class → land on curriculum overview with welcome banner
+  if (classes.length > 0 && activeClassIdx !== null) {
+    loadClassView(activeClassIdx);
+  } else {
+    navOverview();
+  }
 }
 
 // ══════════════════════════════
@@ -1011,8 +1064,10 @@ function clearActive() {
 }
 
 function showView(id) {
+  // Accept either 'unit' or 'view-unit' format
+  const fullId = id.startsWith('view-') ? id : 'view-'+id;
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById('view-'+id).classList.add('active');
+  document.getElementById(fullId).classList.add('active');
   document.getElementById('mainArea').scrollTop = 0;
 }
 
@@ -1044,7 +1099,7 @@ function navUnit(uid) {
       <div class="skill-acc-hdr" onclick="toggleAcc('${uid}',${i})">
         <div class="sa-dot" style="background:${u.color};"></div>
         <div class="sa-name">${s}</div>
-        <div class="sa-count">${ls.length} lessons</div>
+        <div class="sa-count" id="sacount-${uid}-${i}">${ls.length} lessons</div>
         <svg class="sa-chev" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="skill-acc-intro" onclick="">
@@ -1059,17 +1114,24 @@ function navUnit(uid) {
         <div class="intro-dur"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#bbb" stroke-width="1"/><path d="M6 3.5V6l1.5 1.5" stroke="#bbb" stroke-width="1" stroke-linecap="round"/></svg>4 min</div>
       </div>
       <div class="skill-acc-lessons">
-        ${ls.map((l,j) => `
-          <div class="lesson-row" onclick="navLesson('${uid}',${i},${j})">
-            <div class="l-dot" style="background:${u.color};"></div>
+        ${ls.map((l,j) => {
+          const key = uid+'-'+i+'-'+j;
+          const isTaught = isDone(currentGrade, uid, i, j);
+          return `<div class="lesson-row" onclick="navLesson('${uid}',${i},${j})">
+            <div class="l-check${isTaught?' taught':''}" id="lcheck-${uid}-${i}-${j}"
+              onclick="event.stopPropagation();toggleTaught('${uid}',${i},${j})">
+              ${isTaught ? `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>` : ''}
+            </div>
             <div class="l-info"><div class="l-name">${l.n}</div><div class="l-desc">${l.d}</div></div>
             <div class="l-open">Open →</div>
-          </div>`).join('')}
+          </div>`;
+        }).join('')}
       </div>
     </div>`;
   }).join('');
 
   buildResources(uid);
+  refreshSkillCounts(uid);
 }
 
 function navSkill(uid, idx) {
@@ -1116,11 +1178,11 @@ function navLesson(uid, skillIdx, lessonIdx) {
   };
   updateActiveBanner();
 
-  // Reset mark done button
-  const key = uid+'-'+skillIdx+'-'+lessonIdx;
+  // Reset mark done button + taught badge
   const btn = document.getElementById('markDoneBtn');
   const lbl = document.getElementById('markDoneLabel');
-  if (doneLessons.has(key)) {
+  const wasTaught = isDone(currentGrade, uid, skillIdx, lessonIdx);
+  if (wasTaught) {
     btn.classList.add('done'); lbl.textContent = 'Done ✓';
   } else {
     btn.classList.remove('done'); lbl.textContent = 'Mark as done';
@@ -1232,12 +1294,25 @@ function switchMode(mode) {
 // ══════════════════════════════
 // GRADE
 // ══════════════════════════════
+function selectGradeAndNav(grade, uid) {
+  // Switch grade pill and navigate to that unit
+  document.querySelectorAll('.grade-pill').forEach(p => {
+    p.classList.toggle('active', p.textContent === grade);
+  });
+  currentGrade = grade;
+  document.getElementById('gradeLabelOv').textContent = 'Grade '+grade;
+  navUnit(uid);
+}
+
 function selectGrade(el, grade) {
   currentGrade = grade;
   document.querySelectorAll('.grade-pill').forEach(p=>p.classList.remove('active','pulse'));
   el.classList.add('active');
   document.getElementById('gradeLabelOv').textContent = 'Grade '+grade;
-  if (currentUnit) document.getElementById('unitMeta').textContent = 'Grade '+grade+' · 5 skills · 20 lessons';
+  // Refresh current view for new grade
+  if (currentUnit) {
+    navUnit(currentUnit); // re-renders unit with correct grade content
+  }
 }
 
 function flashGrade() {
@@ -1377,8 +1452,12 @@ let classColorIdx = 0;
 let lastOpenedLesson = null; // { title, path, unitColor }
 
 function openCreateClass() {
-  document.getElementById('ccModalOverlay').classList.add('open');
+  isEditingClass = false;
+  document.getElementById('ccModalTitle').textContent = 'Create a class';
+  document.getElementById('ccModalSub').textContent = 'A class can be a whole classroom, a small group, or one student — just give it a name.';
+  document.getElementById('ccSubmitBtn').textContent = 'Create class';
   document.getElementById('ccNameInput').value = '';
+  document.getElementById('ccModalOverlay').classList.add('open');
   document.getElementById('ccNameInput').focus();
 }
 
@@ -1397,7 +1476,7 @@ function createClass() {
   const color = classColors[classColorIdx % classColors.length];
   classColorIdx++;
   const initials = name.split(' ').filter(w=>w).map(w=>w[0]).join('').toUpperCase().slice(0,2) || '??';
-  classes.push({ name, grade, color, initials, taught: {ei:0,gm:0,res:0,ada:0,con:0} });
+  classes.push({ name, grade, color, initials, taught: {} }); // taught[grade][uid] = count
   activeClassIdx = classes.length - 1;
   closeCreateClass();
   updateClassesSidebar();
@@ -1430,24 +1509,26 @@ function switchClass(idx) {
 }
 
 function navMyClasses() {
+  clearActive();
   if (classes.length === 0) {
     showView('view-classes-empty');
   } else {
     loadClassView(activeClassIdx !== null ? activeClassIdx : 0);
   }
-  clearActive();
 }
 
 function loadClassView(idx) {
   if (idx === null || !classes[idx]) return;
+  activeClassIdx = idx;
   const c = classes[idx];
+
+  document.querySelectorAll('.class-nav-item').forEach((el,i) => el.classList.toggle('active', i===idx));
   document.getElementById('classAvatarLg').style.background = c.color;
   document.getElementById('classAvatarLg').textContent = c.initials;
   document.getElementById('classDetailName').textContent = c.name;
-  const totalTaught = Object.values(c.taught).reduce((a,b)=>a+b,0);
-  document.getElementById('classDetailMeta').textContent = 'Grade '+c.grade+' · '+(totalTaught > 0 ? totalTaught+' lesson'+(totalTaught!==1?'s':'')+' taught' : 'No lessons taught yet');
+  const totalTaught = Object.values(c.taught).reduce((sum, gradeData) => sum + Object.values(gradeData||{}).reduce((a,b)=>a+b,0), 0);
+  document.getElementById('classDetailMeta').textContent = 'Grade '+c.grade+(totalTaught > 0 ? ' · '+totalTaught+' lesson'+(totalTaught!==1?'s':'')+' taught' : ' · No lessons taught yet');
 
-  // Resume card
   if (lastOpenedLesson) {
     document.getElementById('noResume').style.display = 'none';
     document.getElementById('resumeCard').style.display = 'flex';
@@ -1459,14 +1540,51 @@ function loadClassView(idx) {
     document.getElementById('resumeCard').style.display = 'none';
   }
 
-  // Progress bars
-  const units = {ei:'#185FA5',gm:'#3B6D11',res:'#993556',ada:'#534AB7',con:'#854F0B'};
-  Object.entries(units).forEach(([uid, color]) => {
-    const taught = c.taught[uid] || 0;
-    const pct = Math.round((taught/20)*100);
-    document.getElementById('bar-'+uid).style.width = pct+'%';
-    document.getElementById('frac-'+uid).textContent = taught > 0 ? taught+' taught' : '0 taught';
-  });
+  // Progress — always show all 5 units
+  // Grade label only appears when lessons from multiple grades have been taught
+  const unitColors = {ei:'#185FA5',gm:'#3B6D11',res:'#993556',ada:'#534AB7',con:'#854F0B'};
+  const unitNames = {ei:'Emotional intelligence',gm:'Growth mindset',res:'Resilience',ada:'Adaptability',con:'Confidence'};
+  const unitIds = ['ei','gm','res','ada','con'];
+  const progressEl = document.getElementById('unitProgressList');
+  const taughtGrades = Object.keys(c.taught).filter(g =>
+    Object.values(c.taught[g]||{}).some(v => v > 0)
+  );
+  const multiGrade = taughtGrades.length > 1;
+
+  // Always render all 5 units — show grade grouping only if multi-grade
+  if (!multiGrade) {
+    // Single grade or no lessons yet — show all 5 units flat
+    const gradeData = taughtGrades.length === 1 ? (c.taught[taughtGrades[0]]||{}) : {};
+    progressEl.innerHTML = unitIds.map(uid => {
+      const taught = gradeData[uid] || 0;
+      const pct = Math.round((taught/20)*100);
+      const navGrade = taughtGrades.length === 1 ? taughtGrades[0] : currentGrade;
+      return `<div class="unit-prog-row" onclick="selectGradeAndNav('${navGrade}','${uid}')">
+        <div class="up-swatch" style="background:${unitColors[uid]};"></div>
+        <div class="up-name">${unitNames[uid]}</div>
+        <div class="up-bar-wrap"><div class="up-bar" style="width:${pct}%;background:${unitColors[uid]};"></div></div>
+        <div class="up-frac">${taught > 0 ? taught+' taught' : '0 taught'}</div>
+        <div class="up-arrow">→</div>
+      </div>`;
+    }).join('');
+  } else {
+    // Multi-grade — group by grade, show all 5 units under each grade that has activity
+    progressEl.innerHTML = taughtGrades.map(g => {
+      const gradeData = c.taught[g] || {};
+      const rows = unitIds.map(uid => {
+        const taught = gradeData[uid] || 0;
+        const pct = Math.round((taught/20)*100);
+        return `<div class="unit-prog-row" onclick="selectGradeAndNav('${g}','${uid}')">
+          <div class="up-swatch" style="background:${unitColors[uid]};"></div>
+          <div class="up-name">${unitNames[uid]}</div>
+          <div class="up-bar-wrap"><div class="up-bar" style="width:${pct}%;background:${unitColors[uid]};"></div></div>
+          <div class="up-frac">${taught > 0 ? taught+' taught' : '0 taught'}</div>
+          <div class="up-arrow">→</div>
+        </div>`;
+      }).join('');
+      return `<div class="prog-grade-label">Grade ${g}</div>${rows}`;
+    }).join('');
+  }
 
   showView('view-class');
 }
@@ -1479,7 +1597,6 @@ function updateActiveBanner() {
   }
   const c = classes[activeClassIdx];
   banner.classList.add('visible');
-  document.getElementById('acbDot').style.background = c.color;
   document.getElementById('acbName').textContent = c.name;
 }
 
@@ -1488,35 +1605,202 @@ function flashClassBtn() {
   openCreateClass();
 }
 
+// Refresh taught counts in skill accordion headers
+function refreshSkillCounts(uid) {
+  if (!uid) return;
+  const u = unitData[uid];
+  if (!u) return;
+  u.skills.forEach((s, i) => {
+    const ls = lessonData[i] || lessonData[0];
+    const taughtCount = ls.filter((l, j) => isDone(currentGrade, uid, i, j)).length;
+    const el = document.getElementById('sacount-'+uid+'-'+i);
+    if (el) {
+      el.textContent = taughtCount > 0
+        ? taughtCount+' / '+ls.length+' taught'
+        : ls.length+' lessons';
+      el.style.color = taughtCount > 0 ? '#3B6D11' : '';
+    }
+    // Also refresh checkbox states in open accordions
+    ls.forEach((l, j) => {
+      const key = uid+'-'+i+'-'+j;
+      const isTaught = doneLessons.has(key);
+      // Find the check element — they're dynamically rendered so we update via the DOM
+    });
+  });
+}
+
+// Toggle taught state directly from accordion row
+function toggleTaught(uid, skillIdx, lessonIdx) {
+  if (activeClassIdx === null || !classes[activeClassIdx]) {
+    document.getElementById('createClassPrompt').classList.add('show');
+    return;
+  }
+  const c = classes[activeClassIdx];
+  if (!c.taught[currentGrade]) c.taught[currentGrade] = {};
+  const checkEl = document.getElementById('lcheck-'+uid+'-'+skillIdx+'-'+lessonIdx);
+  const svgCheck = `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const wasDone = isDone(currentGrade, uid, skillIdx, lessonIdx);
+  setDone(currentGrade, uid, skillIdx, lessonIdx, !wasDone);
+  if (wasDone) {
+    if (checkEl) { checkEl.classList.remove('taught'); checkEl.innerHTML = ''; }
+    if (c.taught[currentGrade][uid] > 0) c.taught[currentGrade][uid]--;
+  } else {
+    if (checkEl) { checkEl.classList.add('taught'); checkEl.innerHTML = svgCheck; }
+    c.taught[currentGrade][uid] = (c.taught[currentGrade][uid]||0) + 1;
+  }
+  refreshSkillCounts(uid);
+}
+
 // ══════════════════════════════
 // MARK AS DONE
 // ══════════════════════════════
-let doneLessons = new Set();
+// doneLessons: Map of "grade:uid-skillIdx-lessonIdx" -> true
+let doneLessons = new Map();
 
+
+// Grade-aware lesson key
+function doneKey(grade, uid, skillIdx, lessonIdx) {
+  return grade + ':' + uid + '-' + skillIdx + '-' + lessonIdx;
+}
+function isDone(grade, uid, skillIdx, lessonIdx) {
+  return doneLessons.has(doneKey(grade, uid, skillIdx, lessonIdx));
+}
+function setDone(grade, uid, skillIdx, lessonIdx, done) {
+  const k = doneKey(grade, uid, skillIdx, lessonIdx);
+  if (done) doneLessons.set(k, true);
+  else doneLessons.delete(k);
+}
 function markDone() {
   if (activeClassIdx === null || !classes[activeClassIdx]) {
     document.getElementById('createClassPrompt').classList.add('show');
     return;
   }
-  const key = currentUnit+'-'+currentSkillIdx+'-'+currentLessonIdx;
   const btn = document.getElementById('markDoneBtn');
   const lbl = document.getElementById('markDoneLabel');
   const c = classes[activeClassIdx];
-  if (doneLessons.has(key)) {
-    doneLessons.delete(key);
+  if (!c.taught[currentGrade]) c.taught[currentGrade] = {};
+  const wasDone = isDone(currentGrade, currentUnit, currentSkillIdx, currentLessonIdx);
+  setDone(currentGrade, currentUnit, currentSkillIdx, currentLessonIdx, !wasDone);
+  if (wasDone) {
     btn.classList.remove('done');
     lbl.textContent = 'Mark as done';
-    if (c.taught[currentUnit] > 0) c.taught[currentUnit]--;
+      if (c.taught[currentGrade][currentUnit] > 0) c.taught[currentGrade][currentUnit]--;
   } else {
-    doneLessons.add(key);
     btn.classList.add('done');
     lbl.textContent = 'Done ✓';
-    c.taught[currentUnit] = (c.taught[currentUnit]||0) + 1;
+    c.taught[currentGrade][currentUnit] = (c.taught[currentGrade][currentUnit]||0) + 1;
   }
+  refreshSkillCounts(currentUnit);
 }
 
 function hidePrompt() {
   document.getElementById('createClassPrompt').classList.remove('show');
+}
+
+
+// ══════════════════════════════
+// SIDEBAR TOGGLE
+// ══════════════════════════════
+let sidebarCollapsed = false;
+function toggleSidebar() {
+  sidebarCollapsed = !sidebarCollapsed;
+  document.getElementById('sidebar').classList.toggle('collapsed', sidebarCollapsed);
+}
+
+// ══════════════════════════════
+// SLIDES PLAYER
+// ══════════════════════════════
+const SLIDES = [
+  { title: "What are feelings?", body: "An introduction to emotions and why we have them" },
+  { title: "All feelings are valid", body: "Happy, sad, angry, scared — all feelings are normal" },
+  { title: "Where do feelings live?", body: "Feelings show up in our body and our mind" },
+  { title: "The feelings wheel", body: "Naming our emotions more precisely" },
+  { title: "Discussion time", body: "Can you name a feeling you had today?" },
+  { title: "Feelings and the brain", body: "How our brain processes emotions" },
+  { title: "When feelings are big", body: "What to do when emotions feel overwhelming" },
+  { title: "Calm-down strategies", body: "Breathing, grounding, and pausing" },
+  { title: "Empathy", body: "Understanding how others feel" },
+  { title: "Activity time", body: "Complete your feelings wheel worksheet" },
+  { title: "Share and reflect", body: "Share one feeling you noticed today" },
+  { title: "Great work!", body: "See you next lesson" },
+];
+let currentSlide = 1;
+
+function openSlidesPlayer() {
+  currentSlide = 1;
+  const title = document.getElementById('slideCardTitle') ? document.getElementById('slideCardTitle').textContent : 'Presentation';
+  const eyebrow = document.getElementById('slideEyebrow') ? document.getElementById('slideEyebrow').textContent : '';
+  document.getElementById('slidesBarTitle').textContent = title;
+  document.getElementById('slideEyebrowS').textContent = eyebrow;
+  renderSlide();
+  document.getElementById('slidesOverlay').classList.add('open');
+}
+
+function closeSlidesPlayer() {
+  document.getElementById('slidesOverlay').classList.remove('open');
+}
+
+function slideNav(dir) {
+  currentSlide = Math.max(1, Math.min(SLIDES.length, currentSlide + dir));
+  renderSlide();
+}
+
+function renderSlide() {
+  const s = SLIDES[currentSlide - 1];
+  document.getElementById('slideTitleS').textContent = s.title;
+  document.getElementById('slideBodyS').textContent = s.body;
+  const label = 'Slide ' + currentSlide + ' of ' + SLIDES.length;
+  document.getElementById('slideNumS').textContent = label;
+  document.getElementById('slidesCounter').textContent = label;
+}
+
+document.addEventListener('keydown', function(e) {
+  if (!document.getElementById('slidesOverlay').classList.contains('open')) return;
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); slideNav(1); }
+  if (e.key === 'ArrowLeft') slideNav(-1);
+  if (e.key === 'Escape') closeSlidesPlayer();
+});
+
+
+
+let isEditingClass = false;
+
+function submitClassModal() {
+  if (isEditingClass) {
+    saveEditClass();
+  } else {
+    createClass();
+  }
+}
+
+function saveEditClass() {
+  if (activeClassIdx === null || !classes[activeClassIdx]) return;
+  const name = document.getElementById('ccNameInput').value.trim() || classes[activeClassIdx].name;
+  const grade = document.querySelector('.cc-grade-opt.active')?.textContent || classes[activeClassIdx].grade;
+  const c = classes[activeClassIdx];
+  c.name = name;
+  c.grade = grade;
+  // Update initials
+  c.initials = name.split(' ').filter(w=>w).map(w=>w[0]).join('').toUpperCase().slice(0,2) || '??';
+  closeCreateClass();
+  updateClassesSidebar();
+  updateActiveBanner();
+  loadClassView(activeClassIdx);
+  isEditingClass = false;
+}
+
+function openEditClass() {
+  if (activeClassIdx === null || !classes[activeClassIdx]) return;
+  const c = classes[activeClassIdx];
+  isEditingClass = true;
+  document.getElementById('ccNameInput').value = c.name;
+  document.querySelectorAll('.cc-grade-opt').forEach(el => {
+    el.classList.toggle('active', el.textContent === c.grade);
+  });
+  document.getElementById('ccModalTitle').textContent = 'Edit class';
+  document.getElementById('ccModalSub').textContent = 'Update the name or grade for this class.';
+  document.getElementById('ccSubmitBtn').textContent = 'Save changes';
+  document.getElementById('ccModalOverlay').classList.add('open');
 }
 
 // ══════════════════════════════
@@ -1524,5 +1808,32 @@ function hidePrompt() {
 // ══════════════════════════════
 init();
 </script>
+
+<!-- ══ SLIDES PLAYER ══ -->
+<div class="slides-overlay" id="slidesOverlay">
+  <div class="slides-bar">
+    <div class="slides-bar-title" id="slidesBarTitle">Presentation</div>
+    <div class="slides-bar-right">
+      <div class="slides-nav-row">
+        <div class="slides-nav-btn" onclick="slideNav(-1)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="slides-counter" id="slidesCounter">Slide 1 of 12</div>
+        <div class="slides-nav-btn" onclick="slideNav(1)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+      <div class="slides-close" onclick="closeSlidesPlayer()">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Exit presentation
+      </div>
+    </div>
+  </div>
+  <div class="slides-stage">
+    <div class="slides-slide">
+      <div class="slide-s-eyebrow" id="slideEyebrowS"></div>
+      <div class="slide-s-title" id="slideTitleS">What are feelings?</div>
+      <div class="slide-s-body" id="slideBodyS">An introduction to emotions and why we have them</div>
+      <div class="slide-s-num" id="slideNumS">Slide 1 of 12</div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
