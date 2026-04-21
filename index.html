@@ -70,7 +70,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 /* Views */
 .view { display: none; }
 .view.active { display: block; }
-.cw { max-width: 900px; margin: 0 auto; padding: 28px 40px; }
+.cw { max-width: 860px; padding: 28px 40px; }
 
 /* ── WELCOME BANNER ── */
 .welcome-banner { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 12px; padding: 16px 18px; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 14px; }
@@ -326,12 +326,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .class-edit-btn:hover { border-color: #185FA5; color: #185FA5; }
 
 /* Resume card */
-.resume-card { border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; display: flex; align-items: center; gap: 20px; cursor: pointer; transition: opacity .12s; }
-.resume-card:hover { opacity: .92; }
-.resume-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: rgba(255,255,255,0.6); margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
-.resume-title { font-size: 18px; font-weight: 500; color: #fff; margin-bottom: 3px; line-height: 1.2; }
-.resume-path { font-size: 12px; color: rgba(255,255,255,0.6); }
-.resume-btn { background: rgba(255,255,255,0.15); border: 0.5px solid rgba(255,255,255,0.3); color: #fff; font-size: 12px; font-weight: 500; padding: 8px 16px; border-radius: 8px; white-space: nowrap; flex-shrink: 0; }
+.resume-card { border-radius: 12px; padding: 18px 22px; margin-bottom: 24px; display: flex; align-items: center; gap: 20px; cursor: pointer; transition: all .12s; background: #E6F1FB; border: 0.5px solid #b5d4f4; }
+.resume-card:hover { background: #dbeeff; border-color: #185FA5; }
+.resume-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #185FA5; opacity: .8; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+.resume-title { font-size: 18px; font-weight: 500; color: #0C447C; margin-bottom: 3px; line-height: 1.2; }
+.resume-path { font-size: 12px; color: #185FA5; opacity: .7; }
+.resume-btn { background: #185FA5; border: none; color: #fff; font-size: 12px; font-weight: 500; padding: 8px 16px; border-radius: 8px; white-space: nowrap; flex-shrink: 0; }
 .no-resume { background: #fff; border: 0.5px dashed #e8e6e0; border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; text-align: center; }
 .no-resume-text { font-size: 13px; color: #bbb; margin-bottom: 4px; }
 .no-resume-sub { font-size: 12px; color: #ccc; }
@@ -479,6 +479,140 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .sidebar.collapsed .sidebar-top-bar { justify-content: center; padding: 8px 0 0; }
 .sidebar.collapsed .sb-footer { visibility: hidden; }
 
+
+/* ── CLASS VIEW UNIT ACCORDION ── */
+.cp-unit { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 10px; margin-bottom: 8px; overflow: hidden; transition: border-color .12s; }
+.cp-unit:hover { border-color: #c8d8ea; }
+.cp-unit.open { border-color: #b5d4f4; }
+.cp-unit-hdr { display: flex; align-items: center; gap: 12px; padding: 13px 16px; cursor: pointer; user-select: none; }
+.cp-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.cp-unit-name { font-size: 13px; font-weight: 500; color: #1a1a1a; flex: 1; }
+.cp-taught { font-size: 11px; color: #bbb; white-space: nowrap; }
+.cp-taught.has-progress { color: #3B6D11; font-weight: 500; }
+.cp-bar-wrap { width: 80px; background: #f5f4f0; border-radius: 10px; height: 4px; overflow: hidden; flex-shrink: 0; }
+.cp-bar { height: 100%; border-radius: 10px; }
+.cp-chev { color: #ccc; transition: transform .2s; flex-shrink: 0; }
+.cp-unit.open .cp-chev { transform: rotate(90deg); }
+.cp-lessons { display: none; border-top: 0.5px solid #f0ede8; }
+.cp-unit.open .cp-lessons { display: block; }
+.cp-lesson-row { display: flex; align-items: center; gap: 10px; padding: 9px 16px 9px 38px; border-bottom: 0.5px solid #f5f4f0; cursor: pointer; transition: background .1s; }
+.cp-lesson-row:last-child { border-bottom: none; }
+.cp-lesson-row:hover { background: #f0f7fe; }
+.cp-check { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #ddd; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .12s; }
+.cp-check.taught { background: #EAF3DE; border-color: #3B6D11; }
+.cp-lesson-name { font-size: 12px; font-weight: 500; color: #1a1a1a; flex: 1; }
+.cp-lesson-open { font-size: 11px; color: #185FA5; opacity: 0; white-space: nowrap; flex-shrink: 0; transition: opacity .12s; }
+.cp-lesson-row:hover .cp-lesson-open { opacity: 1; }
+.cp-grade-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; color: #bbb; padding: 10px 16px 4px; }
+
+.ov-prog { margin-top: 10px; }
+.ov-prog-bar { height: 3px; background: #f0ede8; border-radius: 10px; overflow: hidden; }
+.ov-prog-fill { height: 100%; border-radius: 10px; transition: width .3s ease; }
+.ov-prog-label { font-size: 10px; color: #bbb; margin-top: 4px; }
+.ov-prog-label.has-progress { color: #3B6D11; font-weight: 500; }
+
+.class-grade-group-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; padding: 10px 0 4px; display: block; }
+.class-sec-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; margin-bottom: 10px; margin-top: 20px; display: block; }
+.class-unit-row { display: flex; align-items: center; gap: 12px; background: #fff; border: 0.5px solid #e8e6e0; border-radius: 10px; padding: 12px 16px; margin-bottom: 8px; cursor: pointer; transition: border-color .12s; }
+.class-unit-row:hover { border-color: #185FA5; }
+.class-unit-swatch { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
+.class-unit-name { font-size: 13px; font-weight: 500; color: #1a1a1a; flex: 1; }
+.class-unit-count { font-size: 11px; font-weight: 500; color: #3B6D11; }
+.class-unit-bar { width: 80px; height: 4px; background: #f0ede8; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+.class-unit-bar-fill { height: 100%; border-radius: 10px; }
+.class-browse-prompt { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 10px; border: 0.5px dashed #ddd; color: #888; font-size: 13px; cursor: pointer; margin-top: 8px; transition: all .12s; }
+.class-browse-prompt:hover { border-color: #185FA5; color: #185FA5; background: #f0f7fe; }
+
+
+/* Archive */
+.class-edit-btn.archive { color: #bbb; border-color: #eee; margin-left: 6px; }
+.class-edit-btn.archive:hover { color: #993556; border-color: #993556; }
+.archived-section { margin-top: 20px; }
+.archived-toggle { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #999; cursor: pointer; padding: 6px 8px; margin-top: 6px; border-radius: 7px; user-select: none; transition: background .1s; }
+.archived-toggle:hover { background: #f5f4f0; color: #555; }
+.archived-toggle svg { transition: transform .2s; }
+.archived-toggle.open svg { transform: rotate(90deg); }
+.archived-list { display: none; }
+.archived-list.open { display: block; }
+.archived-class-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 9px; background: #fff; border: 0.5px solid #e8e6e0; margin-bottom: 6px; cursor: pointer; transition: all .12s; opacity: .7; }
+.archived-class-row:hover { opacity: 1; border-color: #185FA5; }
+.archived-avatar { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: #fff; flex-shrink: 0; filter: grayscale(0.4); }
+.archived-name { font-size: 13px; font-weight: 500; color: #888; flex: 1; }
+.archived-meta { font-size: 11px; color: #bbb; }
+.archived-restore { font-size: 11px; color: #185FA5; opacity: 0; transition: opacity .12s; flex-shrink: 0; }
+.archived-class-row:hover .archived-restore { opacity: 1; }
+
+
+/* ── TOP BAR ── */
+.top-bar { height: 44px; background: #fff; border-bottom: 0.5px solid #e8e6e0; display: flex; align-items: center; padding: 0 16px; gap: 8px; flex-shrink: 0; position: relative; z-index: 50; width: 100%; }
+.top-bar-toggle { width: 30px; height: 30px; border-radius: 7px; border: none; background: transparent; cursor: pointer; color: #888; display: flex; align-items: center; justify-content: center; transition: background .12s; flex-shrink: 0; }
+.top-bar-toggle:hover { background: #f5f4f0; color: #185FA5; }
+.top-bar-divider { width: 0.5px; height: 20px; background: #e8e6e0; flex-shrink: 0; }
+.class-switcher { display: flex; align-items: center; gap: 8px; padding: 5px 10px; border-radius: 8px; cursor: pointer; transition: background .12s; border: none; background: transparent; font-family: inherit; }
+.class-switcher:hover { background: #f5f4f0; }
+.cs-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.cs-label { font-size: 11px; color: #bbb; white-space: nowrap; }
+.cs-name { font-size: 13px; font-weight: 500; color: #1a1a1a; white-space: nowrap; }
+.cs-chevron { color: #bbb; transition: transform .15s; }
+.class-switcher.open .cs-chevron { transform: rotate(180deg); }
+.cs-no-class { font-size: 13px; color: #185FA5; font-weight: 500; }
+
+/* Class dropdown */
+.class-dropdown { position: fixed; top: 60px; left: auto; width: 280px; background: #fff; border: 0.5px solid #e8e6e0; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); z-index: 500; display: none; overflow: hidden; }
+.class-dropdown.open { display: block; }
+.cd-search { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 0.5px solid #f0ede8; }
+.cd-search input { flex: 1; font-size: 13px; border: none; outline: none; background: transparent; color: #1a1a1a; font-family: inherit; }
+.cd-search input::placeholder { color: #bbb; }
+.cd-section-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; padding: 8px 14px 4px; }
+.cd-create { display: flex; align-items: center; gap: 8px; padding: 10px 14px; cursor: pointer; transition: background .1s; border-bottom: 0.5px solid #f0ede8; }
+.cd-create:hover { background: #f0f7fe; }
+.cd-create-icon { width: 28px; height: 28px; border-radius: 8px; background: #E6F1FB; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.cd-create-label { font-size: 13px; font-weight: 500; color: #185FA5; }
+.cd-class-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; transition: background .1s; }
+.cd-class-item:hover { background: #f5f4f0; }
+.cd-class-item.active { background: #E6F1FB; }
+.cd-avatar { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: #fff; flex-shrink: 0; }
+.cd-class-name { font-size: 13px; font-weight: 500; color: #1a1a1a; flex: 1; }
+.cd-class-meta { font-size: 11px; color: #bbb; }
+.cd-check { color: #185FA5; flex-shrink: 0; }
+.cd-archived-toggle { display: flex; align-items: center; gap: 6px; padding: 8px 14px; cursor: pointer; border-top: 0.5px solid #f0ede8; font-size: 12px; color: #bbb; transition: color .1s; }
+.cd-archived-toggle:hover { color: #888; }
+.cd-archived-list { border-top: 0.5px solid #f0ede8; display: none; }
+.cd-archived-list.open { display: block; }
+.cd-archived-item { display: flex; align-items: center; gap: 10px; padding: 9px 14px; cursor: pointer; transition: background .1s; }
+.cd-archived-item:hover { background: #faf9f7; }
+.cd-archived-name { font-size: 12px; color: #999; flex: 1; }
+.cd-archived-restore { font-size: 11px; color: #185FA5; opacity: 0; transition: opacity .12s; }
+.cd-archived-item:hover .cd-archived-restore { opacity: 1; }
+.cd-empty { padding: 16px 14px; font-size: 12px; color: #bbb; text-align: center; }
+
+
+/* ── SKILL VIDEO MODAL ── */
+.video-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 400; display: none; align-items: center; justify-content: center; }
+.video-modal-overlay.open { display: flex; }
+.video-modal { background: #fff; border-radius: 16px; width: min(560px, 90vw); box-shadow: 0 16px 48px rgba(0,0,0,0.2); overflow: hidden; }
+.vm-header { padding: 16px 20px; border-bottom: 0.5px solid #f0ede8; display: flex; align-items: center; justify-content: space-between; }
+.vm-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; margin-bottom: 3px; }
+.vm-title { font-size: 15px; font-weight: 500; color: #1a1a1a; }
+.vm-close { width: 28px; height: 28px; border-radius: 7px; border: none; background: #f5f4f0; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #888; transition: background .12s; }
+.vm-close:hover { background: #e8e6e0; }
+.vm-player { background: #1a1a1a; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; }
+.vm-player:hover .vm-play-btn { transform: scale(1.08); }
+.vm-play-btn { width: 56px; height: 56px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform .15s; }
+.vm-play-icon { width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-left: 18px solid #1a1a1a; margin-left: 4px; }
+.vm-duration { position: absolute; bottom: 10px; right: 12px; font-size: 11px; color: rgba(255,255,255,0.6); }
+.vm-slide-hint { position: absolute; bottom: 10px; left: 12px; font-size: 11px; color: rgba(255,255,255,0.5); font-style: italic; }
+.vm-footer { padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
+.vm-watched-btn { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; padding: 7px 14px; border-radius: 8px; cursor: pointer; border: 0.5px solid #e8e6e0; background: #fff; color: #888; transition: all .15s; }
+.vm-watched-btn:hover { border-color: #3B6D11; color: #3B6D11; background: #EAF3DE; }
+.vm-watched-btn.watched { background: #EAF3DE; border-color: #3B6D11; color: #3B6D11; }
+.vm-done-btn { font-size: 12px; color: #888; cursor: pointer; padding: 7px 14px; border-radius: 8px; transition: background .12s; }
+.vm-done-btn:hover { background: #f5f4f0; }
+
+/* Skill intro link with watched state */
+.skill-intro-watched { color: #3B6D11 !important; }
+.skill-intro-watched::before { content: '✓ '; }
+
 </style>
 </head>
 <body>
@@ -487,7 +621,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
   <!-- ══════════════ SIDEBAR ══════════════ -->
   <div class="sidebar" id="sidebar">
-    <div class="sidebar-top-bar" id="sidebarTopBar">
+    <div class="sidebar-top-bar">
       <button class="sb-toggle-btn" onclick="toggleSidebar()" title="Toggle sidebar">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
       </button>
@@ -512,15 +646,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         <div id="navTree"></div>
       </div>
 
-      <div class="sb-section">
-        <span class="s-label">My classes</span>
-        <div id="classesSidebar">
-          <div class="classes-empty">
-            <div class="classes-empty-text">Create a class to track your progress for any group or individual student.</div>
-            <button class="add-class-btn" onclick="openCreateClass()"><span class="plus-sm">+</span> Create a class</button>
-          </div>
-        </div>
-      </div>
+
 
     </div>
     <div class="sb-footer">
@@ -533,10 +659,36 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
   <!-- ══════════════ MAIN ══════════════ -->
   <div class="main-wrapper">
-    <div class="active-class-banner" id="activeBanner">
-      <span class="acb-label">Teaching with:</span>
-      <span class="acb-name" id="acbName" onclick="navMyClasses()">Grade 4B</span>
+    <div class="top-bar" id="topBar">
+      <!-- Class switcher -->
+      <button class="class-switcher" id="classSwitcher" onclick="handleSwitcherClick()">
+        <span class="cs-dot" id="csDot" style="background:#185FA5;display:none;"></span>
+        <span class="cs-label" id="csLabel" style="display:none;">Teaching with:</span>
+        <span class="cs-name" id="csName">+ Create a class</span>
+        <svg class="cs-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
+
+    <!-- Class dropdown -->
+    <div class="class-dropdown" id="classDropdown">
+      <div class="cd-search">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4" stroke="#bbb" stroke-width="1.3"/><path d="M10 10l2.5 2.5" stroke="#bbb" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <input type="text" placeholder="Search classes…" id="classSearch" oninput="filterClasses(this.value)">
+      </div>
+      <div class="cd-create" onclick="closeClassDropdown();openCreateClass()">
+        <div class="cd-create-icon">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="#185FA5" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <div class="cd-create-label">New class</div>
+      </div>
+      <div id="cdClassList"></div>
+      <div class="cd-archived-toggle" id="cdArchivedToggle" onclick="toggleCdArchived()" style="display:none;">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" id="cdArchivedChev"><path d="M3 1l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="cdArchivedLabel">Archived</span>
+      </div>
+      <div class="cd-archived-list" id="cdArchivedList"></div>
+    </div>
+
     <div class="main" id="mainArea">
 
     <!-- ── OVERVIEW ── -->
@@ -556,10 +708,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         <div class="page-title">GrowthMinded Life Skills Curriculum</div>
         <div class="about-link" onclick="openAbout()"><div class="about-icon">i</div>About this curriculum</div>
       </div>
-      <div class="grade-line">
-        <span class="grade-value" id="gradeLabelOv">Grade 3–5</span> ·
-        <span class="grade-link" onclick="flashGrade()">Change in sidebar <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style="display:inline;vertical-align:middle;"><path d="M7 5H1M4 2l-3 3 3 3" stroke="#185FA5" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </div>
 
       <div class="overview-grid" id="overviewGrid"></div>
     </div>
@@ -567,6 +715,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     <!-- ── UNIT ── -->
     <div class="view cw" id="view-unit">
       <div class="unit-hdr">
+        <div class="back-to-class" id="backToClass" onclick="navMyClasses()" style="display:none;margin-bottom:10px;font-size:12px;color:#185FA5;cursor:pointer;display:none;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="backToClassName">Back to class</span></div>
         <div class="unit-title-row">
           <div class="unit-hero-icon" id="unitIcon"></div>
           <div class="unit-hero-name" id="unitName"></div>
@@ -745,9 +894,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       </div>
     </div>
 
-  </div>
-</div>
-
     <!-- ── MY CLASSES EMPTY VIEW ── -->
     <div class="view cw" id="view-classes-empty">
       <div class="class-page-title">My classes</div>
@@ -772,19 +918,22 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           </div>
           <div class="class-detail-meta" id="classDetailMeta">Grade 3–5 · 0 lessons taught</div>
         </div>
-        <div class="class-edit-btn" onclick="openEditClass()">Edit class</div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <div class="class-edit-btn" onclick="openEditClass()">Edit class</div>
+          <div class="class-edit-btn archive" onclick="archiveClass()">Archive</div>
+        </div>
       </div>
 
       <!-- Resume card -->
       <div id="resumeCardWrap">
         <div class="no-resume" id="noResume">
           <div class="no-resume-text">Ready to start teaching?</div>
-          <div class="no-resume-sub">Pick any unit below to get started. Your last lesson will appear here when you return.</div>
+          <div class="no-resume-sub">Open any lesson from the curriculum to get started. Your last lesson will appear here when you return.</div>
         </div>
-        <div class="resume-card" id="resumeCard" style="display:none;background:#185FA5;">
+        <div class="resume-card" id="resumeCard" style="display:none;" onclick="resumeLesson()">
           <div style="flex:1;">
             <div class="resume-eyebrow">
-              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h5M5 2l3 3-3 3" stroke="rgba(255,255,255,0.7)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h5M5 2l3 3-3 3" stroke="#185FA5" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
               Continue where you left off
             </div>
             <div class="resume-title" id="resumeTitle">What are feelings?</div>
@@ -794,9 +943,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         </div>
       </div>
 
-      <!-- Progress by unit -->
-      <div class="class-sec-title">Progress by unit</div>
-      <div id="unitProgressList"></div>
+      <!-- Taught units -->
+      <div id="classTaughtSection"></div>
+
     </div>
 
   </div><!-- end main -->
@@ -991,7 +1140,7 @@ let currentLessonIdx = null;
 function init() {
   buildNavTree();
   buildOverview();
-  updateClassesSidebar();
+  updateClassSwitcher();
 
   // Returning experience:
   // If a class exists → land on class view (Resume front and center)
@@ -1046,13 +1195,28 @@ function buildNavTree() {
 }
 
 function buildOverview() {
-  document.getElementById('overviewGrid').innerHTML = Object.entries(units).map(([uid, u]) => `
-    <div class="ov-card" onclick="navUnit('${uid}')">
-      <div class="ov-icon" style="background:${u.bg};">${u.icon}</div>
-      <div class="ov-name">${u.name}</div>
-      <div class="ov-meta">5 skills · 20 lessons</div>
-      <div class="ov-cta">Explore →</div>
-    </div>`).join('');
+  refreshOverview();
+}
+
+function refreshOverview() {
+  const c = activeClassIdx !== null ? classes[activeClassIdx] : null;
+  const useGrade = c ? (Object.keys(c.taught).filter(g => Object.values(c.taught[g]||{}).some(v=>v>0))[0] || currentGrade) : currentGrade;
+  const gradeData = c ? (c.taught[useGrade] || {}) : {};
+
+  document.getElementById('overviewGrid').innerHTML = Object.entries(units).map(([uid, u]) => {
+    const taught = gradeData[uid] || 0;
+    const pct = Math.round((taught/20)*100);
+    const hasProgress = c && taught > 0;
+    const progLabel = hasProgress ? taught + ' / 20 taught' : '';
+    return '<div class="ov-card" onclick="navUnit(\'' + uid + '\')">'
+      + '<div class="ov-icon" style="background:' + u.bg + ';">' + u.icon + '</div>'
+      + '<div class="ov-name">' + u.name + '</div>'
+      + '<div class="ov-prog" style="margin-top:12px;">'
+      + '<div class="ov-prog-bar"><div class="ov-prog-fill" style="width:' + pct + '%;background:' + u.color + ';"></div></div>'
+      + (progLabel ? '<div class="ov-prog-label has-progress">' + progLabel + '</div>' : '<div class="ov-prog-label">20 lessons</div>')
+      + '</div>'
+      + '</div>';
+  }).join('');
 }
 
 // ══════════════════════════════
@@ -1071,10 +1235,20 @@ function showView(id) {
   document.getElementById('mainArea').scrollTop = 0;
 }
 
-function navUnit(uid) {
+function navUnit(uid, fromClass) {
   currentUnit = uid;
   currentSkillIdx = null;
   currentLessonIdx = null;
+  // Show back-to-class link if navigated from class view
+  const btc = document.getElementById('backToClass');
+  if (btc) {
+    if (fromClass && activeClassIdx !== null && classes[activeClassIdx]) {
+      btc.style.display = 'flex';
+      document.getElementById('backToClassName').textContent = '← ' + classes[activeClassIdx].name;
+    } else {
+      btc.style.display = 'none';
+    }
+  }
   const u = units[uid];
 
   // Sidebar
@@ -1102,7 +1276,7 @@ function navUnit(uid) {
         <div class="sa-count" id="sacount-${uid}-${i}">${ls.length} lessons</div>
         <svg class="sa-chev" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-      <div class="skill-acc-intro" onclick="">
+      <div class="skill-acc-intro" onclick="openVideoModal('${uid}',${i})" style="cursor:pointer;">
         <div class="intro-thumb" style="background:${u.bg};">
           <div style="position:absolute;inset:0;background:linear-gradient(135deg,${u.color}44,${u.color});"></div>
           <div class="intro-play"><svg width="7" height="7" viewBox="0 0 10 10" fill="none"><path d="M2 1.5l6 3.5-6 3.5V1.5z" fill="${u.color}"/></svg></div>
@@ -1136,6 +1310,7 @@ function navUnit(uid) {
 
 function navSkill(uid, idx) {
   if (currentUnit !== uid) navUnit(uid);
+  else showView('unit'); // ensure we're on unit view even if already on same unit
   currentSkillIdx = idx;
 
   // Sidebar
@@ -1174,7 +1349,10 @@ function navLesson(uid, skillIdx, lessonIdx) {
   lastOpenedLesson = {
     title: l.n,
     path: u.name + ' · ' + u.skills[skillIdx] + ' · Lesson ' + (lessonIdx+1),
-    unitColor: u.color
+    unitColor: u.color,
+    uid: uid,
+    skillIdx: skillIdx,
+    lessonIdx: lessonIdx
   };
   updateActiveBanner();
 
@@ -1211,7 +1389,17 @@ function navLesson(uid, skillIdx, lessonIdx) {
   document.getElementById('nextBtn').onclick = lessonIdx<ls.length-1 ? ()=>navLesson(uid,skillIdx,lessonIdx+1) : null;
 
   // Prep mode content
-  document.getElementById('skillIntroLink').textContent = 'Watch the skill intro video';
+  const vKey = uid+'-'+skillIdx;
+  const vWatched = watchedVideos.has(vKey);
+  const sil = document.getElementById('skillIntroLink');
+  if (vWatched) {
+    sil.innerHTML = '<span style="color:#3B6D11;font-weight:500;">✓ Watched</span> — <span style="text-decoration:underline;cursor:pointer;">watch again</span>';
+    sil.className = '';
+  } else {
+    sil.innerHTML = 'Watch the skill intro video';
+    sil.className = '';
+  }
+  sil.onclick = function() { openVideoModal(uid, skillIdx); };
   document.getElementById('lessonPlanTitle').textContent = l.n+' — Teacher guide';
   document.getElementById('printableTitle').textContent = l.n+' — Worksheet';
   document.getElementById('parentGuide1Title').textContent = 'Understanding '+s+' — Parent guide';
@@ -1300,7 +1488,6 @@ function selectGradeAndNav(grade, uid) {
     p.classList.toggle('active', p.textContent === grade);
   });
   currentGrade = grade;
-  document.getElementById('gradeLabelOv').textContent = 'Grade '+grade;
   navUnit(uid);
 }
 
@@ -1308,7 +1495,6 @@ function selectGrade(el, grade) {
   currentGrade = grade;
   document.querySelectorAll('.grade-pill').forEach(p=>p.classList.remove('active','pulse'));
   el.classList.add('active');
-  document.getElementById('gradeLabelOv').textContent = 'Grade '+grade;
   // Refresh current view for new grade
   if (currentUnit) {
     navUnit(currentUnit); // re-renders unit with correct grade content
@@ -1476,35 +1662,21 @@ function createClass() {
   const color = classColors[classColorIdx % classColors.length];
   classColorIdx++;
   const initials = name.split(' ').filter(w=>w).map(w=>w[0]).join('').toUpperCase().slice(0,2) || '??';
-  classes.push({ name, grade, color, initials, taught: {} }); // taught[grade][uid] = count
+  classes.push({ name, grade, color, initials, taught: {}, createdAt: new Date().toISOString(), lastTaughtAt: null });
   activeClassIdx = classes.length - 1;
   closeCreateClass();
-  updateClassesSidebar();
-  updateActiveBanner();
+  updateClassSwitcher();
   loadClassView(activeClassIdx);
 }
 
 function updateClassesSidebar() {
-  const sb = document.getElementById('classesSidebar');
-  if (classes.length === 0) {
-    sb.innerHTML = `<div class="classes-empty"><div class="classes-empty-text">Create a class to track your progress for any group or individual student.</div><button class="add-class-btn" onclick="openCreateClass()"><span class="plus-sm">+</span> Create a class</button></div>`;
-  } else {
-    sb.innerHTML = classes.map((c,i) => `
-      <div class="class-nav-item${i===activeClassIdx?' active':''}" onclick="switchClass(${i})">
-        <div class="class-avatar-sm" style="background:${c.color};">${c.initials}</div>
-        <div style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.name}</div>
-      </div>`).join('') +
-      `<div class="add-another-class" onclick="openCreateClass()">
-        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="#185FA5" stroke-width="1.4" stroke-linecap="round"/></svg>
-        Create another class
-      </div>`;
-  }
+  // Classes now live in the top bar dropdown — sidebar only has curriculum
+  updateClassSwitcher();
 }
 
 function switchClass(idx) {
   activeClassIdx = idx;
-  updateClassesSidebar();
-  updateActiveBanner();
+  updateClassSwitcher();
   loadClassView(idx);
 }
 
@@ -1522,7 +1694,7 @@ function loadClassView(idx) {
   activeClassIdx = idx;
   const c = classes[idx];
 
-  document.querySelectorAll('.class-nav-item').forEach((el,i) => el.classList.toggle('active', i===idx));
+  updateClassSwitcher();
   document.getElementById('classAvatarLg').style.background = c.color;
   document.getElementById('classAvatarLg').textContent = c.initials;
   document.getElementById('classDetailName').textContent = c.name;
@@ -1532,72 +1704,105 @@ function loadClassView(idx) {
   if (lastOpenedLesson) {
     document.getElementById('noResume').style.display = 'none';
     document.getElementById('resumeCard').style.display = 'flex';
-    document.getElementById('resumeCard').style.background = lastOpenedLesson.unitColor;
+  } else if (totalTaught > 0) {
+    // Has taught lessons but no resume yet — hide the empty state, show nothing
+    document.getElementById('noResume').style.display = 'none';
+    document.getElementById('resumeCard').style.display = 'none';
     document.getElementById('resumeTitle').textContent = lastOpenedLesson.title;
     document.getElementById('resumePath').textContent = lastOpenedLesson.path;
   } else {
-    document.getElementById('noResume').style.display = 'block';
+    document.getElementById('noResume').style.display = totalTaught > 0 ? 'none' : 'block';
     document.getElementById('resumeCard').style.display = 'none';
   }
 
-  // Progress — always show all 5 units
-  // Grade label only appears when lessons from multiple grades have been taught
-  const unitColors = {ei:'#185FA5',gm:'#3B6D11',res:'#993556',ada:'#534AB7',con:'#854F0B'};
-  const unitNames = {ei:'Emotional intelligence',gm:'Growth mindset',res:'Resilience',ada:'Adaptability',con:'Confidence'};
-  const unitIds = ['ei','gm','res','ada','con'];
-  const progressEl = document.getElementById('unitProgressList');
-  const taughtGrades = Object.keys(c.taught).filter(g =>
-    Object.values(c.taught[g]||{}).some(v => v > 0)
-  );
-  const multiGrade = taughtGrades.length > 1;
 
-  // Always render all 5 units — show grade grouping only if multi-grade
-  if (!multiGrade) {
-    // Single grade or no lessons yet — show all 5 units flat
-    const gradeData = taughtGrades.length === 1 ? (c.taught[taughtGrades[0]]||{}) : {};
-    progressEl.innerHTML = unitIds.map(uid => {
-      const taught = gradeData[uid] || 0;
-      const pct = Math.round((taught/20)*100);
-      const navGrade = taughtGrades.length === 1 ? taughtGrades[0] : currentGrade;
-      return `<div class="unit-prog-row" onclick="selectGradeAndNav('${navGrade}','${uid}')">
-        <div class="up-swatch" style="background:${unitColors[uid]};"></div>
-        <div class="up-name">${unitNames[uid]}</div>
-        <div class="up-bar-wrap"><div class="up-bar" style="width:${pct}%;background:${unitColors[uid]};"></div></div>
-        <div class="up-frac">${taught > 0 ? taught+' taught' : '0 taught'}</div>
-        <div class="up-arrow">→</div>
-      </div>`;
-    }).join('');
-  } else {
-    // Multi-grade — group by grade, show all 5 units under each grade that has activity
-    progressEl.innerHTML = taughtGrades.map(g => {
-      const gradeData = c.taught[g] || {};
-      const rows = unitIds.map(uid => {
-        const taught = gradeData[uid] || 0;
-        const pct = Math.round((taught/20)*100);
-        return `<div class="unit-prog-row" onclick="selectGradeAndNav('${g}','${uid}')">
-          <div class="up-swatch" style="background:${unitColors[uid]};"></div>
-          <div class="up-name">${unitNames[uid]}</div>
-          <div class="up-bar-wrap"><div class="up-bar" style="width:${pct}%;background:${unitColors[uid]};"></div></div>
-          <div class="up-frac">${taught > 0 ? taught+' taught' : '0 taught'}</div>
-          <div class="up-arrow">→</div>
-        </div>`;
-      }).join('');
-      return `<div class="prog-grade-label">Grade ${g}</div>${rows}`;
-    }).join('');
+  // Taught units section — grouped by grade
+  const taughtSection = document.getElementById('classTaughtSection');
+  if (taughtSection) {
+    const uids = ['ei','gm','res','ada','con'];
+    const uColors = {ei:'#185FA5',gm:'#3B6D11',res:'#993556',ada:'#534AB7',con:'#854F0B'};
+    const uNames = {ei:'Emotional intelligence',gm:'Growth mindset',res:'Resilience',ada:'Adaptability',con:'Confidence'};
+
+    // Find all grades with at least one lesson taught
+    const taughtGrades = Object.keys(c.taught).filter(g =>
+      Object.values(c.taught[g]||{}).some(v => v > 0)
+    );
+
+    if (taughtGrades.length === 0) {
+      taughtSection.innerHTML = '';
+      taughtSection.onclick = null;
+    } else {
+      const multiGrade = taughtGrades.length > 1;
+      let html = '<span class="class-sec-label">Lessons taught</span>';
+
+      taughtGrades.forEach(grade => {
+        const gradeData = c.taught[grade] || {};
+        const taughtUnits = uids.filter(uid => (gradeData[uid]||0) > 0);
+        if (taughtUnits.length === 0) return;
+
+        if (multiGrade) {
+          html += '<div class="class-grade-group-label">Grade ' + grade + '</div>';
+        }
+
+        taughtUnits.forEach(uid => {
+          const taught = gradeData[uid] || 0;
+          const pct = Math.round((taught/20)*100);
+          html += '<div class="class-unit-row" data-uid="' + uid + '" data-grade="' + grade + '">'
+            + '<div class="class-unit-swatch" style="background:' + uColors[uid] + ';"></div>'
+            + '<div class="class-unit-name">' + uNames[uid] + '</div>'
+            + '<div class="class-unit-bar"><div class="class-unit-bar-fill" style="width:' + pct + '%;background:' + uColors[uid] + ';"></div></div>'
+            + '<div class="class-unit-count">' + taught + ' taught</div>'
+            + '</div>';
+        });
+      });
+
+      taughtSection.innerHTML = html;
+      taughtSection.onclick = function(e) {
+        const row = e.target.closest('.class-unit-row');
+        if (row && row.dataset.uid) {
+          const grade = row.dataset.grade;
+          if (grade && grade !== currentGrade) {
+            // Switch grade pill to match
+            document.querySelectorAll('.grade-pill').forEach(p => {
+              p.classList.toggle('active', p.textContent === grade);
+            });
+            currentGrade = grade;
+          }
+          navUnit(row.dataset.uid, true);
+        }
+      };
+    }
   }
 
   showView('view-class');
 }
 
 function updateActiveBanner() {
-  const banner = document.getElementById('activeBanner');
-  if (activeClassIdx === null || !classes[activeClassIdx]) {
-    banner.classList.remove('visible');
-    return;
+  updateClassSwitcher();
+}
+
+function updateClassSwitcher() {
+  const dot = document.getElementById('csDot');
+  const label = document.getElementById('csLabel');
+  const name = document.getElementById('csName');
+  if (!dot || !label || !name) return;
+
+  const chev = document.querySelector('.cs-chevron');
+  if (activeClassIdx !== null && classes[activeClassIdx]) {
+    const c = classes[activeClassIdx];
+    dot.style.background = c.color;
+    dot.style.display = 'block';
+    label.style.display = 'block';
+    name.textContent = c.name;
+    name.style.color = '#1a1a1a';
+    if (chev) chev.style.display = 'block';
+  } else {
+    dot.style.display = 'none';
+    label.style.display = 'none';
+    name.textContent = '+ Create a class';
+    name.style.color = '#185FA5';
+    if (chev) chev.style.display = 'none';
   }
-  const c = classes[activeClassIdx];
-  banner.classList.add('visible');
-  document.getElementById('acbName').textContent = c.name;
 }
 
 // Flash class button in welcome banner
@@ -1608,7 +1813,7 @@ function flashClassBtn() {
 // Refresh taught counts in skill accordion headers
 function refreshSkillCounts(uid) {
   if (!uid) return;
-  const u = unitData[uid];
+  const u = units[uid];
   if (!u) return;
   u.skills.forEach((s, i) => {
     const ls = lessonData[i] || lessonData[0];
@@ -1623,8 +1828,7 @@ function refreshSkillCounts(uid) {
     // Also refresh checkbox states in open accordions
     ls.forEach((l, j) => {
       const key = uid+'-'+i+'-'+j;
-      const isTaught = doneLessons.has(key);
-      // Find the check element — they're dynamically rendered so we update via the DOM
+      // Checkboxes refresh when accordion is re-rendered
     });
   });
 }
@@ -1641,6 +1845,7 @@ function toggleTaught(uid, skillIdx, lessonIdx) {
   const svgCheck = `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
   const wasDone = isDone(currentGrade, uid, skillIdx, lessonIdx);
   setDone(currentGrade, uid, skillIdx, lessonIdx, !wasDone);
+  if (!wasDone) c.lastTaughtAt = new Date().toISOString();
   if (wasDone) {
     if (checkEl) { checkEl.classList.remove('taught'); checkEl.innerHTML = ''; }
     if (c.taught[currentGrade][uid] > 0) c.taught[currentGrade][uid]--;
@@ -1681,6 +1886,7 @@ function markDone() {
   if (!c.taught[currentGrade]) c.taught[currentGrade] = {};
   const wasDone = isDone(currentGrade, currentUnit, currentSkillIdx, currentLessonIdx);
   setDone(currentGrade, currentUnit, currentSkillIdx, currentLessonIdx, !wasDone);
+  if (!wasDone) c.lastTaughtAt = new Date().toISOString();
   if (wasDone) {
     btn.classList.remove('done');
     lbl.textContent = 'Mark as done';
@@ -1691,6 +1897,25 @@ function markDone() {
     c.taught[currentGrade][currentUnit] = (c.taught[currentGrade][currentUnit]||0) + 1;
   }
   refreshSkillCounts(currentUnit);
+  // Also update lesson checkbox in unit view if visible
+  const checkEl = document.getElementById('lcheck-'+currentUnit+'-'+currentSkillIdx+'-'+currentLessonIdx);
+  if (checkEl) {
+    const nowDone = isDone(currentGrade, currentUnit, currentSkillIdx, currentLessonIdx);
+    const svgCheck = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    checkEl.classList.toggle('taught', nowDone);
+    checkEl.innerHTML = nowDone ? svgCheck : '';
+  }
+  // Update class meta taught count
+  if (activeClassIdx !== null && classes[activeClassIdx]) {
+    const c2 = classes[activeClassIdx];
+    const total = Object.values(c2.taught).reduce((sum, g) => sum + Object.values(g||{}).reduce((a,b)=>a+b,0), 0);
+    const metaEl = document.getElementById('classDetailMeta');
+    if (metaEl) metaEl.textContent = 'Grade '+c2.grade+(total > 0 ? ' · '+total+' lesson'+(total!==1?'s':'')+' taught' : ' · No lessons taught yet');
+    // Refresh class view if visible
+    if (document.getElementById('view-class').classList.contains('active')) {
+      loadClassView(activeClassIdx);
+    }
+  }
 }
 
 function hidePrompt() {
@@ -1783,8 +2008,7 @@ function saveEditClass() {
   // Update initials
   c.initials = name.split(' ').filter(w=>w).map(w=>w[0]).join('').toUpperCase().slice(0,2) || '??';
   closeCreateClass();
-  updateClassesSidebar();
-  updateActiveBanner();
+  updateClassSwitcher();
   loadClassView(activeClassIdx);
   isEditingClass = false;
 }
@@ -1801,6 +2025,276 @@ function openEditClass() {
   document.getElementById('ccModalSub').textContent = 'Update the name or grade for this class.';
   document.getElementById('ccSubmitBtn').textContent = 'Save changes';
   document.getElementById('ccModalOverlay').classList.add('open');
+}
+
+
+
+function resumeLesson() {
+  if (lastOpenedLesson) {
+    navLesson(lastOpenedLesson.uid, lastOpenedLesson.skillIdx, lastOpenedLesson.lessonIdx);
+  }
+}
+
+function toggleCpUnit(id) {
+  const el = document.getElementById('cpunit-'+id);
+  if (el) el.classList.toggle('open');
+}
+
+
+// ══════════════════════════════
+// ARCHIVE
+// ══════════════════════════════
+let archivedClasses = [];
+let archivedSidebarOpen = false;
+
+function archiveClass() {
+  if (activeClassIdx === null || !classes[activeClassIdx]) return;
+  const archived = classes.splice(activeClassIdx, 1)[0];
+  archived.archivedAt = new Date().toISOString();
+  archivedClasses.push(archived);
+
+  activeClassIdx = classes.length > 0 ? 0 : null;
+  lastOpenedLesson = null;
+
+  updateClassSwitcher();
+
+  if (classes.length > 0) {
+    loadClassView(0);
+  } else {
+    showView('view-classes-empty');
+  }
+}
+
+function restoreClass(archivedIdx) {
+  const c = archivedClasses.splice(archivedIdx, 1)[0];
+  delete c.archivedAt;
+  classes.push(c);
+  activeClassIdx = classes.length - 1;
+  updateClassSwitcher();
+  loadClassView(activeClassIdx);
+}
+
+function updateArchivedSidebar() { return; // now handled by renderClassDropdown
+  /*
+  const el = document.getElementById('archivedSidebarSection');
+  if (!el || archivedClasses.length === 0) {
+    if (el) el.innerHTML = '';
+    return;
+  }
+  el.innerHTML = '<div class="archived-toggle' + (archivedSidebarOpen ? ' open' : '') + '" onclick="toggleArchivedSidebar()">'
+    + '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3 1l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    + 'Archived (' + archivedClasses.length + ')'
+    + '</div>'
+    + '<div class="archived-list' + (archivedSidebarOpen ? ' open' : '') + '" id="archivedList">'
+    + archivedClasses.map((c, i) => 
+        '<div class="archived-class-row" onclick="restoreClass(' + i + ')">'
+        + '<div class="archived-avatar" style="background:' + c.color + ';">' + c.initials + '</div>'
+        + '<div class="archived-name">' + c.name + '</div>'
+        + '<div class="archived-restore">Restore →</div>'
+        + '</div>'
+      ).join('')
+    + '</div>';
+}
+
+*/
+}
+
+
+function toggleArchivedSidebar() {
+  archivedSidebarOpen = !archivedSidebarOpen;
+  updateArchivedSidebar();
+}
+
+
+// ══════════════════════════════
+// CLASS SWITCHER DROPDOWN
+// ══════════════════════════════
+let dropdownOpen = false;
+let cdArchivedOpen = false;
+
+function handleSwitcherClick() {
+  if (classes.length === 0) {
+    openCreateClass();
+    return;
+  }
+  toggleClassDropdown();
+}
+
+function toggleClassDropdown() {
+  dropdownOpen = !dropdownOpen;
+  const dd = document.getElementById('classDropdown');
+  const btn = document.getElementById('classSwitcher');
+  dd.classList.toggle('open', dropdownOpen);
+  btn.classList.toggle('open', dropdownOpen);
+  if (dropdownOpen) {
+    // Position dropdown below the switcher button
+    const rect = btn.getBoundingClientRect();
+    dd.style.left = rect.left + 'px';
+    dd.style.top = (rect.bottom + 4) + 'px';
+    renderClassDropdown();
+    const si = document.getElementById('classSearch');
+    if (si) { si.value = ''; if (classes.length > 0) setTimeout(() => si.focus(), 50); }
+  }
+}
+
+function closeClassDropdown() {
+  dropdownOpen = false;
+  document.getElementById('classDropdown').classList.remove('open');
+  document.getElementById('classSwitcher').classList.remove('open');
+}
+
+function renderClassDropdown(filter) {
+  const list = document.getElementById('cdClassList');
+  const search = document.getElementById('classSearch');
+  const searchWrap = search ? search.closest('.cd-search') : null;
+  if (searchWrap) searchWrap.style.display = classes.length > 0 ? 'flex' : 'none';
+  const filtered = classes.filter(c => !filter || c.name.toLowerCase().includes(filter.toLowerCase()));
+
+  if (filtered.length === 0 && classes.length > 0) {
+    list.innerHTML = '<div class="cd-empty">No classes match your search</div>';
+  } else if (filtered.length === 0) {
+    list.innerHTML = '';
+  } else {
+    list.innerHTML = filtered.map((c, i) => {
+      const realIdx = classes.indexOf(c);
+      const isActive = realIdx === activeClassIdx;
+      return '<div class="cd-class-item' + (isActive ? ' active' : '') + '" onclick="selectClassFromDropdown(' + realIdx + ')">'
+        + '<div class="cd-avatar" style="background:' + c.color + ';">' + c.initials + '</div>'
+        + '<div class="cd-class-name">' + c.name + '</div>'
+        + '<div class="cd-class-meta">Grade ' + c.grade + '</div>'
+        + ''
+        + '</div>';
+    }).join('');
+  }
+
+  // Archived section
+  const archToggle = document.getElementById('cdArchivedToggle');
+  const archList = document.getElementById('cdArchivedList');
+  if (archivedClasses.length > 0) {
+    archToggle.style.display = 'flex';
+    document.getElementById('cdArchivedLabel').textContent = 'Archived (' + archivedClasses.length + ')';
+    archList.innerHTML = archivedClasses.map((c, i) =>
+      '<div class="cd-archived-item" onclick="restoreFromDropdown(' + i + ')">'
+      + '<div class="cd-avatar" style="background:' + c.color + ';filter:grayscale(0.5);opacity:0.7;">' + c.initials + '</div>'
+      + '<div class="cd-archived-name">' + c.name + '</div>'
+      + '<div class="cd-archived-restore">Restore →</div>'
+      + '</div>'
+    ).join('');
+    archList.classList.toggle('open', cdArchivedOpen);
+  } else {
+    archToggle.style.display = 'none';
+    archList.innerHTML = '';
+  }
+}
+
+function filterClasses(val) {
+  renderClassDropdown(val);
+}
+
+function selectClassFromDropdown(idx) {
+  closeClassDropdown();
+  switchClass(idx);
+}
+
+function restoreFromDropdown(archivedIdx) {
+  restoreClass(archivedIdx);
+  closeClassDropdown();
+}
+
+function toggleCdArchived() {
+  cdArchivedOpen = !cdArchivedOpen;
+  document.getElementById('cdArchivedList').classList.toggle('open', cdArchivedOpen);
+  document.getElementById('cdArchivedChev').style.transform = cdArchivedOpen ? 'rotate(90deg)' : '';
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#classDropdown') && !e.target.closest('#classSwitcher')) {
+    closeClassDropdown();
+  }
+});
+
+
+// ══════════════════════════════
+// SKILL VIDEO MODAL
+// ══════════════════════════════
+let watchedVideos = new Set(); // "uid-skillIdx"
+let currentVideoKey = null;
+let videoPlaying = false;
+
+function openVideoModal(uid, skillIdx) {
+  currentVideoKey = uid + '-' + skillIdx;
+  const u = units[uid];
+  const skillName = u.skills[skillIdx];
+
+  document.getElementById('vmEyebrow').textContent = u.name + ' · Skill intro';
+  document.getElementById('vmTitle').textContent = 'Understanding ' + skillName;
+
+  const isWatched = watchedVideos.has(currentVideoKey);
+  updateWatchedBtn(isWatched);
+
+  videoPlaying = false;
+  resetPlayBtn();
+  document.getElementById('videoModalOverlay').classList.add('open');
+}
+
+function closeVideoModal() {
+  document.getElementById('videoModalOverlay').classList.remove('open');
+  videoPlaying = false;
+  resetPlayBtn();
+  // Refresh skill intro link state
+  if (currentVideoKey) refreshSkillIntroLink();
+}
+
+function toggleVideoPlay() {
+  videoPlaying = !videoPlaying;
+  const btn = document.getElementById('vmPlayBtn');
+  if (videoPlaying) {
+    btn.style.background = 'rgba(255,255,255,0.6)';
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="3" y="2" width="3" height="10" rx="1" fill="#1a1a1a"/><rect x="8" y="2" width="3" height="10" rx="1" fill="#1a1a1a"/></svg>';
+  } else {
+    resetPlayBtn();
+  }
+}
+
+function resetPlayBtn() {
+  const btn = document.getElementById('vmPlayBtn');
+  btn.style.background = 'rgba(255,255,255,0.9)';
+  btn.innerHTML = '<div class="vm-play-icon"></div>';
+}
+
+function toggleVideoWatched() {
+  if (!currentVideoKey) return;
+  const isWatched = watchedVideos.has(currentVideoKey);
+  if (isWatched) {
+    watchedVideos.delete(currentVideoKey);
+    updateWatchedBtn(false);
+  } else {
+    watchedVideos.add(currentVideoKey);
+    updateWatchedBtn(true);
+  }
+  refreshSkillIntroLink();
+}
+
+function updateWatchedBtn(isWatched) {
+  const btn = document.getElementById('vmWatchedBtn');
+  const lbl = document.getElementById('vmWatchedLabel');
+  btn.classList.toggle('watched', isWatched);
+  lbl.textContent = isWatched ? 'Watched ✓' : 'Mark as watched';
+}
+
+function refreshSkillIntroLink() {
+  const link = document.getElementById('skillIntroLink');
+  if (!link || !currentVideoKey) return;
+  const isWatched = watchedVideos.has(currentVideoKey);
+  if (isWatched) {
+    link.innerHTML = '<span style="color:#3B6D11;font-weight:500;">✓ Watched</span> — <span style="text-decoration:underline;cursor:pointer;">watch again</span>';
+    link.className = '';
+    link.onclick = function() { openVideoModal(currentVideoKey.split('-')[0], parseInt(currentVideoKey.split('-')[1])); };
+  } else {
+    link.innerHTML = 'Watch the skill intro video';
+    link.className = '';
+  }
 }
 
 // ══════════════════════════════
@@ -1831,6 +2325,36 @@ init();
       <div class="slide-s-title" id="slideTitleS">What are feelings?</div>
       <div class="slide-s-body" id="slideBodyS">An introduction to emotions and why we have them</div>
       <div class="slide-s-num" id="slideNumS">Slide 1 of 12</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ SKILL VIDEO MODAL ══ -->
+<div class="video-modal-overlay" id="videoModalOverlay" onclick="if(event.target===this)closeVideoModal()">
+  <div class="video-modal">
+    <div class="vm-header">
+      <div>
+        <div class="vm-eyebrow" id="vmEyebrow">Skill intro</div>
+        <div class="vm-title" id="vmTitle">Understanding Naming my feelings</div>
+      </div>
+      <button class="vm-close" onclick="closeVideoModal()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="vm-player" onclick="toggleVideoPlay()">
+      <div class="vm-play-btn" id="vmPlayBtn">
+        <div class="vm-play-icon"></div>
+      </div>
+      <div class="vm-duration">4:00</div>
+      <div class="vm-slide-hint">Simulated player — real video via embed URL</div>
+    </div>
+    <div class="vm-footer">
+      <div class="vm-watched-btn" id="vmWatchedBtn" onclick="toggleVideoWatched()">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" id="vmWatchedIcon"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 7l2 2 3.5-3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="vmWatchedLabel">Mark as watched</span>
+      </div>
+      <div class="vm-done-btn" onclick="closeVideoModal()">Close</div>
     </div>
   </div>
 </div>
