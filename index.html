@@ -70,7 +70,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 /* Views */
 .view { display: none; }
 .view.active { display: block; }
-.cw { max-width: 860px; padding: 28px 40px; }
+.cw { max-width: 900px; padding: 28px 40px; }
 
 /* ── WELCOME BANNER ── */
 .welcome-banner { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 12px; padding: 16px 18px; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 14px; }
@@ -231,17 +231,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .ccp-create:hover { background: #E6F1FB; }
 .ccp-dismiss { font-size: 12px; color: #bbb; cursor: pointer; }
 .ccp-dismiss:hover { color: #888; }
-.nav-btn { width: 28px; height: 28px; border-radius: 6px; border: 0.5px solid #e8e6e0; background: #fff; color: #ccc; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #888; transition: all .12s; }
+.nav-btn { width: 28px; height: 28px; border-radius: 6px; border: 0.5px solid #e8e6e0; background: transparent; color: #ccc; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #888; transition: all .12s; }
 .nav-btn:hover { border-color: #185FA5; color: #185FA5; background: #f0f7fe; }
-.nav-btn.disabled { opacity: .3; pointer-events: none; }
+.nav-btn.disabled { opacity: 0.5; pointer-events: none; }
 .nav-lbl { font-size: 11px; color: #bbb; padding: 0 6px; white-space: nowrap; }
 
-.lesson-body { background: #fff; }
-.lesson-cw { max-width: 900px; margin: 0 auto; padding: 0 40px; }
-.lesson-intro { padding-top: 24px; padding-bottom: 0; }
+.lesson-body { }
+.lesson-cw { max-width: 900px; margin: 0 auto; padding: 28px 40px 40px; }
+.lesson-intro { padding-top: 0; padding-bottom: 24px; }
 .lesson-num-row { font-size: 11px; color: #bbb; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
 .lesson-num-badge { background: #E6F1FB; color: #185FA5; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 10px; }
-.lesson-title { font-size: 24px; font-weight: 500; color: #1a1a1a; margin-bottom: 6px; line-height: 1.2; }
+.lesson-title { font-size: 22px; font-weight: 500; color: #1a1a1a; margin-bottom: 6px; line-height: 1.3; }
 .lesson-desc { font-size: 13px; color: #999; line-height: 1.6; margin-bottom: 24px; }
 
 /* Mode tabs */
@@ -880,11 +880,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
       </div>
       <div class="lesson-body">
-        <div class="lesson-cw lesson-intro">
-          
-          <div class="lesson-title" id="lessonTitle"></div>
-          <div class="lesson-desc" id="lessonDesc"></div>
-        </div>
         <div class="mode-tabs-wrap">
           <div class="mode-tabs">
             <div class="mode-tab active" id="mtab-prep" onclick="switchMode('prep')"><span class="mode-tab-lbl">Prep Mode</span></div>
@@ -892,8 +887,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           </div>
         </div>
         <div class="mode-content lesson-cw">
+          <div class="lesson-intro" style="background:#fff;border-radius:12px;padding:24px 24px 20px;margin-bottom:8px;">
+            <div class="lesson-title" id="lessonTitle"></div>
+            <div class="lesson-desc" id="lessonDesc"></div>
+          </div>
           <div class="mode-pane active" id="mpane-prep">
-            <div class="skill-intro-note">
+            <div class="skill-intro-note" onclick="if(currentUnit&&currentSkillIdx!==undefined)openVideoModal(currentUnit,currentSkillIdx)" style="cursor:pointer;">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#185FA5" stroke-width="1.2"/><path d="M7 4.5V7l1.5 1.5" stroke="#185FA5" stroke-width="1.2" stroke-linecap="round"/></svg>
               <span class="skill-intro-label">Skill intro video:</span> <a id="skillIntroLink">Watch — 4 min</a>
             </div>
@@ -1333,14 +1332,16 @@ function refreshOverview() {
 
       // Last opened
       resumeCard.style.display = 'block';
-      if (lastOpenedLesson) {
-        document.getElementById('ovResumeTitle').textContent = lastOpenedLesson.title;
-        document.getElementById('ovResumePath').textContent = lastOpenedLesson.path;
+      const effectiveOpened = lastOpenedLesson || lastTaughtLesson;
+      if (effectiveOpened) {
+        document.getElementById('ovResumeTitle').textContent = effectiveOpened.title;
+        document.getElementById('ovResumePath').textContent = effectiveOpened.path;
         const rd = document.getElementById('ovResumeDate');
-        if (rd) rd.textContent = lastOpenedLesson.openedAt ? fmtDate(lastOpenedLesson.openedAt) : '';
+        if (rd) rd.textContent = effectiveOpened.openedAt ? fmtDate(effectiveOpened.openedAt) : (effectiveOpened.taughtAt ? fmtDate(effectiveOpened.taughtAt) : '');
         resumeCard.style.opacity = '1'; resumeCard.style.cursor = 'pointer';
         resumeCard.classList.remove('empty');
-        resumeCard.style.borderLeftColor = unitColor(lastOpenedLesson.uid);
+        resumeCard.style.borderLeftColor = unitColor(effectiveOpened.uid);
+        resumeCard.onclick = function() { navLesson(effectiveOpened.uid, effectiveOpened.skillIdx, effectiveOpened.lessonIdx); };
       } else {
         document.getElementById('ovResumeTitle').textContent = 'No lesson opened yet';
         document.getElementById('ovResumePath').textContent = '';
@@ -1563,7 +1564,7 @@ function navLesson(uid, skillIdx, lessonIdx) {
   // Track for resume
   lastOpenedLesson = {
     title: l.n,
-    path: u.name + ' · ' + u.skills[skillIdx] + ' · Lesson ' + (lessonIdx+1),
+    path: u.name + ' · ' + u.skills[skillIdx],
     unitColor: u.color,
     uid: uid, skillIdx: skillIdx, lessonIdx: lessonIdx,
     grade: currentGrade,
@@ -1589,7 +1590,7 @@ function navLesson(uid, skillIdx, lessonIdx) {
     btn.style.borderColor = '';
     const wasTaught = isDone(currentGrade, uid, skillIdx, lessonIdx);
     if (wasTaught) {
-      btn.classList.add('done'); lbl.textContent = 'Done';
+      btn.classList.add('done'); lbl.textContent = 'Taught';
     } else {
       btn.classList.remove('done'); lbl.textContent = 'Mark as taught';
     }
@@ -1600,7 +1601,6 @@ function navLesson(uid, skillIdx, lessonIdx) {
   switchMode('prep');
 
   // Header
-  document.getElementById('bcLesson').textContent = l.n;
   document.getElementById('lessonBackLabel').textContent = u.name;
   document.getElementById('lessonTitle').textContent = l.n;
   document.getElementById('lessonDesc').textContent = l.d;
@@ -2031,7 +2031,7 @@ function toggleTaught(uid, skillIdx, lessonIdx) {
     // Store last taught lesson
     lastTaughtLesson = {
       title: document.getElementById('lessonTitle') ? document.getElementById('lessonTitle').textContent : '',
-      path: units[currentUnit].name + ' · ' + units[currentUnit].skills[currentSkillIdx] + ' · Lesson ' + (currentLessonIdx+1),
+      path: units[currentUnit].name + ' · ' + units[currentUnit].skills[currentSkillIdx],
       uid: currentUnit, skillIdx: currentSkillIdx, lessonIdx: currentLessonIdx,
       grade: currentGrade,
       taughtAt: new Date().toISOString()
@@ -2052,7 +2052,7 @@ function toggleTaught(uid, skillIdx, lessonIdx) {
     const ls2 = lessonData[skillIdx]||lessonData[0];
     lastTaughtLesson = {
       title: ls2[lessonIdx] ? ls2[lessonIdx].n : '',
-      path: units[uid].name + ' · ' + units[uid].skills[skillIdx] + ' · Lesson ' + (lessonIdx+1),
+      path: units[uid].name + ' · ' + units[uid].skills[skillIdx],
       uid: uid, skillIdx: skillIdx, lessonIdx: lessonIdx,
       grade: currentGrade,
       taughtAt: new Date().toISOString()
@@ -2096,7 +2096,7 @@ function markDone() {
     // Store last taught lesson
     lastTaughtLesson = {
       title: document.getElementById('lessonTitle') ? document.getElementById('lessonTitle').textContent : '',
-      path: units[currentUnit].name + ' · ' + units[currentUnit].skills[currentSkillIdx] + ' · Lesson ' + (currentLessonIdx+1),
+      path: units[currentUnit].name + ' · ' + units[currentUnit].skills[currentSkillIdx],
       uid: currentUnit, skillIdx: currentSkillIdx, lessonIdx: currentLessonIdx,
       grade: currentGrade,
       taughtAt: new Date().toISOString()
@@ -2111,7 +2111,7 @@ function markDone() {
       if (c.taught[currentGrade][currentUnit] > 0) c.taught[currentGrade][currentUnit]--;
   } else {
     btn.classList.add('done');
-    lbl.textContent = 'Done';
+    lbl.textContent = 'Taught';
     c.taught[currentGrade][currentUnit] = (c.taught[currentGrade][currentUnit]||0) + 1;
     if (!c.lastTaughtByUnit) c.lastTaughtByUnit = {};
     c.lastTaughtByUnit[currentUnit] = new Date().toISOString();
@@ -2519,13 +2519,15 @@ function updateWatchedBtn(isWatched) {
 function refreshSkillIntroLink() {
   const link = document.getElementById('skillIntroLink');
   if (!link || !currentVideoKey) return;
+  const parts = currentVideoKey.split('-');
+  const uid = parts[0]; const si = parseInt(parts[1]);
   const isWatched = watchedVideos.has(currentVideoKey);
+  link.onclick = function() { openVideoModal(uid, si); };
   if (isWatched) {
-    link.innerHTML = '<span style="color:#3B6D11;font-weight:500;">✓ Watched</span> — <span style="text-decoration:underline;cursor:pointer;">watch again</span>';
+    link.innerHTML = '<span style="color:#3B6D11;font-weight:500;">✓ Watched</span> · <span style="text-decoration:underline;cursor:pointer;color:#888;">watch again</span>';
     link.className = '';
-    link.onclick = function() { openVideoModal(currentVideoKey.split('-')[0], parseInt(currentVideoKey.split('-')[1])); };
   } else {
-    link.innerHTML = 'Watch the skill intro video';
+    link.innerHTML = 'Watch — 4 min';
     link.className = '';
   }
 }
@@ -2625,7 +2627,7 @@ function setPlanLesson(uid, si, li, name, skill) {
   classes[activeClassIdx].plannedNext = {
     uid, skillIdx: si, lessonIdx: li,
     title: name,
-    path: u.name + ' · ' + skill + ' · Lesson ' + (li+1)
+    path: u.name + ' · ' + skill
   };
   closePlanPicker();
   refreshOverview();
