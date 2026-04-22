@@ -236,7 +236,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .nav-btn.disabled { opacity: .3; pointer-events: none; }
 .nav-lbl { font-size: 11px; color: #bbb; padding: 0 6px; white-space: nowrap; }
 
-.lesson-body { }
+.lesson-body { background: #fff; }
 .lesson-cw { max-width: 900px; margin: 0 auto; padding: 0 40px; }
 .lesson-intro { padding-top: 24px; padding-bottom: 0; }
 .lesson-num-row { font-size: 11px; color: #bbb; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
@@ -540,7 +540,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 
 /* ── TOP BAR ── */
-.top-bar { height: 44px; background: #fff; border-bottom: 0.5px solid #e8e6e0; display: flex; align-items: center; padding: 0 40px; gap: 8px; flex-shrink: 0; position: relative; z-index: 50; width: 100%; }
+.top-bar { height: 44px; background: #fff; border-bottom: 0.5px solid #e8e6e0; padding: 0 40px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; position: relative; z-index: 50; width: 100%; }
 .top-bar-toggle { width: 30px; height: 30px; border-radius: 7px; border: none; background: transparent; cursor: pointer; color: #888; display: flex; align-items: center; justify-content: center; transition: background .12s; flex-shrink: 0; }
 .top-bar-toggle:hover { background: #f5f4f0; color: #185FA5; }
 .top-bar-divider { width: 0.5px; height: 20px; background: #e8e6e0; flex-shrink: 0; }
@@ -621,8 +621,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .oac-taught-eyebrow { color: #3B6D11; }
 .oac-title { font-size: 15px; font-weight: 500; color: #1a1a1a; margin-bottom: 4px; line-height: 1.3; }
 .oac-path { font-size: 11px; color: #bbb; margin-bottom: 4px; }
-.oac-date { font-size: 10px; color: #ddd; margin-top: 5px; font-weight: 400; font-style: italic; }
-
+.oac-path { font-size: 11px; color: #bbb; margin-bottom: 2px; }
+.oac-date { font-size: 11px; color: #888; margin-top: 2px; font-weight: 400; }
 
 /* Also taught indicator */
 .also-taught { font-size: 11px; color: #bbb; white-space: nowrap; flex-shrink: 0; margin-right: 4px; }
@@ -677,6 +677,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .cd-action-btn { width: 24px; height: 24px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #aaa; cursor: pointer; transition: all .12s; }
 .cd-action-btn:hover { background: rgba(0,0,0,0.06); color: #555; }
 
+.skill-intro-label { font-size: 12px; color: #888; }
 </style>
 </head>
 <body>
@@ -808,9 +809,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
             </div>
             <div class="oac-title" id="ovPlannedTitle">No lesson planned yet</div>
             <div class="oac-path" id="ovPlannedPath"></div>
-            <div style="margin-top:8px;">
-              <span class="oac-plan-btn" id="ovPlanBtn">Plan →</span>
-            </div>
+            <div class="oac-date" id="ovPlannedHint"></div>
           </div>
 
         </div>
@@ -896,7 +895,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           <div class="mode-pane active" id="mpane-prep">
             <div class="skill-intro-note">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#185FA5" stroke-width="1.2"/><path d="M7 4.5V7l1.5 1.5" stroke="#185FA5" stroke-width="1.2" stroke-linecap="round"/></svg>
-              <a id="skillIntroLink">Watch the intro video — 4 min</a>
+              <span class="skill-intro-label">Skill intro video:</span> <a id="skillIntroLink">Watch — 4 min</a>
             </div>
             <div class="prep-sec-lbl">For the teacher</div>
             <div class="prep-list">
@@ -1406,43 +1405,20 @@ function refreshOverview() {
 
   document.getElementById('overviewGrid').innerHTML = Object.entries(units).map(([uid, u]) => {
     // Sum taught across ALL grades for this unit
-    const taughtByGrade = c ? Object.keys(c.taught).filter(g => (c.taught[g]||{})[uid] > 0) : [];
-    const taughtTotal = taughtByGrade.reduce((sum, g) => sum + ((c.taught[g]||{})[uid]||0), 0);
-    const taught = taughtTotal;
+    const taughtTotal = c ? Object.values(c.taught).reduce((sum, gd) => sum + ((gd||{})[uid]||0), 0) : 0;
     const pct = Math.round((taughtTotal/20)*100);
-    const hasProgress = c && taught > 0;
-    // Multi-grade: show breakdown; single grade: show count
-    const progLabel = taughtByGrade.length > 1
-      ? taughtByGrade.map(g => (c.taught[g][uid]||0) + ' (' + g + ')').join(' · ')
-      : (taught > 0 ? taught + ' taught' : '');
     return '<div class="ov-card" onclick="navUnit(\'' + uid + '\')">'
       + '<div class="ov-icon" style="background:' + u.bg + ';">' + u.icon + '</div>'
       + '<div class="ov-name">' + u.name + '</div>'
       + '<div class="ov-desc">' + (u.desc || '') + '</div>'
       + '<div class="ov-prog" style="margin-top:auto;padding-top:12px;">'
       + (pct > 0 ? '<div class="ov-prog-bar"><div class="ov-prog-fill" style="width:' + pct + '%;background:' + u.color + ';"></div></div>' : '')
-      + (() => {
-        if (!c) return '';
-        // Gather per-grade counts for this unit
-        const gradeCounts = Object.entries(c.taught)
-          .filter(([g, gd]) => (gd[uid]||0) > 0)
-          .map(([g, gd]) => ({ grade: g, count: gd[uid] }));
-        if (gradeCounts.length === 0) return '';
-        if (gradeCounts.length === 1) {
-          const {grade, count} = gradeCounts[0];
-          return '<div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:3px;">'
-            + '<div class="ov-prog-label has-progress">' + count + ' taught</div>'
-            + (c.lastTaughtByUnit && c.lastTaughtByUnit[uid] ? '<div class="ov-last-taught">' + fmtDate(c.lastTaughtByUnit[uid]) + '</div>' : '')
-            + '</div>';
-        }
-        // Multi-grade: show breakdown
-        return '<div style="margin-top:4px;">'
-          + gradeCounts.map(({grade, count}) =>
-              '<div class="ov-prog-label has-progress" style="margin-top:1px;">Gr ' + grade + ': ' + count + ' taught</div>'
-            ).join('')
-          + (c.lastTaughtByUnit && c.lastTaughtByUnit[uid] ? '<div class="ov-last-taught">' + fmtDate(c.lastTaughtByUnit[uid]) + '</div>' : '')
-          + '</div>';
-      })()
+      + (taughtTotal > 0
+        ? '<div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:3px;">'
+          + '<div class="ov-prog-label has-progress">' + taughtTotal + ' taught</div>'
+          + (c && c.lastTaughtByUnit && c.lastTaughtByUnit[uid] ? '<div class="ov-last-taught">Last: ' + fmtDate(c.lastTaughtByUnit[uid]) + '</div>' : '')
+          + '</div>'
+        : '')
       + '</div>'
       + '</div>';
   }).join('');
@@ -1593,6 +1569,9 @@ function navLesson(uid, skillIdx, lessonIdx) {
     grade: currentGrade,
     openedAt: new Date().toISOString()
   };
+  if (activeClassIdx !== null && classes[activeClassIdx]) {
+    classes[activeClassIdx].lastOpenedLesson = lastOpenedLesson;
+  }
   updateActiveBanner();
   refreshOverview(); // keep overview resume card in sync
   refreshPlanNextBtn();
@@ -1921,9 +1900,12 @@ function updateClassesSidebar() {
 
 function switchClass(idx) {
   activeClassIdx = idx;
+  const c = classes[idx];
+  // Restore per-class lesson state
+  lastOpenedLesson = c.lastOpenedLesson || null;
+  lastTaughtLesson = c.lastTaughtLesson || null;
   updateClassSwitcher();
   loadClassView(idx);
-  // Refresh overview in background so it's ready
   refreshOverview();
 }
 
@@ -2054,6 +2036,9 @@ function toggleTaught(uid, skillIdx, lessonIdx) {
       grade: currentGrade,
       taughtAt: new Date().toISOString()
     };
+    if (activeClassIdx !== null && classes[activeClassIdx]) {
+      classes[activeClassIdx].lastTaughtLesson = lastTaughtLesson;
+    }
   }
   if (wasDone) {
     if (checkEl) { checkEl.classList.remove('taught'); checkEl.innerHTML = ''; }
@@ -2116,6 +2101,9 @@ function markDone() {
       grade: currentGrade,
       taughtAt: new Date().toISOString()
     };
+    if (activeClassIdx !== null && classes[activeClassIdx]) {
+      classes[activeClassIdx].lastTaughtLesson = lastTaughtLesson;
+    }
   }
   if (wasDone) {
     btn.classList.remove('done');
