@@ -1,0 +1,2822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GrowthMinded Life Skills Curriculum</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f4f0; overflow: hidden; height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; }
+
+/* ── APP SHELL ── */
+.app { display: flex; width: 100%; max-width: 1400px; height: calc(100vh - 32px); overflow: hidden; border-radius: 12px; box-shadow: 0 2px 24px rgba(0,0,0,0.08); border: 0.5px solid #e8e6e0; }
+
+/* ── SIDEBAR ── */
+.sidebar { width: 240px; flex-shrink: 0; background: #fff; border-right: 0.5px solid #e8e6e0; display: flex; flex-direction: column; height: 100%; }
+.sb-scroll { flex: 1; overflow-y: auto; padding: 18px 12px 8px; }
+.sb-scroll::-webkit-scrollbar { width: 3px; }
+.sb-scroll::-webkit-scrollbar-thumb { background: #e8e6e0; border-radius: 2px; }
+.sb-section { margin-bottom: 18px; }
+.s-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; color: #aaa; padding: 0 8px; margin-bottom: 7px; display: block; }
+
+/* Grade pills */
+.grade-pills { display: flex; gap: 5px; padding: 0 4px; flex-wrap: wrap; }
+.grade-pill { font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 0.5px solid #ddd; color: #888; background: transparent; cursor: pointer; white-space: nowrap; transition: all .2s; }
+.grade-pill:hover { border-color: #185FA5; color: #185FA5; }
+.grade-pill.active { background: #E6F1FB; border-color: #185FA5; color: #0C447C; font-weight: 500; }
+.grade-pill.pulse { border-color: #185FA5; background: #E6F1FB; box-shadow: 0 0 0 3px #b5d4f4; }
+
+/* Nav tree */
+.nav-item { display: flex; align-items: center; gap: 7px; padding: 6px 8px; border-radius: 7px; font-size: 13px; color: #888; cursor: pointer; margin-bottom: 1px; user-select: none; transition: background .1s; }
+.nav-item:hover { background: #f5f4f0; color: #555; }
+.nav-item.active { background: #E6F1FB; color: #0C447C; font-weight: 500; }
+.nav-item.skill-level { padding-left: 24px; font-size: 12px; }
+.nav-item.lesson-level { padding-left: 40px; font-size: 11px; color: #999; }
+.nav-item.lesson-level.active { background: #E6F1FB; color: #0C447C; font-weight: 500; }
+.nav-swatch { width: 7px; height: 7px; border-radius: 2px; flex-shrink: 0; }
+.nav-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.nav-lesson-dot { width: 4px; height: 4px; border-radius: 50%; background: #ddd; flex-shrink: 0; }
+.nav-item.active .nav-lesson-dot { background: #185FA5; }
+.nav-all-units { display: flex; align-items: center; gap: 7px; padding: 6px 8px; border-radius: 7px; font-size: 13px; color: #888; cursor: pointer; margin-bottom: 5px; transition: background .1s; }
+.nav-all-units:hover { background: #f5f4f0; color: #555; }
+.nav-all-units.active { background: #E6F1FB; color: #0C447C; font-weight: 500; }
+.nav-all-dot { width: 7px; height: 7px; border-radius: 2px; background: #ddd; flex-shrink: 0; }
+.nav-chevron { margin-left: auto; color: #ccc; transition: transform .2s; flex-shrink: 0; }
+.nav-item.open > .nav-chevron { transform: rotate(90deg); }
+.nav-children { overflow: hidden; max-height: 0; transition: max-height .3s ease; }
+.nav-children.open { max-height: 800px; }
+
+/* Classes */
+.classes-empty { padding: 2px 8px 0; }
+.classes-empty-title { font-size: 12px; font-weight: 500; color: #999; margin-bottom: 4px; }
+.classes-empty-text { font-size: 11px; color: #bbb; line-height: 1.5; margin-bottom: 10px; }
+.add-class-btn { display: flex; align-items: center; gap: 6px; padding: 7px 8px; border-radius: 7px; font-size: 12px; color: #185FA5; font-weight: 500; border: 0.5px solid #b5d4f4; background: #f0f7fe; width: 100%; cursor: pointer; transition: all .2s; }
+.add-class-btn:hover { background: #E6F1FB; }
+.plus-sm { width: 15px; height: 15px; border-radius: 4px; border: 0.5px solid #185FA5; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; color: #185FA5; }
+
+/* Sidebar footer */
+.sb-footer { flex-shrink: 0; border-top: 0.5px solid #f0ede8; padding: 10px 12px; background: #fff; }
+.find-btn { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 9px; font-size: 12px; color: #185FA5; cursor: pointer; background: #f0f7fe; border: 0.5px dashed #b5d4f4; width: 100%; transition: background .12s; }
+.find-btn:hover { background: #E6F1FB; }
+.find-icon { width: 20px; height: 20px; border-radius: 6px; background: #185FA5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.find-label { flex: 1; font-weight: 500; }
+
+/* ── MAIN ── */
+.main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.main { flex: 1; overflow-y: auto; min-width: 0; }
+.main::-webkit-scrollbar { width: 4px; }
+.main::-webkit-scrollbar-thumb { background: #e8e6e0; border-radius: 2px; }
+
+/* Views */
+.view { display: none; }
+.view.active { display: block; }
+.cw { max-width: 860px; padding: 28px 40px; }
+
+/* ── WELCOME BANNER ── */
+.welcome-banner { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 12px; padding: 16px 18px; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 14px; }
+.welcome-banner.dismissed { display: none; }
+.wb-icon { width: 34px; height: 34px; border-radius: 9px; background: #E6F1FB; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.wb-body { flex: 1; }
+.wb-title { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 6px; }
+.wb-line { font-size: 12px; color: #999; line-height: 1.6; margin-bottom: 3px; }
+.wb-line:last-child { margin-bottom: 0; }
+.wb-line a { color: #185FA5; cursor: pointer; font-weight: 500; text-decoration: none; }
+.wb-line a:hover { text-decoration: underline; }
+.wb-dismiss { background: none; border: none; cursor: pointer; color: #ccc; font-size: 20px; line-height: 1; padding: 0; flex-shrink: 0; }
+.wb-dismiss:hover { color: #888; }
+
+/* ── OVERVIEW ── */
+.page-title-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+.page-class-name { font-size: 18px; font-weight: 500; color: #185FA5; margin-top: 8px; letter-spacing: 0.01em; }
+.page-title { font-size: 22px; font-weight: 500; color: #1a1a1a; }
+.about-link { font-size: 12px; color: #185FA5; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; transition: opacity .12s; }
+.about-link:hover { opacity: .75; }
+.about-icon { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #185FA5; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; color: #185FA5; flex-shrink: 0; }
+.grade-line { font-size: 12px; color: #bbb; margin-bottom: 22px; display: flex; align-items: center; gap: 5px; }
+.grade-value { color: #888; font-weight: 500; }
+.grade-link { color: #185FA5; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; }
+.grade-link:hover { opacity: .75; }
+
+.overview-grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; margin-top: 24px; }
+.ov-card { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 12px; padding: 16px; cursor: pointer; transition: all .15s; display: flex; flex-direction: column; }
+.ov-card:hover { border-color: #185FA5; transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.ov-icon { width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+.ov-name { font-size: 13px; font-weight: 500; color: #1a1a1a; line-height: 1.3; margin-bottom: 8px; }
+.ov-desc { font-size: 11px; color: #aaa; line-height: 1.55; flex: 1; }
+.ov-meta { font-size: 11px; color: #bbb; }
+.ov-cta { font-size: 11px; color: #185FA5; font-weight: 500; margin-top: 10px; display: none; }
+.ov-card:hover .ov-cta { display: block; }
+
+/* ── UNIT VIEW ── */
+.unit-hdr { margin-bottom: 20px; }
+.unit-title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
+.unit-hero-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.unit-hero-name { font-size: 22px; font-weight: 500; }
+.unit-hero-meta { font-size: 12px; color: #bbb; padding-left: 56px; }
+
+/* Unit tabs */
+.unit-tabs-wrap { border-bottom: 0.5px solid #e8e6e0; margin: 0 -40px 22px; padding: 0 40px; }
+.unit-tabs { display: flex; }
+.unit-tab { padding: 11px 18px 10px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; transition: all .15s; user-select: none; }
+.unit-tab.active { border-bottom-color: #185FA5; }
+.unit-tab-lbl { font-size: 13px; font-weight: 500; color: #888; transition: color .15s; }
+.unit-tab.active .unit-tab-lbl { color: #185FA5; }
+.unit-tab:hover .unit-tab-lbl { color: #185FA5; }
+.unit-pane { display: none; }
+.unit-pane.active { display: block; }
+
+/* Skill accordions */
+.skill-accordions { display: flex; flex-direction: column; gap: 8px; }
+.skill-acc { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 12px; overflow: hidden; transition: border-color .15s; }
+.skill-acc.open { border-color: #b5d4f4; }
+.skill-acc-hdr { display: flex; align-items: center; gap: 12px; padding: 14px 18px; cursor: pointer; transition: background .1s; user-select: none; }
+.skill-acc-hdr:hover { background: #faf9f7; }
+.skill-acc.open .skill-acc-hdr { background: #faf9f7; }
+.sa-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.sa-name { font-size: 14px; font-weight: 500; color: #1a1a1a; flex: 1; }
+.sa-count { font-size: 12px; color: #bbb; margin-right: 4px; }
+.sa-chev { color: #ccc; transition: transform .2s; flex-shrink: 0; }
+.skill-acc.open .sa-chev { transform: rotate(90deg); }
+.skill-acc-intro { display: none; }
+.skill-acc.open .skill-acc-intro { display: flex; align-items: center; gap: 12px; padding: 10px 18px; background: #f0f7fe; border-top: 0.5px solid #e8e6e0; cursor: pointer; transition: background .12s; }
+.skill-acc-intro:hover { background: #E6F1FB; }
+.intro-thumb { width: 54px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; overflow: hidden; }
+.intro-play { position: relative; width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; }
+.intro-text { flex: 1; }
+.intro-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #185FA5; margin-bottom: 2px; }
+.intro-title { font-size: 12px; font-weight: 500; color: #1a1a1a; }
+.intro-dur { font-size: 10px; color: #bbb; display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
+.skill-acc-lessons { display: none; border-top: 0.5px solid #f0ede8; background: #faf9f7; }
+.skill-acc.open .skill-acc-lessons { display: block; }
+
+/* Lesson rows */
+.lesson-row { display: flex; align-items: center; gap: 12px; padding: 12px 18px 12px 42px; border-bottom: 0.5px solid #f0ede8; cursor: pointer; transition: background .1s; }
+.lesson-row:last-child { border-bottom: none; }
+.lesson-row:hover { background: #f0f7fe; }
+.l-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+/* Circle checkbox for taught state */
+.l-check { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #ddd; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .15s; cursor: pointer; }
+.l-check:hover:not(.taught) { border-color: #185FA5; background: #f0f7fe; }
+.l-check:hover.taught { border-color: #993556; background: #FBEAF0; }
+.l-check:hover.taught svg path { stroke: #993556; }
+.l-check.taught { background: #EAF3DE; border-color: #3B6D11; }
+.lesson-row:hover .l-check:not(.taught) { border-color: #185FA5; }
+.l-info { flex: 1; }
+.l-name { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 2px; }
+.l-desc { font-size: 11px; color: #bbb; line-height: 1.4; }
+.l-taught { width: 16px; height: 16px; border-radius: 50%; background: #EAF3DE; border: 0.5px solid #3B6D11; display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: 0; transition: opacity .15s; }
+.l-taught.visible { opacity: 1; }
+
+/* Taught indicator on lesson page */
+.l-open { font-size: 11px; color: #185FA5; opacity: 0; font-weight: 500; white-space: nowrap; flex-shrink: 0; transition: opacity .12s; }
+.lesson-row:hover .l-open { opacity: 1; }
+
+/* ── UNIT RESOURCES ── */
+.res-intro { font-size: 13px; color: #999; line-height: 1.6; margin-bottom: 22px; }
+.res-sec-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; margin-bottom: 10px; margin-top: 20px; }
+.res-sec-lbl:first-of-type { margin-top: 0; }
+.poster-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+.poster-card { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 10px; overflow: hidden; cursor: pointer; transition: border-color .15s; }
+.poster-card:hover { border-color: #185FA5; }
+.poster-thumb { aspect-ratio: 3/4; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 16px; text-align: center; }
+.poster-thumb-title { font-size: 12px; font-weight: 500; line-height: 1.3; }
+.poster-info { padding: 10px 12px; border-top: 0.5px solid #f0ede8; }
+.poster-name { font-size: 12px; font-weight: 500; color: #1a1a1a; margin-bottom: 2px; }
+.poster-desc { font-size: 10px; color: #bbb; margin-bottom: 8px; }
+.poster-btns { display: flex; gap: 6px; }
+.p-btn { font-size: 10px; font-weight: 500; padding: 4px 9px; border-radius: 5px; cursor: pointer; transition: all .12s; }
+.p-prev { color: #888; background: #f5f4f0; border: 0.5px solid #e8e6e0; }
+.p-prev:hover { background: #E6F1FB; color: #185FA5; border-color: #185FA5; }
+.p-dl { color: #185FA5; background: #f0f7fe; border: 0.5px solid #b5d4f4; }
+.p-dl:hover { background: #E6F1FB; }
+
+.res-list { display: flex; flex-direction: column; gap: 8px; }
+.res-item { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 10px; padding: 13px 16px; display: flex; align-items: center; gap: 12px; }
+.ri-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ri-info { flex: 1; }
+.ri-type { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; margin-bottom: 2px; }
+.ri-title { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 2px; }
+.ri-desc { font-size: 11px; color: #999; line-height: 1.4; }
+.ri-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.ri-btn { font-size: 11px; font-weight: 500; padding: 5px 10px; border-radius: 6px; cursor: pointer; white-space: nowrap; transition: all .12s; }
+.ri-prev { color: #888; background: #f5f4f0; border: 0.5px solid #e8e6e0; }
+.ri-prev:hover { background: #E6F1FB; color: #185FA5; border-color: #185FA5; }
+.ri-dl { color: #185FA5; background: #f0f7fe; border: 0.5px solid #b5d4f4; }
+.ri-dl:hover { background: #E6F1FB; }
+
+/* ── LESSON PAGE ── */
+.lesson-header { background: #fff; border-bottom: 0.5px solid #e8e6e0; padding: 0 40px; display: flex; align-items: center; height: 52px; flex-shrink: 0; position: sticky; top: 0; z-index: 10; }
+.back-link { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #bbb; cursor: pointer; transition: color .12s; white-space: nowrap; padding-right: 16px; border-right: 0.5px solid #e8e6e0; margin-right: 16px; }
+.back-link:hover { color: #185FA5; }
+.breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #bbb; flex: 1; min-width: 0; overflow: hidden; }
+.bc-sep { color: #ddd; flex-shrink: 0; }
+.bc-unit { color: #185FA5; font-weight: 500; white-space: nowrap; }
+.bc-skill { color: #888; white-space: nowrap; }
+.bc-lesson { color: #1a1a1a; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lesson-hdr-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.lesson-nav { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.mark-done-btn { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; padding: 6px 12px; border-radius: 7px; cursor: pointer; transition: all .15s; white-space: nowrap; margin-left: 12px; border: 0.5px solid #e8e6e0; background: #fff; color: #888; flex-shrink: 0; }
+.mark-done-btn:hover { border-color: #3B6D11; color: #3B6D11; background: #EAF3DE; }
+.mark-done-btn.done { background: #EAF3DE; border-color: #3B6D11; color: #3B6D11; }
+.mark-done-icon { display: none; flex-shrink: 0; }
+.mark-done-btn.done .mark-done-icon { display: block; }
+/* Create class prompt */
+.create-class-prompt { position: fixed; bottom: 24px; right: 24px; background: #fff; border: 0.5px solid #e8e6e0; border-radius: 12px; padding: 14px 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); max-width: 280px; z-index: 80; display: none; animation: slideUp .2s ease; }
+.create-class-prompt.show { display: block; }
+@keyframes slideUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.ccp-title { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 4px; }
+.ccp-text { font-size: 12px; color: #999; line-height: 1.5; margin-bottom: 12px; }
+.ccp-actions { display: flex; gap: 8px; align-items: center; }
+.ccp-create { font-size: 12px; font-weight: 500; color: #185FA5; background: #f0f7fe; border: 0.5px solid #b5d4f4; padding: 6px 12px; border-radius: 7px; cursor: pointer; }
+.ccp-create:hover { background: #E6F1FB; }
+.ccp-dismiss { font-size: 12px; color: #bbb; cursor: pointer; }
+.ccp-dismiss:hover { color: #888; }
+.nav-btn { width: 28px; height: 28px; border-radius: 6px; border: 0.5px solid #e8e6e0; background: #fff; color: #ccc; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #888; transition: all .12s; }
+.nav-btn:hover { border-color: #185FA5; color: #185FA5; background: #f0f7fe; }
+.nav-btn.disabled { opacity: .3; pointer-events: none; }
+.nav-lbl { font-size: 11px; color: #bbb; padding: 0 6px; white-space: nowrap; }
+
+.lesson-body { }
+.lesson-cw { max-width: 900px; margin: 0 auto; padding: 0 40px; }
+.lesson-intro { padding-top: 24px; padding-bottom: 0; }
+.lesson-num-row { font-size: 11px; color: #bbb; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.lesson-num-badge { background: #E6F1FB; color: #185FA5; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 10px; }
+.lesson-title { font-size: 24px; font-weight: 500; color: #1a1a1a; margin-bottom: 6px; line-height: 1.2; }
+.lesson-desc { font-size: 13px; color: #999; line-height: 1.6; margin-bottom: 24px; }
+
+/* Mode tabs */
+.mode-tabs-wrap { border-bottom: 0.5px solid #e8e6e0; background: #fff; }
+.mode-tabs { display: flex; max-width: 900px; margin: 0 auto; padding: 0 40px; }
+.mode-tab { padding: 12px 20px 11px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; transition: all .15s; user-select: none; }
+.mode-tab.active { border-bottom-color: #185FA5; }
+.mode-tab-lbl { font-size: 13px; font-weight: 500; color: #888; transition: color .15s; }
+.mode-tab.active .mode-tab-lbl { color: #185FA5; }
+.mode-tab:hover .mode-tab-lbl { color: #185FA5; }
+
+.mode-content { padding-top: 24px; padding-bottom: 40px; }
+.mode-pane { display: none; }
+.mode-pane.active { display: block; }
+
+/* Teaching mode */
+.teaching-cards { display: flex; flex-direction: column; gap: 12px; }
+.t-card { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 12px; overflow: hidden; cursor: pointer; transition: border-color .15s; }
+.t-card:hover { border-color: #185FA5; }
+.t-preview { width: 100%; aspect-ratio: 16/6; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.slides-bg { background: linear-gradient(135deg, #E6F1FB, #b5d4f4); }
+.video-bg { background: linear-gradient(135deg, #1a1a2e, #185FA5); }
+.slide-mock { background: rgba(255,255,255,0.95); border-radius: 8px; padding: 16px 24px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+.slide-eyebrow { font-size: 9px; color: #185FA5; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+.slide-title { font-size: 16px; font-weight: 500; color: #1a1a1a; margin-bottom: 4px; }
+.slide-sub { font-size: 10px; color: #bbb; }
+.play-circle { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.92); display: flex; align-items: center; justify-content: center; }
+.t-card-info { padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+.t-card-text { flex: 1; }
+.t-card-type { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; margin-bottom: 3px; }
+.t-card-title { font-size: 14px; font-weight: 500; color: #1a1a1a; margin-bottom: 2px; }
+.t-card-desc { font-size: 11px; color: #999; }
+.t-card-btn { font-size: 11px; font-weight: 500; color: #185FA5; white-space: nowrap; flex-shrink: 0; }
+
+/* Prep mode */
+.skill-intro-note { background: #f0f7fe; border: 0.5px solid #b5d4f4; border-radius: 10px; padding: 10px 14px; margin-bottom: 20px; font-size: 12px; color: #185FA5; display: flex; align-items: center; gap: 8px; }
+.skill-intro-note a { font-weight: 500; cursor: pointer; text-decoration: underline; }
+.prep-sec-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; margin-bottom: 8px; margin-top: 20px; }
+.prep-sec-lbl:first-of-type { margin-top: 0; }
+.prep-list { display: flex; flex-direction: column; gap: 8px; }
+.prep-item { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 10px; padding: 13px 16px; display: flex; align-items: center; gap: 12px; }
+.prep-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.prep-info { flex: 1; }
+.prep-type { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; margin-bottom: 2px; }
+.prep-title { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 2px; }
+.prep-desc { font-size: 11px; color: #999; line-height: 1.4; }
+.prep-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.pr-btn { font-size: 11px; font-weight: 500; padding: 5px 10px; border-radius: 6px; cursor: pointer; white-space: nowrap; transition: all .12s; }
+.pr-prev { color: #888; background: #f5f4f0; border: 0.5px solid #e8e6e0; }
+.pr-prev:hover { background: #E6F1FB; color: #185FA5; border-color: #185FA5; }
+.pr-dl { color: #185FA5; background: #f0f7fe; border: 0.5px solid #b5d4f4; }
+.pr-dl:hover { background: #E6F1FB; }
+
+/* ── ACTIVE CLASS BANNER ── */
+.active-class-banner { background: #fff; border-bottom: 0.5px solid #e8e6e0; padding: 0 20px; height: 36px; display: none; align-items: center; gap: 6px; flex-shrink: 0; width: 100%; }
+.active-class-banner.visible { display: flex; }
+.acb-label { font-size: 11px; color: #bbb; flex-shrink: 0; }
+.acb-name { font-size: 11px; font-weight: 500; color: #185FA5; cursor: pointer; }
+.acb-name:hover { text-decoration: underline; }
+
+/* Class nav items in sidebar */
+.class-nav-item { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 7px; font-size: 12px; color: #888; cursor: pointer; margin-bottom: 1px; transition: background .1s; }
+.class-nav-item:hover { background: #f5f4f0; color: #555; }
+.class-nav-item.active { background: #E6F1FB; color: #0C447C; font-weight: 500; }
+.class-avatar-sm { width: 24px; height: 24px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; color: #fff; flex-shrink: 0; }
+.add-another-class { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 7px; font-size: 12px; color: #185FA5; font-weight: 500; cursor: pointer; margin-top: 2px; transition: background .1s; }
+.add-another-class:hover { background: #f0f7fe; }
+
+/* ── CLASS VIEWS ── */
+.class-page-title { font-size: 22px; font-weight: 500; color: #1a1a1a; margin-bottom: 6px; }
+.class-page-sub { font-size: 13px; color: #999; line-height: 1.6; margin-bottom: 28px; max-width: 480px; }
+.create-class-card { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 14px; padding: 28px; max-width: 380px; cursor: pointer; transition: all .15s; }
+.create-class-card:hover { border-color: #185FA5; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
+.ccc-icon { width: 44px; height: 44px; border-radius: 12px; background: #E6F1FB; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+.ccc-title { font-size: 16px; font-weight: 500; color: #1a1a1a; margin-bottom: 6px; }
+.ccc-desc { font-size: 13px; color: #999; line-height: 1.6; margin-bottom: 18px; }
+.ccc-cta { font-size: 13px; font-weight: 500; color: #185FA5; display: inline-flex; align-items: center; gap: 5px; }
+
+/* Class detail view */
+.class-detail-hdr { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; }
+.class-detail-title-row { display: flex; align-items: center; gap: 12px; margin-bottom: 3px; }
+.class-avatar-lg { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; color: #fff; flex-shrink: 0; }
+.class-detail-name { font-size: 22px; font-weight: 500; color: #1a1a1a; }
+.class-detail-meta { font-size: 12px; color: #bbb; margin-left: 56px; }
+.class-edit-btn { font-size: 11px; color: #888; background: #fff; border: 0.5px solid #e8e6e0; padding: 6px 12px; border-radius: 7px; cursor: pointer; transition: all .12s; }
+.class-edit-btn:hover { border-color: #185FA5; color: #185FA5; }
+
+/* Resume card */
+.resume-card { border-radius: 12px; padding: 18px 22px; margin-bottom: 24px; display: flex; align-items: center; gap: 20px; cursor: pointer; transition: all .12s; background: #E6F1FB; border: 0.5px solid #b5d4f4; }
+.resume-card:hover { background: #dbeeff; border-color: #185FA5; }
+.resume-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #185FA5; opacity: .8; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+.resume-title { font-size: 18px; font-weight: 500; color: #0C447C; margin-bottom: 3px; line-height: 1.2; }
+.resume-path { font-size: 12px; color: #185FA5; opacity: .7; }
+.resume-btn { background: #185FA5; border: none; color: #fff; font-size: 12px; font-weight: 500; padding: 8px 16px; border-radius: 8px; white-space: nowrap; flex-shrink: 0; }
+.no-resume { background: #fff; border: 0.5px dashed #e8e6e0; border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; text-align: center; }
+.no-resume-text { font-size: 13px; color: #bbb; margin-bottom: 4px; }
+.no-resume-sub { font-size: 12px; color: #ccc; }
+
+/* Progress section */
+.class-sec-title { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 12px; }
+.unit-prog-row { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 14px; margin-bottom: 8px; cursor: pointer; transition: border-color .12s; }
+.unit-prog-row:hover { border-color: #185FA5; }
+.unit-prog-row:hover .up-arrow { opacity: 1; }
+.up-arrow { font-size: 11px; color: #185FA5; opacity: 0; transition: opacity .12s; flex-shrink: 0; }
+.prog-grade-label { font-size: 11px; font-weight: 500; color: #bbb; text-transform: uppercase; letter-spacing: 0.07em; padding: 4px 0 6px; margin-top: 14px; display: block; }
+.prog-grade-label:first-child { margin-top: 0; }
+.up-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.up-name { font-size: 13px; font-weight: 500; color: #1a1a1a; flex: 1; }
+.up-bar-wrap { width: 120px; background: #f5f4f0; border-radius: 10px; height: 5px; overflow: hidden; flex-shrink: 0; }
+.up-bar { height: 100%; border-radius: 10px; }
+.up-frac { font-size: 11px; color: #bbb; white-space: nowrap; width: 44px; text-align: right; flex-shrink: 0; }
+
+/* Create class modal */
+.cc-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 200; display: none; align-items: center; justify-content: center; }
+.cc-modal-overlay.open { display: flex; }
+.cc-modal { background: #fff; border-radius: 14px; width: 400px; box-shadow: 0 8px 40px rgba(0,0,0,0.15); overflow: hidden; }
+.cc-modal-hdr { padding: 22px 24px 16px; border-bottom: 0.5px solid #f0ede8; }
+.cc-modal-title { font-size: 16px; font-weight: 500; color: #1a1a1a; margin-bottom: 3px; }
+.cc-modal-sub { font-size: 12px; color: #999; line-height: 1.5; }
+.cc-modal-body { padding: 20px 24px; }
+.cc-form-label { font-size: 12px; font-weight: 500; color: #555; margin-bottom: 6px; display: block; }
+.cc-form-input { width: 100%; font-size: 13px; padding: 10px 12px; border-radius: 8px; border: 0.5px solid #ddd; background: #faf9f7; color: #1a1a1a; outline: none; font-family: inherit; transition: border-color .12s; margin-bottom: 18px; }
+.cc-form-input:focus { border-color: #185FA5; background: #fff; }
+.cc-grade-row { display: flex; gap: 6px; }
+.cc-grade-opt { font-size: 11px; padding: 6px 12px; border-radius: 20px; border: 0.5px solid #ddd; color: #888; cursor: pointer; transition: all .12s; }
+.cc-grade-opt:hover { border-color: #185FA5; color: #185FA5; }
+.cc-grade-opt.active { background: #E6F1FB; border-color: #185FA5; color: #0C447C; font-weight: 500; }
+.cc-modal-footer { padding: 14px 24px; border-top: 0.5px solid #f0ede8; display: flex; justify-content: flex-end; gap: 8px; }
+.cc-btn-cancel { font-size: 12px; color: #888; background: #f5f4f0; border: 0.5px solid #e8e6e0; padding: 7px 14px; border-radius: 7px; cursor: pointer; }
+.cc-btn-create { font-size: 12px; font-weight: 500; color: #fff; background: #185FA5; border: none; padding: 7px 18px; border-radius: 7px; cursor: pointer; transition: background .12s; }
+.cc-btn-create:hover { background: #0C447C; }
+.about-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.15); z-index: 40; display: none; }
+.about-overlay.open { display: block; }
+.about-panel { position: fixed; top: 0; right: -420px; width: 400px; height: 100%; background: #fff; border-left: 0.5px solid #e8e6e0; z-index: 50; overflow-y: auto; transition: right .25s ease; }
+.about-panel::-webkit-scrollbar { width: 4px; }
+.about-panel::-webkit-scrollbar-thumb { background: #e8e6e0; border-radius: 2px; }
+.about-panel.open { right: 0; }
+.ap-header { padding: 18px 20px 14px; border-bottom: 0.5px solid #f0ede8; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: #fff; z-index: 1; }
+.ap-title { font-size: 15px; font-weight: 500; color: #1a1a1a; }
+.ap-close { background: none; border: none; cursor: pointer; color: #bbb; font-size: 22px; line-height: 1; padding: 0; }
+.ap-close:hover { color: #888; }
+.ap-body { padding: 20px; }
+.ap-section { margin-bottom: 22px; }
+.ap-section-title { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 0.5px solid #f0ede8; }
+.ap-section p { font-size: 12px; color: #777; line-height: 1.7; margin-bottom: 8px; }
+.fw-visual { background: #faf9f7; border-radius: 10px; padding: 16px; margin-bottom: 20px; text-align: center; }
+.fw-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; margin-bottom: 14px; }
+.grade-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.grade-table th { text-align: left; padding: 6px 8px; background: #faf9f7; color: #999; font-weight: 500; border-bottom: 0.5px solid #f0ede8; }
+.grade-table td { padding: 7px 8px; border-bottom: 0.5px solid #f0ede8; color: #555; }
+.grade-table tr:last-child td { border-bottom: none; }
+.skills-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.skill-block { background: #faf9f7; border-radius: 8px; padding: 10px 12px; }
+.skill-block-title { font-size: 11px; font-weight: 500; margin-bottom: 5px; }
+.skill-block ul { list-style: none; }
+.skill-block ul li { font-size: 10px; color: #888; padding: 2px 0; display: flex; gap: 5px; }
+.skill-block ul li::before { content: '·'; color: #ccc; flex-shrink: 0; }
+.coming-soon { background: #faf9f7; border: 0.5px dashed #e8e6e0; border-radius: 8px; padding: 16px; text-align: center; }
+.pdf-download-btn { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: #f0f7fe; border: 0.5px solid #b5d4f4; border-radius: 9px; cursor: pointer; transition: background .12s; width: 100%; margin-top: 6px; }
+.pdf-download-btn:hover { background: #E6F1FB; }
+.pdf-icon { width: 32px; height: 32px; border-radius: 7px; background: #185FA5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.pdf-info { flex: 1; }
+.pdf-title { font-size: 12px; font-weight: 500; color: #185FA5; }
+.pdf-sub { font-size: 10px; color: #bbb; margin-top: 1px; }
+
+/* ── AI DRAWER ── */
+.ai-drawer { display: none; position: fixed; bottom: 0; left: 0; width: 240px; background: #fff; border: 0.5px solid #e8e6e0; border-bottom: none; border-radius: 12px 12px 0 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 60; padding: 16px; }
+.ai-drawer.open { display: block; }
+.ai-drawer-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.ai-drawer-title { font-size: 13px; font-weight: 500; color: #1a1a1a; }
+.ai-x { background: none; border: none; font-size: 20px; color: #bbb; cursor: pointer; line-height: 1; }
+.ai-x:hover { color: #888; }
+.ai-input { width: 100%; font-size: 12px; padding: 9px 11px; border-radius: 8px; border: 0.5px solid #ddd; background: #faf9f7; color: #1a1a1a; outline: none; font-family: inherit; margin-bottom: 8px; }
+.ai-input:focus { border-color: #185FA5; }
+.ai-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+.ai-chip { font-size: 10px; color: #888; background: #f5f4f0; border: 0.5px solid #e8e6e0; border-radius: 20px; padding: 3px 8px; cursor: pointer; transition: all .12s; }
+.ai-chip:hover { background: #E6F1FB; color: #0C447C; border-color: #185FA5; }
+.ai-results { display: flex; flex-direction: column; gap: 5px; }
+.ai-result { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: #faf9f7; border-radius: 7px; border: 0.5px solid #e8e6e0; cursor: pointer; transition: all .12s; }
+.ai-result:hover { border-color: #185FA5; background: #E6F1FB; }
+.ai-res-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.ai-res-info { flex: 1; }
+.ai-res-lesson { font-size: 11px; font-weight: 500; color: #1a1a1a; }
+.ai-res-path { font-size: 10px; color: #bbb; }
+.ai-res-open { font-size: 10px; color: #185FA5; flex-shrink: 0; font-weight: 500; }
+
+/* ── MODAL ── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; display: none; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: #fff; border-radius: 14px; width: 540px; max-width: 90%; max-height: 84vh; display: flex; flex-direction: column; box-shadow: 0 8px 40px rgba(0,0,0,0.18); overflow: hidden; }
+.modal-hdr { padding: 16px 20px; border-bottom: 0.5px solid #f0ede8; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.modal-type { font-size: 10px; color: #bbb; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; margin-bottom: 2px; }
+.modal-title { font-size: 14px; font-weight: 500; color: #1a1a1a; }
+.modal-x { background: none; border: none; cursor: pointer; color: #bbb; font-size: 22px; line-height: 1; padding: 0; }
+.modal-x:hover { color: #888; }
+.modal-body { flex: 1; overflow-y: auto; padding: 20px; background: #faf9f7; }
+.modal-body::-webkit-scrollbar { width: 3px; }
+.modal-body::-webkit-scrollbar-thumb { background: #e8e6e0; border-radius: 2px; }
+.modal-footer { padding: 14px 20px; border-top: 0.5px solid #f0ede8; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.modal-meta { font-size: 11px; color: #bbb; }
+.modal-dl { font-size: 12px; font-weight: 500; color: #185FA5; background: #f0f7fe; border: 0.5px solid #b5d4f4; padding: 7px 14px; border-radius: 7px; cursor: pointer; }
+.modal-dl:hover { background: #E6F1FB; }
+.modal-doc { background: #fff; border-radius: 10px; padding: 26px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+.mdoc-eyebrow { font-size: 10px; color: #bbb; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+.mdoc-title { font-size: 17px; font-weight: 500; color: #1a1a1a; margin-bottom: 3px; }
+.mdoc-sub { font-size: 11px; color: #bbb; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 0.5px solid #f0ede8; }
+.mdoc-sec { margin-bottom: 14px; }
+.mdoc-sec-title { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+.mdoc-text { font-size: 12px; color: #666; line-height: 1.7; }
+.mdoc-list { list-style: none; }
+.mdoc-list li { font-size: 12px; color: #666; padding: 2px 0; display: flex; gap: 5px; line-height: 1.5; }
+.mdoc-list li::before { content: '·'; color: #bbb; flex-shrink: 0; }
+
+/* ── SLIDES PLAYER ── */
+.slides-overlay { position: fixed; inset: 0; background: #111; z-index: 300; display: none; flex-direction: column; }
+.slides-overlay.open { display: flex; }
+.slides-bar { height: 50px; background: #1a1a1a; border-bottom: 0.5px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; }
+.slides-bar-title { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.7); }
+.slides-bar-right { display: flex; align-items: center; gap: 16px; }
+.slides-nav-row { display: flex; align-items: center; gap: 10px; }
+.slides-nav-btn { width: 34px; height: 34px; border-radius: 8px; border: 0.5px solid rgba(255,255,255,0.2); background: transparent; cursor: pointer; color: rgba(255,255,255,0.6); display: flex; align-items: center; justify-content: center; transition: all .12s; }
+.slides-nav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.slides-counter { font-size: 12px; color: rgba(255,255,255,0.4); min-width: 80px; text-align: center; }
+.slides-close { display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255,255,255,0.5); cursor: pointer; padding: 6px 14px; border-radius: 7px; border: 0.5px solid rgba(255,255,255,0.15); transition: all .12s; }
+.slides-close:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.slides-stage { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px; }
+.slides-slide { background: #fff; border-radius: 8px; box-shadow: 0 8px 40px rgba(0,0,0,0.5); width: min(900px, 90vw); aspect-ratio: 16/9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 60px; text-align: center; }
+.slide-s-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; color: #bbb; }
+.slide-s-title { font-size: 38px; font-weight: 500; color: #1a1a1a; line-height: 1.2; }
+.slide-s-body { font-size: 18px; color: #666; line-height: 1.5; max-width: 600px; }
+.slide-s-num { font-size: 12px; color: #ccc; margin-top: 8px; }
+/* Sidebar toggle */
+.sidebar-top-bar { height: 36px; padding: 0 12px; display: flex; align-items: center; justify-content: flex-end; flex-shrink: 0; border-bottom: 0.5px solid #e8e6e0; }
+.sb-toggle-btn { width: 30px; height: 30px; border-radius: 7px; border: none; background: transparent; cursor: pointer; color: #888; display: flex; align-items: center; justify-content: center; transition: background .12s; }
+.sb-toggle-btn:hover { background: #f5f4f0; color: #185FA5; }
+.sidebar { transition: width .2s ease; }
+.sidebar.collapsed { width: 48px; overflow: hidden; }
+.sidebar.collapsed .sb-scroll { visibility: hidden; }
+.sidebar.collapsed .sidebar-top-bar { justify-content: center; padding: 8px 0 0; }
+.sidebar.collapsed .sb-footer { visibility: hidden; }
+
+
+/* ── CLASS VIEW UNIT ACCORDION ── */
+.cp-unit { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 10px; margin-bottom: 8px; overflow: hidden; transition: border-color .12s; }
+.cp-unit:hover { border-color: #c8d8ea; }
+.cp-unit.open { border-color: #b5d4f4; }
+.cp-unit-hdr { display: flex; align-items: center; gap: 12px; padding: 13px 16px; cursor: pointer; user-select: none; }
+.cp-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.cp-unit-name { font-size: 13px; font-weight: 500; color: #1a1a1a; flex: 1; }
+.cp-taught { font-size: 11px; color: #bbb; white-space: nowrap; }
+.cp-taught.has-progress { color: #3B6D11; font-weight: 500; }
+.cp-bar-wrap { width: 80px; background: #f5f4f0; border-radius: 10px; height: 4px; overflow: hidden; flex-shrink: 0; }
+.cp-bar { height: 100%; border-radius: 10px; }
+.cp-chev { color: #ccc; transition: transform .2s; flex-shrink: 0; }
+.cp-unit.open .cp-chev { transform: rotate(90deg); }
+.cp-lessons { display: none; border-top: 0.5px solid #f0ede8; }
+.cp-unit.open .cp-lessons { display: block; }
+.cp-lesson-row { display: flex; align-items: center; gap: 10px; padding: 9px 16px 9px 38px; border-bottom: 0.5px solid #f5f4f0; cursor: pointer; transition: background .1s; }
+.cp-lesson-row:last-child { border-bottom: none; }
+.cp-lesson-row:hover { background: #f0f7fe; }
+.cp-check { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #ddd; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .12s; }
+.cp-check.taught { background: #EAF3DE; border-color: #3B6D11; }
+.cp-lesson-name { font-size: 12px; font-weight: 500; color: #1a1a1a; flex: 1; }
+.cp-lesson-open { font-size: 11px; color: #185FA5; opacity: 0; white-space: nowrap; flex-shrink: 0; transition: opacity .12s; }
+.cp-lesson-row:hover .cp-lesson-open { opacity: 1; }
+.cp-grade-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; color: #bbb; padding: 10px 16px 4px; }
+
+.ov-prog { margin-top: 10px; }
+.ov-prog-bar { height: 3px; background: #f0ede8; border-radius: 10px; overflow: hidden; }
+.ov-prog-fill { height: 100%; border-radius: 10px; transition: width .3s ease; }
+.ov-prog-label { font-size: 10px; color: #bbb; margin-top: 4px; }
+.ov-prog-label.has-progress { color: #3B6D11; font-weight: 500; }
+.ov-last-taught { font-size: 10px !important; color: #ccc; font-style: italic; font-weight: 400 !important; line-height: 1; }
+
+.class-unit-row:hover { border-color: #185FA5; }
+.class-browse-prompt:hover { border-color: #185FA5; color: #185FA5; background: #f0f7fe; }
+
+
+/* Archive */
+.class-edit-btn.archive { color: #bbb; border-color: #eee; margin-left: 6px; }
+.class-edit-btn.archive:hover { color: #993556; border-color: #993556; }
+.archived-section { margin-top: 20px; }
+.archived-toggle { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #999; cursor: pointer; padding: 6px 8px; margin-top: 6px; border-radius: 7px; user-select: none; transition: background .1s; }
+.archived-toggle:hover { background: #f5f4f0; color: #555; }
+.archived-toggle svg { transition: transform .2s; }
+.archived-toggle.open svg { transform: rotate(90deg); }
+.archived-list { display: none; }
+.archived-list.open { display: block; }
+.archived-class-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 9px; background: #fff; border: 0.5px solid #e8e6e0; margin-bottom: 6px; cursor: pointer; transition: all .12s; opacity: .7; }
+.archived-class-row:hover { opacity: 1; border-color: #185FA5; }
+.archived-avatar { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: #fff; flex-shrink: 0; filter: grayscale(0.4); }
+.archived-name { font-size: 13px; font-weight: 500; color: #888; flex: 1; }
+.archived-meta { font-size: 11px; color: #bbb; }
+.archived-restore { font-size: 11px; color: #185FA5; opacity: 0; transition: opacity .12s; flex-shrink: 0; }
+.archived-class-row:hover .archived-restore { opacity: 1; }
+
+
+/* ── TOP BAR ── */
+.top-bar { height: 44px; background: #fff; border-bottom: 0.5px solid #e8e6e0; display: flex; align-items: center; padding: 0 40px; gap: 8px; flex-shrink: 0; position: relative; z-index: 50; width: 100%; }
+.top-bar-toggle { width: 30px; height: 30px; border-radius: 7px; border: none; background: transparent; cursor: pointer; color: #888; display: flex; align-items: center; justify-content: center; transition: background .12s; flex-shrink: 0; }
+.top-bar-toggle:hover { background: #f5f4f0; color: #185FA5; }
+.top-bar-divider { width: 0.5px; height: 20px; background: #e8e6e0; flex-shrink: 0; }
+.class-switcher { display: flex; align-items: center; gap: 8px; padding: 5px 10px; border-radius: 8px; cursor: pointer; transition: background .12s; border: none; background: transparent; font-family: inherit; }
+.class-switcher:hover { background: #f5f4f0; }
+.cs-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.cs-label { font-size: 11px; color: #bbb; white-space: nowrap; }
+.cs-name { font-size: 13px; font-weight: 500; color: #1a1a1a; white-space: nowrap; }
+.cs-chevron { color: #bbb; transition: transform .15s; }
+.class-switcher.open .cs-chevron { transform: rotate(180deg); }
+.cs-no-class { font-size: 13px; color: #185FA5; font-weight: 500; }
+
+/* Class dropdown */
+.class-dropdown { position: fixed; top: 60px; left: auto; width: 280px; background: #fff; border: 0.5px solid #e8e6e0; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); z-index: 500; display: none; overflow: hidden; }
+.class-dropdown.open { display: block; }
+.cd-search { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 0.5px solid #f0ede8; }
+.cd-search input { flex: 1; font-size: 13px; border: none; outline: none; background: transparent; color: #1a1a1a; font-family: inherit; }
+.cd-search input::placeholder { color: #bbb; }
+.cd-section-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; padding: 8px 14px 4px; }
+.cd-create { display: flex; align-items: center; gap: 8px; padding: 10px 14px; cursor: pointer; transition: background .1s; border-bottom: 0.5px solid #f0ede8; }
+.cd-create:hover { background: #f0f7fe; }
+.cd-create-icon { width: 28px; height: 28px; border-radius: 8px; background: #E6F1FB; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.cd-create-label { font-size: 13px; font-weight: 500; color: #185FA5; }
+.cd-class-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; transition: background .1s; }
+.cd-class-item:hover { background: #f5f4f0; }
+.cd-class-item.active { background: #E6F1FB; }
+.cd-avatar { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: #fff; flex-shrink: 0; }
+.cd-class-name { font-size: 13px; font-weight: 500; color: #1a1a1a; flex: 1; }
+.cd-class-meta { font-size: 11px; color: #bbb; }
+.cd-check { color: #185FA5; flex-shrink: 0; }
+.cd-archived-toggle { display: flex; align-items: center; gap: 6px; padding: 8px 14px; cursor: pointer; border-top: 0.5px solid #f0ede8; font-size: 12px; color: #bbb; transition: color .1s; }
+.cd-archived-toggle:hover { color: #888; }
+.cd-archived-list { border-top: 0.5px solid #f0ede8; display: none; }
+.cd-archived-list.open { display: block; }
+.cd-archived-item { display: flex; align-items: center; gap: 10px; padding: 9px 14px; cursor: pointer; transition: background .1s; }
+.cd-archived-item:hover { background: #faf9f7; }
+.cd-archived-name { font-size: 12px; color: #999; flex: 1; }
+.cd-archived-restore { font-size: 11px; color: #185FA5; opacity: 0; transition: opacity .12s; }
+.cd-archived-item:hover .cd-archived-restore { opacity: 1; }
+.cd-empty { padding: 16px 14px; font-size: 12px; color: #bbb; text-align: center; }
+
+
+/* ── SKILL VIDEO MODAL ── */
+.video-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 400; display: none; align-items: center; justify-content: center; }
+.video-modal-overlay.open { display: flex; }
+.video-modal { background: #fff; border-radius: 16px; width: min(560px, 90vw); box-shadow: 0 16px 48px rgba(0,0,0,0.2); overflow: hidden; }
+.vm-header { padding: 16px 20px; border-bottom: 0.5px solid #f0ede8; display: flex; align-items: center; justify-content: space-between; }
+.vm-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; margin-bottom: 3px; }
+.vm-title { font-size: 15px; font-weight: 500; color: #1a1a1a; }
+.vm-close { width: 28px; height: 28px; border-radius: 7px; border: none; background: #f5f4f0; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #888; transition: background .12s; }
+.vm-close:hover { background: #e8e6e0; }
+.vm-player { background: #1a1a1a; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; }
+.vm-player:hover .vm-play-btn { transform: scale(1.08); }
+.vm-play-btn { width: 56px; height: 56px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform .15s; }
+.vm-play-icon { width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-left: 18px solid #1a1a1a; margin-left: 4px; }
+.vm-duration { position: absolute; bottom: 10px; right: 12px; font-size: 11px; color: rgba(255,255,255,0.6); }
+.vm-slide-hint { position: absolute; bottom: 10px; left: 12px; font-size: 11px; color: rgba(255,255,255,0.5); font-style: italic; }
+.vm-footer { padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
+.vm-watched-btn { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; padding: 7px 14px; border-radius: 8px; cursor: pointer; border: 0.5px solid #e8e6e0; background: #fff; color: #888; transition: all .15s; }
+.vm-watched-btn:hover { border-color: #3B6D11; color: #3B6D11; background: #EAF3DE; }
+.vm-watched-btn.watched { background: #EAF3DE; border-color: #3B6D11; color: #3B6D11; }
+.vm-done-btn { font-size: 12px; color: #888; cursor: pointer; padding: 7px 14px; border-radius: 8px; transition: background .12s; }
+.vm-done-btn:hover { background: #f5f4f0; }
+
+/* Skill intro link with watched state */
+.skill-intro-watched { color: #3B6D11 !important; }
+.skill-intro-watched::before { content: '✓ '; }
+
+
+/* ── OVERVIEW ACTION CARDS ── */
+.ov-action-card { background: #fff; border: 0.5px solid #e8e6e0; border-left: 3px solid transparent; border-radius: 12px; padding: 16px 18px; cursor: pointer; transition: all .12s; }
+.ov-action-card:hover:not(.empty) { border-color: #185FA5; transform: translateY(-1px); box-shadow: 0 3px 12px rgba(0,0,0,0.06); }
+.ov-action-card.empty { cursor: default; opacity: 0.45; }
+.ov-taught-card { border-color: #c8e6c4; background: #fafff9; }
+.ov-taught-card:hover:not(.empty) { border-color: #3B6D11; }
+.oac-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #185FA5; margin-bottom: 7px; display: flex; align-items: center; gap: 5px; }
+.oac-taught-eyebrow { color: #3B6D11; }
+.oac-title { font-size: 15px; font-weight: 500; color: #1a1a1a; margin-bottom: 4px; line-height: 1.3; }
+.oac-path { font-size: 11px; color: #bbb; margin-bottom: 4px; }
+.oac-date { font-size: 10px; color: #ddd; margin-top: 5px; font-weight: 400; font-style: italic; }
+
+
+/* Also taught indicator */
+.also-taught { font-size: 11px; color: #bbb; white-space: nowrap; flex-shrink: 0; margin-right: 4px; }
+.also-taught.visible { color: #854F0B; }
+
+/* Milestone toast */
+.milestone-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: #1a1a1a; color: #fff; padding: 14px 20px; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 500; z-index: 999; transition: transform .4s cubic-bezier(0.34,1.56,0.64,1), opacity .3s; opacity: 0; pointer-events: none; max-width: 360px; }
+.milestone-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.milestone-toast-icon { font-size: 22px; flex-shrink: 0; }
+.milestone-toast-body { flex: 1; }
+.milestone-toast-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.milestone-toast-sub { font-size: 11px; color: rgba(255,255,255,0.6); font-weight: 400; }
+
+
+/* Planned card */
+.ov-planned-card { border-color: #e8e6e0; background: #fff; }
+.ov-planned-card:hover { border-color: #534AB7; background: #faf8ff; }
+.oac-planned-eyebrow { color: #888; }
+.oac-plan-btn { font-size: 11px; font-weight: 500; color: #534AB7; cursor: pointer; text-decoration: underline; }
+.oac-plan-hint { font-size: 11px; color: #bbb; font-style: italic; cursor: default; }
+.oac-plan-btn.has-plan { color: #888; font-weight: 400; text-decoration: none; }
+
+/* Class note */
+.class-note-inline { font-size: 12px; color: #555; line-height: 1.6; background: #f5f4f0; border: 0.5px solid transparent; border-radius: 10px; padding: 10px 14px; min-height: 38px; outline: none; transition: border-color .15s, background .15s; white-space: pre-wrap; }
+.class-note-inline:empty:before { content: attr(data-placeholder); color: #bbb; font-style: italic; pointer-events: none; }
+.class-note-inline.focused { background: #fff; border-color: #e8e6e0; }
+.class-note-inline:hover { border-color: #e8e6e0; }
+
+/* Plan picker modal */
+.plan-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 400; display: none; align-items: center; justify-content: center; }
+.plan-modal-overlay.open { display: flex; }
+.plan-modal { background: #fff; border-radius: 14px; width: min(520px, 90vw); max-height: 70vh; display: flex; flex-direction: column; box-shadow: 0 16px 48px rgba(0,0,0,0.15); overflow: hidden; }
+.plan-modal-hdr { padding: 16px 20px; border-bottom: 0.5px solid #f0ede8; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; }
+.plan-modal-title { font-size: 15px; font-weight: 500; color: #1a1a1a; }
+.plan-modal-close { width: 28px; height: 28px; border-radius: 7px; border: none; background: #f5f4f0; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #888; }
+.plan-modal-body { overflow-y: auto; padding: 8px 0; }
+.plan-unit-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; padding: 10px 20px 4px; }
+.plan-lesson-row { display: flex; align-items: center; gap: 12px; padding: 10px 20px; cursor: pointer; transition: background .1s; border-bottom: 0.5px solid #f5f4f0; }
+.plan-lesson-row:hover { background: #f0f7fe; }
+.plan-lesson-swatch { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.plan-lesson-name { font-size: 13px; font-weight: 500; color: #1a1a1a; flex: 1; }
+.plan-lesson-skill { font-size: 11px; color: #bbb; }
+.plan-clear { display: flex; align-items: center; justify-content: center; padding: 12px; border-top: 0.5px solid #f0ede8; font-size: 12px; color: #993556; cursor: pointer; flex-shrink: 0; }
+.plan-clear:hover { background: #fbeaf0; }
+
+.plan-next-btn { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; padding: 6px 12px; border-radius: 7px; cursor: pointer; transition: all .15s; white-space: nowrap; margin-left: 4px; border: 0.5px solid #e8e6e0; background: #fff; color: #888; flex-shrink: 0; }
+.plan-next-btn:hover { border-color: #534AB7; color: #534AB7; background: #EEEDFE; }
+.plan-next-btn.planned { background: #EEEDFE; border-color: #534AB7; color: #534AB7; }
+
+.cd-class-actions { display: flex; align-items: center; gap: 4px; opacity: 0; transition: opacity .15s; }
+.cd-class-item:hover .cd-class-actions { opacity: 1; }
+.cd-action-btn { width: 24px; height: 24px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #aaa; cursor: pointer; transition: all .12s; }
+.cd-action-btn:hover { background: rgba(0,0,0,0.06); color: #555; }
+
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ══════════════ SIDEBAR ══════════════ -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-top-bar">
+      <button class="sb-toggle-btn" onclick="toggleSidebar()" title="Toggle sidebar">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="sb-scroll" id="sbScroll">
+
+      <div class="sb-section">
+        <span class="s-label">Grade</span>
+        <div class="grade-pills">
+          <div class="grade-pill" onclick="selectGrade(this,'K–2')">K–2</div>
+          <div class="grade-pill active" onclick="selectGrade(this,'3–5')">3–5</div>
+          <div class="grade-pill" onclick="selectGrade(this,'6–8')">6–8</div>
+          <div class="grade-pill" onclick="selectGrade(this,'9–12')">9–12</div>
+        </div>
+      </div>
+
+      <div class="sb-section">
+        <span class="s-label">Units</span>
+        <div class="nav-all-units active" id="nav-all-units" onclick="navOverview()">
+          <span class="nav-all-dot"></span>All units
+        </div>
+        <div id="navTree"></div>
+      </div>
+
+
+
+    </div>
+    <div class="sb-footer">
+      <div class="find-btn" onclick="toggleAI()">
+        <div class="find-icon"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#fff" stroke-width="1.2"/><path d="M8 8l2 2" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+        <span class="find-label">Find a lesson with AI</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MAIN ══════════════ -->
+  <div class="main-wrapper">
+    <div class="top-bar" id="topBar">
+      <!-- Class switcher -->
+      <button class="class-switcher" id="classSwitcher" onclick="handleSwitcherClick()">
+        <span class="cs-dot" id="csDot" style="background:#185FA5;display:none;"></span>
+        <span class="cs-label" id="csLabel" style="display:none;">Teaching with:</span>
+        <span class="cs-name" id="csName">+ Create a class</span>
+        <svg class="cs-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <!-- Class dropdown -->
+    <div class="class-dropdown" id="classDropdown">
+      <div class="cd-search">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4" stroke="#bbb" stroke-width="1.3"/><path d="M10 10l2.5 2.5" stroke="#bbb" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <input type="text" placeholder="Search classes…" id="classSearch" oninput="filterClasses(this.value)">
+      </div>
+      <div class="cd-create" onclick="closeClassDropdown();openCreateClass()">
+        <div class="cd-create-icon">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="#185FA5" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <div class="cd-create-label">New class</div>
+      </div>
+      <div id="cdClassList"></div>
+      <div class="cd-archived-toggle" id="cdArchivedToggle" onclick="toggleCdArchived()" style="display:none;">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" id="cdArchivedChev"><path d="M3 1l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="cdArchivedLabel">Archived</span>
+      </div>
+      <div class="cd-archived-list" id="cdArchivedList"></div>
+    </div>
+
+    <div class="main" id="mainArea">
+
+    <!-- ── OVERVIEW ── -->
+    <div class="view cw" id="view-overview">
+      <div class="welcome-banner" id="welcomeBanner">
+        <div class="wb-icon"><svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 2l1.8 4.2 4.5.5-3.3 3.1.9 4.7L9 12l-3.9 2.5.9-4.7L2.7 6.7l4.5-.5L9 2z" stroke="#185FA5" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
+        <div class="wb-body">
+          <div class="wb-title">Welcome to the GrowthMinded curriculum</div>
+          <div class="wb-line">Select your grade in the sidebar, then pick any unit to get started.</div>
+        </div>
+        <button class="wb-dismiss" onclick="this.closest('.welcome-banner').classList.add('dismissed')">×</button>
+      </div>
+
+      <div class="page-title-row">
+        <div>
+          <div class="page-title">GrowthMinded Life Skills Curriculum</div>
+          <div class="page-class-name" id="ovClassName" style="display:none;"></div>
+        </div>
+        <div class="about-link" onclick="openAbout()"><div class="about-icon">i</div>About this curriculum</div>
+      </div>
+
+      <!-- Resume + Last taught cards -->
+      <div id="ovCardsWrap" style="margin-bottom:20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;" id="ovCardsGrid">
+
+          <!-- Last opened card -->
+          <div class="ov-action-card" id="ovResumeCard" style="display:none;" onclick="resumeLesson()">
+            <div class="oac-eyebrow">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5h5M5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Last opened
+            </div>
+            <div class="oac-title" id="ovResumeTitle">—</div>
+            <div class="oac-path" id="ovResumePath"></div>
+            <div class="oac-date" id="ovResumeDate"></div>
+          </div>
+
+          <!-- Last taught card -->
+          <div class="ov-action-card ov-taught-card" id="ovTaughtCard" style="display:none;" onclick="if(lastTaughtLesson)navLesson(lastTaughtLesson.uid,lastTaughtLesson.skillIdx,lastTaughtLesson.lessonIdx)">
+            <div class="oac-eyebrow oac-taught-eyebrow">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Last taught
+            </div>
+            <div class="oac-title" id="ovTaughtTitle">—</div>
+            <div class="oac-path" id="ovTaughtPath"></div>
+            <div class="oac-date" id="ovTaughtDate"></div>
+          </div>
+
+          <!-- Next planned card -->
+          <div class="ov-action-card ov-planned-card" id="ovPlannedCard" style="display:none;">
+            <div class="oac-eyebrow oac-planned-eyebrow">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.3"/><path d="M5 2.5v2.5l1.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Next planned
+            </div>
+            <div class="oac-title" id="ovPlannedTitle">No lesson planned yet</div>
+            <div class="oac-path" id="ovPlannedPath"></div>
+            <div style="margin-top:8px;">
+              <span class="oac-plan-btn" id="ovPlanBtn">Plan →</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Class note -->
+        <div class="class-note-wrap" id="classNoteWrap" style="display:none;margin-top:10px;">
+          <div class="class-note-inline" id="classNoteInline"
+            contenteditable="true"
+            spellcheck="false"
+            data-placeholder="Add a note about this class..."
+            oninput="autoSaveNote()"
+            onfocus="this.classList.add('focused')"
+            onblur="this.classList.remove('focused')"></div>
+        </div>
+      </div>
+
+      <div class="overview-grid" id="overviewGrid"></div>
+    </div>
+
+    <!-- ── UNIT ── -->
+    <div class="view cw" id="view-unit">
+      <div class="unit-hdr">
+        <div class="back-to-class" id="backToClass" onclick="navMyClasses()" style="display:none;margin-bottom:10px;font-size:12px;color:#185FA5;cursor:pointer;display:none;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="backToClassName">Back to class</span></div>
+        <div class="unit-title-row">
+          <div class="unit-hero-icon" id="unitIcon"></div>
+          <div class="unit-hero-name" id="unitName"></div>
+        </div>
+        <div class="unit-hero-meta" id="unitMeta"></div>
+      </div>
+      <div class="unit-tabs-wrap">
+        <div class="unit-tabs">
+          <div class="unit-tab active" id="utab-lessons" onclick="switchUnitTab('lessons')"><span class="unit-tab-lbl">Skills &amp; lessons</span></div>
+          <div class="unit-tab" id="utab-resources" onclick="switchUnitTab('resources')"><span class="unit-tab-lbl">Unit resources</span></div>
+        </div>
+      </div>
+      <div class="unit-pane active" id="upane-lessons"><div class="skill-accordions" id="skillAccordions"></div></div>
+      <div class="unit-pane" id="upane-resources">
+        <div class="res-intro" id="resIntro"></div>
+        <div class="res-sec-lbl">Classroom posters</div>
+        <div class="poster-grid" id="posterGrid"></div>
+        <div class="res-sec-lbl">Send home</div>
+        <div class="res-list" id="resList"></div>
+      </div>
+    </div>
+
+    <!-- ── LESSON ── -->
+    <div class="view" id="view-lesson">
+      <div class="lesson-header">
+        <div class="back-link" id="lessonBack" onclick="backToUnit()">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="lessonBackLabel">Back</span>
+        </div>
+        
+        <div class="lesson-hdr-right">
+          <div class="lesson-nav">
+            <div class="nav-btn disabled" id="prevBtn"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M7 2L4 5l3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="nav-lbl" id="lessonNavLbl">Lesson 1 of 4</span>
+            <div class="nav-btn" id="nextBtn"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3 2l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+          <div class="plan-next-btn" id="planNextBtn" onclick="togglePlanNext()">
+            <span id="planNextLabel">Plan next</span>
+          </div>
+          <div class="mark-done-btn" id="markDoneBtn" onclick="markDone()">
+            <svg class="mark-done-icon" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span id="markDoneLabel">Mark as taught</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="lesson-body">
+        <div class="lesson-cw lesson-intro">
+          
+          <div class="lesson-title" id="lessonTitle"></div>
+          <div class="lesson-desc" id="lessonDesc"></div>
+        </div>
+        <div class="mode-tabs-wrap">
+          <div class="mode-tabs">
+            <div class="mode-tab active" id="mtab-prep" onclick="switchMode('prep')"><span class="mode-tab-lbl">Prep Mode</span></div>
+            <div class="mode-tab" id="mtab-teach" onclick="switchMode('teach')"><span class="mode-tab-lbl">Teaching Mode</span></div>
+          </div>
+        </div>
+        <div class="mode-content lesson-cw">
+          <div class="mode-pane active" id="mpane-prep">
+            <div class="skill-intro-note">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#185FA5" stroke-width="1.2"/><path d="M7 4.5V7l1.5 1.5" stroke="#185FA5" stroke-width="1.2" stroke-linecap="round"/></svg>
+              <a id="skillIntroLink">Watch the intro video — 4 min</a>
+            </div>
+            <div class="prep-sec-lbl">For the teacher</div>
+            <div class="prep-list">
+              <div class="prep-item">
+                <div class="prep-icon" style="background:#EAF3DE;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l5 5v9H4V2z" stroke="#3B6D11" stroke-width="1.2" stroke-linejoin="round"/><path d="M11 2v5h5M6 9h6M6 12h4" stroke="#3B6D11" stroke-width="1" stroke-linecap="round"/></svg></div>
+                <div class="prep-info">
+                  <div class="prep-type">Lesson plan</div>
+                  <div class="prep-title" id="lessonPlanTitle">Teacher guide</div>
+                  <div class="prep-desc">Step-by-step guide with timing, discussion questions and facilitation tips.</div>
+                </div>
+                <div class="prep-actions">
+                  <div class="pr-btn pr-prev" onclick="openModal('lesson-plan')">Preview</div>
+                  <div class="pr-btn pr-dl">↓ Download</div>
+                </div>
+              </div>
+            </div>
+            <div class="prep-sec-lbl">Print for students</div>
+            <div class="prep-list">
+              <div class="prep-item">
+                <div class="prep-icon" style="background:#EEEDFE;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#534AB7" stroke-width="1.2"/><path d="M6 9h6M6 6h6M6 12h4" stroke="#534AB7" stroke-width="1" stroke-linecap="round"/></svg></div>
+                <div class="prep-info">
+                  <div class="prep-type">Printable activity</div>
+                  <div class="prep-title" id="printableTitle">Activity worksheet</div>
+                  <div class="prep-desc">One per student. Colour and black &amp; white versions included.</div>
+                </div>
+                <div class="prep-actions">
+                  <div class="pr-btn pr-prev" onclick="openModal('worksheet')">Preview</div>
+                  <div class="pr-btn pr-dl">↓ Download</div>
+                </div>
+              </div>
+            </div>
+            <div class="prep-sec-lbl">Send home</div>
+            <div class="prep-list">
+              <div class="prep-item">
+                <div class="prep-icon" style="background:#FAEEDA;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 5h12l-6 7-6-7z" stroke="#854F0B" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
+                <div class="prep-info">
+                  <div class="prep-type">Parent guide</div>
+                  <div class="prep-title" id="parentGuide1Title">What your child learned</div>
+                  <div class="prep-desc">Explains what was covered and how to support the skill at home.</div>
+                </div>
+                <div class="prep-actions">
+                  <div class="pr-btn pr-prev" onclick="openModal('parent-1')">Preview</div>
+                  <div class="pr-btn pr-dl">↓ Download</div>
+                </div>
+              </div>
+              <div class="prep-item">
+                <div class="prep-icon" style="background:#FAEEDA;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 5h12l-6 7-6-7z" stroke="#854F0B" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
+                <div class="prep-info">
+                  <div class="prep-type">Parent guide</div>
+                  <div class="prep-title" id="parentGuide2Title">At-home activity guide</div>
+                  <div class="prep-desc">Simple activities to reinforce the lesson at home this week.</div>
+                </div>
+                <div class="prep-actions">
+                  <div class="pr-btn pr-prev" onclick="openModal('parent-2')">Preview</div>
+                  <div class="pr-btn pr-dl">↓ Download</div>
+                </div>
+              </div>
+              <div class="prep-item">
+                <div class="prep-icon" style="background:#f5f4f0;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#888" stroke-width="1.2"/><path d="M6 8h6M6 11h4" stroke="#888" stroke-width="1" stroke-linecap="round"/></svg></div>
+                <div class="prep-info">
+                  <div class="prep-type">Newsletter blurb</div>
+                  <div class="prep-title" id="newsletterTitle">Class newsletter</div>
+                  <div class="prep-desc">Ready-to-paste paragraph for your class newsletter or email update.</div>
+                </div>
+                <div class="prep-actions">
+                  <div class="pr-btn pr-prev" onclick="openModal('newsletter')">Preview</div>
+                  <div class="pr-btn pr-dl">↓ Download</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mode-pane" id="mpane-teach">
+            <div class="teaching-cards">
+              <div class="t-card">
+                <div class="t-preview slides-bg">
+                  <div class="slide-mock">
+                    <div class="slide-eyebrow" id="slideEyebrow"></div>
+                    <div class="slide-title" id="slideTitle"></div>
+                    <div class="slide-sub">Slide 1 of 12</div>
+                  </div>
+                </div>
+                <div class="t-card-info">
+                  <div class="t-card-text">
+                    <div class="t-card-type">Google Slides</div>
+                    <div class="t-card-title" id="slideCardTitle"></div>
+                    <div class="t-card-desc">12 slides ready to project. Includes discussion prompts and activities.</div>
+                  </div>
+                  <div class="t-card-btn" onclick="openSlidesPlayer()">Present →</div>
+                </div>
+              </div>
+              <div class="t-card">
+                <div class="t-preview video-bg">
+                  <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1a2e,#185FA5);"></div>
+                  <div style="position:relative;text-align:center;">
+                    <div class="play-circle" style="margin:0 auto 8px;"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2l10 6-10 6V2z" fill="#185FA5"/></svg></div>
+                    <div style="font-size:11px;color:rgba(255,255,255,0.7);" id="videoDur">3 min 24 sec</div>
+                  </div>
+                </div>
+                <div class="t-card-info">
+                  <div class="t-card-text">
+                    <div class="t-card-type">Video for students</div>
+                    <div class="t-card-title" id="videoCardTitle"></div>
+                    <div class="t-card-desc">Watch together as a class before the activity.</div>
+                  </div>
+                  <div class="t-card-btn">Play →</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MY CLASSES EMPTY VIEW ── -->
+    <div class="view cw" id="view-classes-empty">
+      <div class="class-page-title">My classes</div>
+      <div class="class-page-sub">Create a class to track your progress, mark lessons as done, and pick up exactly where you left off — for any group or individual student.</div>
+      <div class="create-class-card" onclick="openCreateClass()">
+        <div class="ccc-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="#185FA5" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <div class="ccc-title">Create a class</div>
+        <div class="ccc-desc">A class can be anything — a whole classroom, a small group, or even one student. Give it a name and start tracking.</div>
+        <div class="ccc-cta">Get started <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="#185FA5" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+    </div>
+
+    <!-- ── CLASS DETAIL VIEW ── -->
+    <div class="view cw" id="view-class">
+      <div class="class-detail-hdr">
+        <div>
+          <div class="class-detail-title-row">
+            <div class="class-avatar-lg" id="classAvatarLg" style="background:#185FA5;">4B</div>
+            <div class="class-detail-name" id="classDetailName">Grade 4B</div>
+          </div>
+          <div class="class-detail-meta" id="classDetailMeta">Grade 3–5 · 0 lessons taught</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <div class="class-edit-btn" onclick="openEditClass()">Edit class</div>
+          <div class="class-edit-btn archive" onclick="archiveClass()">Archive</div>
+        </div>
+      </div>
+
+
+
+    </div>
+
+  </div><!-- end main -->
+  </div><!-- end main-wrapper -->
+</div><!-- end app -->
+
+<!-- ══ ABOUT PANEL ══ -->
+<div class="about-overlay" id="aboutOverlay" onclick="closeAbout()"></div>
+<div class="about-panel" id="aboutPanel">
+  <div class="ap-header">
+    <div class="ap-title">About this curriculum</div>
+    <button class="ap-close" onclick="closeAbout()">×</button>
+  </div>
+  <div class="ap-body">
+    <div class="fw-visual">
+      <div class="fw-lbl">Life Skills Framework</div>
+      <svg width="200" height="200" viewBox="0 0 200 200" style="display:block;margin:0 auto 8px;">
+        <path d="M100 100 L100 20 A80 80 0 0 1 163 60 Z" fill="#EAF3DE" opacity=".9"/>
+        <path d="M100 100 L163 60 A80 80 0 0 1 163 140 Z" fill="#FBEAF0" opacity=".9"/>
+        <path d="M100 100 L163 140 A80 80 0 0 1 100 180 Z" fill="#FAEEDA" opacity=".9"/>
+        <path d="M100 100 L100 180 A80 80 0 0 1 37 140 Z" fill="#EEEDFE" opacity=".9"/>
+        <path d="M100 100 L37 140 A80 80 0 0 1 37 60 Z" fill="#E6F1FB" opacity=".9"/>
+        <path d="M100 100 L37 60 A80 80 0 0 1 100 20 Z" fill="#EAF3DE" opacity=".6"/>
+        <circle cx="100" cy="100" r="38" fill="#fff"/>
+        <text x="100" y="95" text-anchor="middle" font-size="9" font-weight="600" fill="#1a1a1a" font-family="sans-serif">FUTURE</text>
+        <text x="100" y="108" text-anchor="middle" font-size="9" font-weight="600" fill="#1a1a1a" font-family="sans-serif">READY</text>
+        <text x="100" y="14" text-anchor="middle" font-size="8" font-weight="500" fill="#3B6D11" font-family="sans-serif">Growth mindset</text>
+        <text x="174" y="65" text-anchor="start" font-size="8" font-weight="500" fill="#993556" font-family="sans-serif">Resilience</text>
+        <text x="174" y="145" text-anchor="start" font-size="8" font-weight="500" fill="#854F0B" font-family="sans-serif">Confidence</text>
+        <text x="100" y="196" text-anchor="middle" font-size="8" font-weight="500" fill="#534AB7" font-family="sans-serif">Adaptability</text>
+        <text x="26" y="105" text-anchor="end" font-size="8" font-weight="500" fill="#185FA5" font-family="sans-serif">EI</text>
+      </svg>
+      <div style="font-size:11px;color:#999;">5 interconnected life skills that build future-ready students</div>
+    </div>
+    <div class="ap-section">
+      <div class="ap-section-title">Why this curriculum</div>
+      <p>GrowthMinded is built on the premise that academic success alone isn't enough. Students need the emotional, social, and cognitive skills to navigate real life — and those skills can be taught.</p>
+      <p>The 5 units are sequenced to build on each other, starting with emotional intelligence as the foundation. Each skill is broken into classroom-ready lessons that take 15 minutes and require no prep.</p>
+    </div>
+    <div class="ap-section">
+      <div class="ap-section-title">Grade levels</div>
+      <table class="grade-table">
+        <tr><th>Grade</th><th>Focus</th><th>Lessons</th></tr>
+        <tr><td>K–2</td><td>Foundations — naming, expressing, regulating</td><td>80</td></tr>
+        <tr><td>3–5</td><td>Building — deepening skills, peer relationships</td><td>100</td></tr>
+        <tr><td>6–8</td><td>Applying — identity, pressure, resilience</td><td>100</td></tr>
+        <tr><td>9–12</td><td>Mastering — leadership, self-direction, future</td><td>100</td></tr>
+      </table>
+    </div>
+    <div class="ap-section">
+      <div class="ap-section-title">Supporting skills</div>
+      <div class="skills-2col">
+        <div class="skill-block"><div class="skill-block-title" style="color:#185FA5;">Emotional intelligence</div><ul><li>Self-awareness</li><li>Self-regulation</li><li>Empathy</li><li>Communication</li></ul></div>
+        <div class="skill-block"><div class="skill-block-title" style="color:#3B6D11;">Growth mindset</div><ul><li>Belief flexibility</li><li>Setback recovery</li><li>Challenge orientation</li><li>Self-talk</li></ul></div>
+        <div class="skill-block"><div class="skill-block-title" style="color:#993556;">Resilience</div><ul><li>Stress tolerance</li><li>Recovery</li><li>Endurance</li><li>Meaning-making</li></ul></div>
+        <div class="skill-block"><div class="skill-block-title" style="color:#534AB7;">Adaptability</div><ul><li>Flexibility</li><li>Critical thinking</li><li>Decision-making</li><li>Creativity</li></ul></div>
+        <div class="skill-block" style="grid-column:span 2;"><div class="skill-block-title" style="color:#854F0B;">Confidence</div><ul style="columns:2;"><li>Self-esteem</li><li>Public speaking</li><li>Assertiveness</li><li>Leadership</li></ul></div>
+      </div>
+    </div>
+    <div class="ap-section">
+      <div class="ap-section-title">Case studies</div>
+      <div class="coming-soon"><div style="font-size:12px;font-weight:500;color:#bbb;margin-bottom:3px;">Coming soon</div><div style="font-size:11px;color:#ccc;">Real stories from schools using this curriculum</div></div>
+    </div>
+    <div class="ap-section">
+      <div class="ap-section-title">Resources</div>
+      <div class="pdf-download-btn">
+        <div class="pdf-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 2h6l4 4v8H4V2z" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/><path d="M10 2v4h4M6 9h4M6 11.5h2" stroke="#fff" stroke-width="1" stroke-linecap="round"/></svg></div>
+        <div class="pdf-info"><div class="pdf-title">Life Skills Framework PDF</div><div class="pdf-sub">Share with your principal or admin team</div></div>
+        <span style="font-size:14px;color:#185FA5;">↓</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CREATE CLASS MODAL ══ -->
+<div class="cc-modal-overlay" id="ccModalOverlay" onclick="if(event.target===this)closeCreateClass()">
+  <div class="cc-modal">
+    <div class="cc-modal-hdr">
+      <div class="cc-modal-title" id="ccModalTitle">Create a class</div>
+      <div class="cc-modal-sub" id="ccModalSub">Give it a name — a whole classroom, a small group, or one student.</div>
+    </div>
+    <div class="cc-modal-body">
+      <label class="cc-form-label">Class name</label>
+      <input class="cc-form-input" id="ccNameInput" placeholder="e.g. Grade 4B, Wednesday group, Emma…">
+      <label class="cc-form-label">Grade level</label>
+      <div class="cc-grade-row">
+        <div class="cc-grade-opt" onclick="ccSelectGrade(this)">K–2</div>
+        <div class="cc-grade-opt active" onclick="ccSelectGrade(this)">3–5</div>
+        <div class="cc-grade-opt" onclick="ccSelectGrade(this)">6–8</div>
+        <div class="cc-grade-opt" onclick="ccSelectGrade(this)">9–12</div>
+      </div>
+      <div style="font-size:11px;color:#bbb;margin-top:8px;">This sets your starting grade. You can teach from any grade.</div>
+    </div>
+    <div class="cc-modal-footer">
+      <div class="cc-btn-cancel" onclick="closeCreateClass()">Cancel</div>
+      <div class="cc-btn-create" id="ccSubmitBtn" onclick="submitClassModal()">Create class</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ AI DRAWER ══ -->
+<div class="ai-drawer" id="aiDrawer">
+  <div class="ai-drawer-hdr">
+    <span class="ai-drawer-title">Find a lesson with AI</span>
+    <button class="ai-x" onclick="toggleAI()">×</button>
+  </div>
+  <input class="ai-input" id="aiInput" placeholder="e.g. student struggling with anger…" onkeydown="if(event.key==='Enter')runAI(this.value)">
+  <div class="ai-chips">
+    <div class="ai-chip" onclick="runAI('anger')">Anger</div>
+    <div class="ai-chip" onclick="runAI('self-esteem')">Self-esteem</div>
+    <div class="ai-chip" onclick="runAI('conflict')">Conflict</div>
+    <div class="ai-chip" onclick="runAI('anxiety')">Anxiety</div>
+    <div class="ai-chip" onclick="runAI('change')">Change</div>
+  </div>
+  <div class="ai-results" id="aiResults"></div>
+</div>
+
+<!-- ══ MODAL ══ -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div><div class="modal-type" id="mType"></div><div class="modal-title" id="mTitle"></div></div>
+      <button class="modal-x" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="mBody"></div>
+    <div class="modal-footer"><span class="modal-meta" id="mMeta"></span><div class="modal-dl">↓ Download PDF</div></div>
+  </div>
+</div>
+
+<!-- ══ CREATE CLASS PROMPT ══ -->
+<div class="create-class-prompt" id="createClassPrompt">
+  <div class="ccp-title">Create a class to track progress</div>
+  <div class="ccp-text">Mark lessons as done and track your progress by creating a class — it only takes a minute.</div>
+  <div class="ccp-actions">
+    <div class="ccp-create" onclick="hidePrompt();openCreateClass()">+ Create a class</div>
+    <div class="ccp-dismiss" onclick="hidePrompt()">Not now</div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════
+// DATA
+// ══════════════════════════════
+const units = {
+  ei:  { name:'Emotional intelligence', desc:'Help students name, understand and manage their emotions with confidence.', color:'#185FA5', bg:'#E6F1FB',
+    icon:`<svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M8 2C5.8 2 4 3.8 4 6c0 1.5.8 2.8 2 3.5V11h4V9.5C11.2 8.8 12 7.5 12 6c0-2.2-1.8-4-4-4z" stroke="#185FA5" stroke-width="1.3" stroke-linejoin="round"/></svg>`,
+    skills:['Naming my feelings','Body signals','Emotion thermometer','Feelings journal','Mirror of emotions'],
+    posters:[{name:'All feelings are welcome',desc:'A3/Letter'},{name:'The feelings wheel',desc:'A3/Letter'},{name:'Name it to tame it',desc:'A3/Letter'}] },
+  gm:  { name:'Growth mindset', desc:'Build the belief that effort and practice lead to growth and learning.', color:'#3B6D11', bg:'#EAF3DE',
+    icon:`<svg width="20" height="20" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="#3B6D11" stroke-width="1.2"/><path d="M5.5 8l2 2 3-3" stroke="#3B6D11" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    skills:['Power of yet','Mistakes are lessons','Challenge accepted','Brain gym','Effort tracker'],
+    posters:[{name:'The power of yet',desc:'A3/Letter'},{name:'Mistakes help us grow',desc:'A3/Letter'},{name:'My brain can grow',desc:'A3/Letter'}] },
+  res: { name:'Resilience', desc:'Teach students how to bounce back from setbacks and keep going.', color:'#993556', bg:'#FBEAF0',
+    icon:`<svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M8 3C5.5 3 4 5 4 7c0 1.5 1 3 4 5 3-2 4-3.5 4-5 0-2-1.5-4-4-4z" stroke="#993556" stroke-width="1.1" stroke-linejoin="round"/></svg>`,
+    skills:['Bounce back stories','Problem solving','Coping toolbox','Inner strength','Setback superpower'],
+    posters:[{name:'Bounce back like a ball',desc:'A3/Letter'},{name:'My coping toolbox',desc:'A3/Letter'},{name:'Setbacks make us stronger',desc:'A3/Letter'}] },
+  ada: { name:'Adaptability', desc:'Help students navigate change, uncertainty and unexpected challenges.', color:'#534AB7', bg:'#EEEDFE',
+    icon:`<svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M4 12V7l4-4 4 4v5H4z" stroke="#534AB7" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
+    skills:['Flex & flow','New perspectives','Change champions','Pivot practice','Comfort zone map'],
+    posters:[{name:'Comfort zone map',desc:'A3/Letter'},{name:'Change is how we grow',desc:'A3/Letter'},{name:'Flexible thinking',desc:'A3/Letter'}] },
+  con: { name:'Confidence', desc:'Develop a strong sense of self-worth and the courage to try new things.', color:'#854F0B', bg:'#FAEEDA',
+    icon:`<svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M8 2l1.5 3.5L13 6l-2.5 2.5.5 3.5L8 10.5 5 12l.5-3.5L3 6l3.5-.5L8 2z" stroke="#854F0B" stroke-width="1.1" stroke-linejoin="round"/></svg>`,
+    skills:['My strengths shield','Positive self-talk','Brave moments','Public speaking','Celebration wall'],
+    posters:[{name:'I am brave enough',desc:'A3/Letter'},{name:'My strengths',desc:'A3/Letter'},{name:'Flip the script',desc:'A3/Letter'}] }
+};
+
+const lessonData = [
+  [{n:'What are feelings?',d:'Introduce the concept of emotions and why we have them'},{n:'Feelings vocabulary',d:'Build a rich emotional vocabulary with feeling words'},{n:'Emotion thermometer 1',d:'Learn to rate emotion intensity on a scale'},{n:'Emotion thermometer 2',d:'Practice using the thermometer in real situations'}],
+  [{n:'How the body holds emotions',d:'Explore where emotions live in the body'},{n:'Body scan activity',d:'Guide students through a mindful body scan'},{n:'Calm-down strategies',d:'Learn breathing and grounding techniques'},{n:'Signal journaling',d:'Track physical signals throughout the week'}],
+  [{n:'Reading the thermometer',d:'Understand emotion intensity levels 1 through 10'},{n:'Intensity vs. type',d:'Distinguish between how strong and what kind of feeling'},{n:'Class emotion check-in',d:'Daily check-in practice as a whole class'},{n:'Personal thermometer craft',d:'Create a personal emotion thermometer to keep'}],
+  [{n:'Setting up your journal',d:'Create a personal feelings journal together'},{n:'Daily check-in practice',d:'Build a consistent emotional check-in habit'},{n:'Drawing your feelings',d:'Express emotions through drawing and color'},{n:'Sharing circles',d:'Share journal reflections in a safe group setting'}],
+  [{n:'Reading facial expressions',d:'Learn to identify emotions from facial cues'},{n:'Empathy in action',d:"Practice stepping into someone else's shoes"},{n:'Mirror activity pairs',d:'Partner activity reflecting emotions back and forth'},{n:'Emotions in stories',d:'Identify and discuss emotions in picture books'}]
+];
+
+const aiData = {
+  anger:[{l:'Calm-down strategies',p:'EI · Body signals',c:'#185FA5'},{l:'Reading the thermometer',p:'EI · Emotion thermometer',c:'#185FA5'},{l:'Coping toolbox',p:'Resilience',c:'#993556'}],
+  'self-esteem':[{l:'My strengths shield',p:'Confidence',c:'#854F0B'},{l:'Positive self-talk',p:'Confidence',c:'#854F0B'},{l:'Inner strength',p:'Resilience',c:'#993556'}],
+  conflict:[{l:'Empathy in action',p:'EI · Mirror of emotions',c:'#185FA5'},{l:'Problem solving',p:'Resilience',c:'#993556'},{l:'Sharing circles',p:'EI · Feelings journal',c:'#185FA5'}],
+  anxiety:[{l:'Body scan activity',p:'EI · Body signals',c:'#185FA5'},{l:'Calm-down strategies',p:'EI · Body signals',c:'#185FA5'},{l:'Coping toolbox',p:'Resilience',c:'#993556'}],
+  change:[{l:'Change champions',p:'Adaptability',c:'#534AB7'},{l:'Flex & flow',p:'Adaptability',c:'#534AB7'},{l:'Bounce back stories',p:'Resilience',c:'#993556'}]
+};
+
+// State
+let currentGrade = '3–5';
+let currentUnit = null;
+let currentSkillIdx = null;
+let currentLessonIdx = null;
+
+// ══════════════════════════════
+// INIT
+// ══════════════════════════════
+function init() {
+  buildNavTree();
+  buildOverview();
+  updateClassSwitcher();
+
+  // Returning experience:
+  // If a class exists → land on class view (Resume front and center)
+  // If no class → land on curriculum overview with welcome banner
+  if (classes.length > 0 && activeClassIdx !== null) {
+    loadClassView(activeClassIdx);
+  } else {
+    navOverview();
+  }
+}
+
+// ══════════════════════════════
+// NAV OVERVIEW
+// ══════════════════════════════
+function navOverview() {
+  clearActive();
+  document.getElementById('nav-all-units').classList.add('active');
+  document.querySelectorAll('.nav-children').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('open'));
+  refreshOverview();
+  showView('overview');
+}
+
+// ══════════════════════════════
+// NAV TREE
+// ══════════════════════════════
+function buildNavTree() {
+  document.getElementById('navTree').innerHTML = Object.entries(units).map(([uid, u]) => `
+    <div>
+      <div class="nav-item unit-level" id="nav-${uid}" onclick="navUnit('${uid}')">
+        <span class="nav-swatch" style="background:${u.color};"></span>
+        ${u.name}
+        <svg class="nav-chevron" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3 1l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="nav-children" id="nc-${uid}">
+        ${u.skills.map((s,i) => `
+          <div>
+            <div class="nav-item skill-level" id="nav-${uid}-${i}" onclick="navSkill('${uid}',${i})">
+              <span class="nav-dot" style="background:${u.color};"></span>
+              ${s}
+              <svg class="nav-chevron" width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M3 1l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="nav-children" id="nc-${uid}-${i}">
+              ${(lessonData[i]||lessonData[0]).map((l,j) => `
+                <div class="nav-item lesson-level" id="nav-${uid}-${i}-${j}" onclick="navLesson('${uid}',${i},${j})">
+                  <span class="nav-lesson-dot"></span>${l.n}
+                </div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function buildOverview() {
+  refreshOverview();
+}
+
+function refreshOverview() {
+  const c = activeClassIdx !== null ? classes[activeClassIdx] : null;
+
+  // Show/hide class name under title
+  const ovClassName = document.getElementById('ovClassName');
+  if (ovClassName) {
+    if (c) {
+      ovClassName.textContent = c.name.toUpperCase();
+      ovClassName.style.display = 'block';
+    } else {
+      ovClassName.style.display = 'none';
+    }
+  }
+
+  // Show/hide resume + last taught cards
+  const ovWrap = document.getElementById('ovCardsWrap');
+  const resumeCard = document.getElementById('ovResumeCard');
+  const taughtCard = document.getElementById('ovTaughtCard');
+  const grid = document.getElementById('ovCardsGrid');
+
+  if (ovWrap && resumeCard && taughtCard) {
+    const hasResume = c && lastOpenedLesson;
+    const hasTaught = c && lastTaughtLesson;
+
+    // Don't show resume if it's the same lesson as last taught
+    const resumeIsSameTaught = hasResume && hasTaught &&
+      lastOpenedLesson.uid === lastTaughtLesson.uid &&
+      lastOpenedLesson.skillIdx === lastTaughtLesson.skillIdx &&
+      lastOpenedLesson.lessonIdx === lastTaughtLesson.lessonIdx;
+
+    // Always show all 3 cards + note when class active
+    const plannedCard = document.getElementById('ovPlannedCard');
+    const noteWrap = document.getElementById('classNoteWrap');
+
+    if (c) {
+      ovWrap.style.display = 'block';
+
+      // Last opened
+      resumeCard.style.display = 'block';
+      if (lastOpenedLesson) {
+        document.getElementById('ovResumeTitle').textContent = lastOpenedLesson.title;
+        document.getElementById('ovResumePath').textContent = lastOpenedLesson.path;
+        const rd = document.getElementById('ovResumeDate');
+        if (rd) rd.textContent = lastOpenedLesson.openedAt ? fmtDate(lastOpenedLesson.openedAt) : '';
+        resumeCard.style.opacity = '1'; resumeCard.style.cursor = 'pointer';
+        resumeCard.classList.remove('empty');
+        resumeCard.style.borderLeftColor = unitColor(lastOpenedLesson.uid);
+      } else {
+        document.getElementById('ovResumeTitle').textContent = 'No lesson opened yet';
+        document.getElementById('ovResumePath').textContent = '';
+        const rd = document.getElementById('ovResumeDate'); if (rd) rd.textContent = '';
+        resumeCard.classList.add('empty');
+        resumeCard.style.borderLeftColor = '#e8e6e0';
+      }
+
+      // Last taught
+      taughtCard.style.display = 'block';
+      if (lastTaughtLesson) {
+        document.getElementById('ovTaughtTitle').textContent = lastTaughtLesson.title;
+        document.getElementById('ovTaughtPath').textContent = lastTaughtLesson.path;
+        const td = document.getElementById('ovTaughtDate');
+        if (td) td.textContent = lastTaughtLesson.taughtAt ? fmtDate(lastTaughtLesson.taughtAt) : '';
+        taughtCard.style.opacity = '1'; taughtCard.style.cursor = 'pointer';
+        taughtCard.classList.remove('empty');
+        taughtCard.style.borderLeftColor = unitColor(lastTaughtLesson.uid);
+      } else {
+        document.getElementById('ovTaughtTitle').textContent = 'No lessons taught yet';
+        document.getElementById('ovTaughtPath').textContent = '';
+        const td = document.getElementById('ovTaughtDate'); if (td) td.textContent = '';
+        taughtCard.classList.add('empty');
+        taughtCard.style.borderLeftColor = '#e8e6e0';
+      }
+
+      // Next planned
+      if (plannedCard) {
+        plannedCard.style.display = 'block';
+        const planned = c.plannedNext;
+        const planBtn = document.getElementById('ovPlanBtn');
+        if (planned) {
+          document.getElementById('ovPlannedTitle').textContent = planned.title;
+          document.getElementById('ovPlannedPath').textContent = planned.path;
+          if (planBtn) { planBtn.textContent = 'Change'; planBtn.className = 'oac-plan-btn has-plan'; }
+          plannedCard.onclick = function(e) { if (!e.target.classList.contains('oac-plan-btn')) navLesson(planned.uid, planned.skillIdx, planned.lessonIdx); };
+          plannedCard.classList.remove('empty');
+          plannedCard.style.borderLeftColor = unitColor(planned.uid);
+          plannedCard.querySelector('.oac-eyebrow').style.color = '#534AB7';
+        } else {
+          document.getElementById('ovPlannedTitle').textContent = 'No lesson planned yet';
+          document.getElementById('ovPlannedPath').textContent = '';
+          if (planBtn) { planBtn.textContent = 'Open any lesson and tap Plan next'; planBtn.className = 'oac-plan-hint'; }
+          plannedCard.classList.add('empty');
+          plannedCard.onclick = null;
+          plannedCard.style.borderLeftColor = '#e8e6e0';
+        }
+      }
+
+      // Class note
+      if (noteWrap) {
+        noteWrap.style.display = 'block';
+        const noteEl = document.getElementById('classNoteInline');
+        if (noteEl && document.activeElement !== noteEl) {
+          noteEl.innerText = c.note || '';
+        }
+      }
+    } else {
+      ovWrap.style.display = 'none';
+      if (noteWrap) noteWrap.style.display = 'none';
+    }
+
+  document.getElementById('overviewGrid').innerHTML = Object.entries(units).map(([uid, u]) => {
+    // Sum taught across ALL grades for this unit
+    const taughtByGrade = c ? Object.keys(c.taught).filter(g => (c.taught[g]||{})[uid] > 0) : [];
+    const taughtTotal = taughtByGrade.reduce((sum, g) => sum + ((c.taught[g]||{})[uid]||0), 0);
+    const taught = taughtTotal;
+    const pct = Math.round((taughtTotal/20)*100);
+    const hasProgress = c && taught > 0;
+    // Multi-grade: show breakdown; single grade: show count
+    const progLabel = taughtByGrade.length > 1
+      ? taughtByGrade.map(g => (c.taught[g][uid]||0) + ' (' + g + ')').join(' · ')
+      : (taught > 0 ? taught + ' taught' : '');
+    return '<div class="ov-card" onclick="navUnit(\'' + uid + '\')">'
+      + '<div class="ov-icon" style="background:' + u.bg + ';">' + u.icon + '</div>'
+      + '<div class="ov-name">' + u.name + '</div>'
+      + '<div class="ov-desc">' + (u.desc || '') + '</div>'
+      + '<div class="ov-prog" style="margin-top:auto;padding-top:12px;">'
+      + (pct > 0 ? '<div class="ov-prog-bar"><div class="ov-prog-fill" style="width:' + pct + '%;background:' + u.color + ';"></div></div>' : '')
+      + (() => {
+        if (!c) return '';
+        // Gather per-grade counts for this unit
+        const gradeCounts = Object.entries(c.taught)
+          .filter(([g, gd]) => (gd[uid]||0) > 0)
+          .map(([g, gd]) => ({ grade: g, count: gd[uid] }));
+        if (gradeCounts.length === 0) return '';
+        if (gradeCounts.length === 1) {
+          const {grade, count} = gradeCounts[0];
+          return '<div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:3px;">'
+            + '<div class="ov-prog-label has-progress">' + count + ' taught</div>'
+            + (c.lastTaughtByUnit && c.lastTaughtByUnit[uid] ? '<div class="ov-last-taught">' + fmtDate(c.lastTaughtByUnit[uid]) + '</div>' : '')
+            + '</div>';
+        }
+        // Multi-grade: show breakdown
+        return '<div style="margin-top:4px;">'
+          + gradeCounts.map(({grade, count}) =>
+              '<div class="ov-prog-label has-progress" style="margin-top:1px;">Gr ' + grade + ': ' + count + ' taught</div>'
+            ).join('')
+          + (c.lastTaughtByUnit && c.lastTaughtByUnit[uid] ? '<div class="ov-last-taught">' + fmtDate(c.lastTaughtByUnit[uid]) + '</div>' : '')
+          + '</div>';
+      })()
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+}
+// ══════════════════════════════
+// NAVIGATION
+// ══════════════════════════════
+function clearActive() {
+  document.querySelectorAll('.nav-item, .nav-item').forEach(el => el.classList.remove('active'));
+  document.getElementById('nav-all-units').classList.remove('active');
+}
+
+function showView(id) {
+  // Accept either 'unit' or 'view-unit' format
+  const fullId = id.startsWith('view-') ? id : 'view-'+id;
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(fullId).classList.add('active');
+  document.getElementById('mainArea').scrollTop = 0;
+}
+
+function navUnit(uid, fromClass) {
+  currentUnit = uid;
+  currentSkillIdx = null;
+  currentLessonIdx = null;
+  // Show back-to-class link if navigated from class view
+  const btc = document.getElementById('backToClass');
+  if (btc) {
+    if (fromClass && activeClassIdx !== null && classes[activeClassIdx]) {
+      btc.style.display = 'flex';
+      document.getElementById('backToClassName').textContent = '← ' + classes[activeClassIdx].name;
+    } else {
+      btc.style.display = 'none';
+    }
+  }
+  const u = units[uid];
+
+  // Sidebar
+  clearActive();
+  const el = document.getElementById('nav-'+uid);
+  el.classList.add('active','open');
+  document.getElementById('nc-'+uid).classList.add('open');
+
+  // Unit view
+  showView('unit');
+  switchUnitTab('lessons');
+  document.getElementById('unitIcon').style.background = u.bg;
+  document.getElementById('unitIcon').innerHTML = u.icon;
+  document.getElementById('unitName').textContent = u.name;
+  document.getElementById('unitName').style.color = u.color;
+  document.getElementById('unitMeta').textContent = 'Grade '+currentGrade+' · 5 skills';
+
+  // Build skill accordions
+  document.getElementById('skillAccordions').innerHTML = u.skills.map((s,i) => {
+    const ls = lessonData[i]||lessonData[0];
+    return `<div class="skill-acc" id="sacc-${uid}-${i}">
+      <div class="skill-acc-hdr" onclick="toggleAcc('${uid}',${i})">
+        <div class="sa-dot" style="background:${u.color};"></div>
+        <div class="sa-name">${s}</div>
+        <div class="sa-count" id="sacount-${uid}-${i}">${ls.length} lessons</div>
+        <svg class="sa-chev" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="skill-acc-intro" onclick="openVideoModal('${uid}',${i})" style="cursor:pointer;">
+        <div class="intro-thumb" style="background:${u.bg};">
+          <div style="position:absolute;inset:0;background:linear-gradient(135deg,${u.color}44,${u.color});"></div>
+          <div class="intro-play"><svg width="7" height="7" viewBox="0 0 10 10" fill="none"><path d="M2 1.5l6 3.5-6 3.5V1.5z" fill="${u.color}"/></svg></div>
+        </div>
+        <div class="intro-text">
+          <div class="intro-label">Watch before teaching</div>
+          <div class="intro-title">Understanding ${s}</div>
+        </div>
+        <div class="intro-dur"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#bbb" stroke-width="1"/><path d="M6 3.5V6l1.5 1.5" stroke="#bbb" stroke-width="1" stroke-linecap="round"/></svg>4 min</div>
+      </div>
+      <div class="skill-acc-lessons">
+        ${ls.map((l,j) => {
+          const key = uid+'-'+i+'-'+j;
+          const isTaught = isDone(currentGrade, uid, i, j);
+          // Count other classes that have taught this lesson (any grade)
+          const othersTaught = !isTaught ? classes.filter((cls, ci) => {
+            if (ci === activeClassIdx) return false;
+            return Object.keys(cls.taught).some(g => doneLessons.has(g+':'+uid+'-'+i+'-'+j));
+          }).length : 0;
+          const alsoLabel = othersTaught > 0
+            ? (othersTaught === 1 ? 'Also taught to 1 other class' : 'Also taught to '+othersTaught+' other classes')
+            : '';
+          return `<div class="lesson-row" onclick="navLesson('${uid}',${i},${j})">
+            <div class="l-check${isTaught?' taught':''}" id="lcheck-${uid}-${i}-${j}"
+              onclick="event.stopPropagation();toggleTaught('${uid}',${i},${j})">
+              ${isTaught ? `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>` : ''}
+            </div>
+            <div class="l-info"><div class="l-name">${l.n}</div><div class="l-desc">${l.d}</div></div>
+            ${alsoLabel ? `<div class="also-taught visible">${alsoLabel}</div>` : ''}
+            <div class="l-open">Open →</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  buildResources(uid);
+  refreshSkillCounts(uid);
+}
+
+function navSkill(uid, idx) {
+  if (currentUnit !== uid) navUnit(uid);
+  else showView('unit'); // ensure we're on unit view even if already on same unit
+  currentSkillIdx = idx;
+
+  // Sidebar
+  clearActive();
+  document.getElementById('nav-'+uid).classList.add('active','open');
+  document.getElementById('nc-'+uid).classList.add('open');
+  document.getElementById('nav-'+uid+'-'+idx).classList.add('active','open');
+  document.getElementById('nc-'+uid+'-'+idx).classList.add('open');
+
+  // Open accordion
+  switchUnitTab('lessons');
+  document.querySelectorAll('.skill-acc').forEach(a => a.classList.remove('open'));
+  const acc = document.getElementById('sacc-'+uid+'-'+idx);
+  if (acc) { acc.classList.add('open'); setTimeout(()=>acc.scrollIntoView({behavior:'smooth',block:'nearest'}),100); }
+}
+
+function navLesson(uid, skillIdx, lessonIdx) {
+  currentUnit = uid;
+  currentSkillIdx = skillIdx;
+  currentLessonIdx = lessonIdx;
+  const u = units[uid];
+  const s = u.skills[skillIdx];
+  const ls = lessonData[skillIdx]||lessonData[0];
+  const l = ls[lessonIdx];
+
+  // Sidebar — fully expanded
+  clearActive();
+  document.getElementById('nav-'+uid).classList.add('open');
+  document.getElementById('nc-'+uid).classList.add('open');
+  document.getElementById('nav-'+uid+'-'+skillIdx).classList.add('active','open');
+  document.getElementById('nc-'+uid+'-'+skillIdx).classList.add('open');
+  const lEl = document.getElementById('nav-'+uid+'-'+skillIdx+'-'+lessonIdx);
+  if (lEl) lEl.classList.add('active');
+
+  // Track for resume
+  lastOpenedLesson = {
+    title: l.n,
+    path: u.name + ' · ' + u.skills[skillIdx] + ' · Lesson ' + (lessonIdx+1),
+    unitColor: u.color,
+    uid: uid, skillIdx: skillIdx, lessonIdx: lessonIdx,
+    grade: currentGrade,
+    openedAt: new Date().toISOString()
+  };
+  updateActiveBanner();
+  refreshOverview(); // keep overview resume card in sync
+  refreshPlanNextBtn();
+
+  // Reset mark done button + taught badge
+  const btn = document.getElementById('markDoneBtn');
+  const lbl = document.getElementById('markDoneLabel');
+  if (activeClassIdx === null || !classes[activeClassIdx]) {
+    btn.classList.remove('done');
+    lbl.textContent = 'Create a class to mark as taught';
+    btn.style.color = '#185FA5';
+    btn.style.borderColor = '#b5d4f4';
+  } else {
+    btn.style.color = '';
+    btn.style.borderColor = '';
+    const wasTaught = isDone(currentGrade, uid, skillIdx, lessonIdx);
+    if (wasTaught) {
+      btn.classList.add('done'); lbl.textContent = 'Done';
+    } else {
+      btn.classList.remove('done'); lbl.textContent = 'Mark as taught';
+    }
+  }
+
+  // Lesson view
+  showView('lesson');
+  switchMode('prep');
+
+  // Header
+  document.getElementById('bcLesson').textContent = l.n;
+  document.getElementById('lessonBackLabel').textContent = u.name;
+  document.getElementById('lessonTitle').textContent = l.n;
+  document.getElementById('lessonDesc').textContent = l.d;
+  document.getElementById('lessonNavLbl').textContent = 'Lesson '+(lessonIdx+1)+' of '+ls.length;
+
+  // Prev/next
+  document.getElementById('prevBtn').classList.toggle('disabled', lessonIdx===0);
+  document.getElementById('nextBtn').classList.toggle('disabled', lessonIdx===ls.length-1);
+  document.getElementById('prevBtn').onclick = lessonIdx>0 ? ()=>navLesson(uid,skillIdx,lessonIdx-1) : null;
+  document.getElementById('nextBtn').onclick = lessonIdx<ls.length-1 ? ()=>navLesson(uid,skillIdx,lessonIdx+1) : null;
+
+  // Prep mode content
+  const vKey = uid+'-'+skillIdx;
+  const vWatched = watchedVideos.has(vKey);
+  const sil = document.getElementById('skillIntroLink');
+  sil.onclick = function() { openVideoModal(uid, skillIdx); };
+  if (vWatched) {
+    sil.innerHTML = '<span style="color:#3B6D11;font-weight:500;font-size:11px;">✓ Watched</span> <span style="color:#bbb;font-size:11px;">·</span> <span style="font-size:11px;text-decoration:underline;cursor:pointer;color:#888;">watch again</span>';
+    sil.className = '';
+  } else {
+    sil.innerHTML = 'Watch the intro video — 4 min';
+    sil.className = '';
+  }
+  document.getElementById('lessonPlanTitle').textContent = l.n+' — Teacher guide';
+  document.getElementById('printableTitle').textContent = l.n+' — Worksheet';
+  document.getElementById('parentGuide1Title').textContent = 'Understanding '+s+' — Parent guide';
+  document.getElementById('parentGuide2Title').textContent = s+' at home — Activity guide';
+  document.getElementById('newsletterTitle').textContent = l.n+' — Newsletter blurb';
+
+  // Teaching mode
+  document.getElementById('slideEyebrow').textContent = u.name+' · '+s;
+  document.getElementById('slideTitle').textContent = l.n;
+  document.getElementById('slideCardTitle').textContent = l.n+' — Presentation';
+  document.getElementById('videoCardTitle').textContent = l.n+' — Student video';
+}
+
+function backToUnit() { navUnit(currentUnit); }
+
+function toggleAcc(uid, idx) {
+  const acc = document.getElementById('sacc-'+uid+'-'+idx);
+  const isOpen = acc.classList.contains('open');
+  acc.classList.toggle('open', !isOpen);
+  // Sync sidebar
+  clearActive();
+  document.getElementById('nav-'+uid).classList.add('active','open');
+  document.getElementById('nc-'+uid).classList.add('open');
+  if (!isOpen) {
+    document.getElementById('nav-'+uid+'-'+idx).classList.add('active','open');
+    document.getElementById('nc-'+uid+'-'+idx).classList.add('open');
+  }
+}
+
+function buildResources(uid) {
+  const u = units[uid];
+  document.getElementById('resIntro').textContent = 'Resources for the '+u.name+' unit — set up your classroom before starting, and send home the parent overview when you begin.';
+  document.getElementById('posterGrid').innerHTML = u.posters.map((p,i)=>`
+    <div class="poster-card">
+      <div class="poster-thumb" style="background:${u.bg};">
+        <div style="width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;">${u.icon}</div>
+        <div class="poster-thumb-title" style="color:${u.color};">${p.name}</div>
+        <div style="font-size:9px;color:rgba(0,0,0,0.3);">Grade ${currentGrade}</div>
+      </div>
+      <div class="poster-info">
+        <div class="poster-name">${p.name}</div>
+        <div class="poster-desc">${p.desc} · Display before starting unit</div>
+        <div class="poster-btns">
+          <div class="p-btn p-prev" onclick="openPosterModal('${uid}',${i})">Preview</div>
+          <div class="p-btn p-dl">↓ Download</div>
+        </div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('resList').innerHTML = `
+    <div class="res-item">
+      <div class="ri-icon" style="background:#FAEEDA;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 5h12l-6 7-6-7z" stroke="#854F0B" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
+      <div class="ri-info"><div class="ri-type">Parent overview</div><div class="ri-title">${u.name} — What your child will learn</div><div class="ri-desc">Send at the start of the unit. Explains the 5 skills and how parents can support at home.</div></div>
+      <div class="ri-actions"><div class="ri-btn ri-prev" onclick="openDocModal('parent','${uid}')">Preview</div><div class="ri-btn ri-dl">↓ Download</div></div>
+    </div>
+    <div class="res-item">
+      <div class="ri-icon" style="background:#f5f4f0;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="3" width="12" height="12" rx="2" stroke="#888" stroke-width="1.2"/><path d="M6 8h6M6 11h4" stroke="#888" stroke-width="1" stroke-linecap="round"/></svg></div>
+      <div class="ri-info"><div class="ri-type">Newsletter blurb</div><div class="ri-title">Starting ${u.name} — Newsletter blurb</div><div class="ri-desc">Ready-to-paste paragraph for your school newsletter.</div></div>
+      <div class="ri-actions"><div class="ri-btn ri-prev" onclick="openDocModal('newsletter','${uid}')">Preview</div><div class="ri-btn ri-dl">↓ Download</div></div>
+    </div>`;
+}
+
+// ══════════════════════════════
+// TAB SWITCHING
+// ══════════════════════════════
+function switchUnitTab(tab) {
+  document.querySelectorAll('.unit-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.unit-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('utab-'+tab).classList.add('active');
+  document.getElementById('upane-'+tab).classList.add('active');
+}
+
+function switchMode(mode) {
+  document.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.mode-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('mtab-'+mode).classList.add('active');
+  document.getElementById('mpane-'+mode).classList.add('active');
+}
+
+// ══════════════════════════════
+// GRADE
+// ══════════════════════════════
+function selectGradeAndNav(grade, uid) {
+  // Switch grade pill and navigate to that unit
+  document.querySelectorAll('.grade-pill').forEach(p => {
+    p.classList.toggle('active', p.textContent === grade);
+  });
+  currentGrade = grade;
+  navUnit(uid);
+}
+
+function selectGrade(el, grade) {
+  currentGrade = grade;
+  document.querySelectorAll('.grade-pill').forEach(p=>p.classList.remove('active','pulse'));
+  el.classList.add('active');
+  // Refresh current view for new grade
+  if (currentUnit) {
+    navUnit(currentUnit); // re-renders unit with correct grade content
+  }
+}
+
+function flashGrade() {
+  document.getElementById('sbScroll').scrollTo({top:0,behavior:'smooth'});
+  document.querySelectorAll('.grade-pill').forEach(p=>{
+    p.classList.add('pulse');
+    setTimeout(()=>p.classList.remove('pulse'),900);
+  });
+}
+
+// ══════════════════════════════
+// ABOUT PANEL
+// ══════════════════════════════
+function openAbout() { document.getElementById('aboutPanel').classList.add('open'); document.getElementById('aboutOverlay').classList.add('open'); }
+function closeAbout() { document.getElementById('aboutPanel').classList.remove('open'); document.getElementById('aboutOverlay').classList.remove('open'); }
+
+// ══════════════════════════════
+// AI DRAWER
+// ══════════════════════════════
+function toggleAI() { document.getElementById('aiDrawer').classList.toggle('open'); }
+function openAI() { document.getElementById('aiDrawer').classList.add('open'); }
+function runAI(topic) {
+  document.getElementById('aiInput').value = topic;
+  const results = aiData[topic]||aiData.anger;
+  document.getElementById('aiResults').innerHTML = results.map(r=>`
+    <div class="ai-result">
+      <span class="ai-res-dot" style="background:${r.c};"></span>
+      <div class="ai-res-info"><div class="ai-res-lesson">${r.l}</div><div class="ai-res-path">${r.p}</div></div>
+      <span class="ai-res-open">Open →</span>
+    </div>`).join('');
+}
+
+// ══════════════════════════════
+// MODAL
+// ══════════════════════════════
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+function openModal(key) {
+  const u = currentUnit ? units[currentUnit] : units.ei;
+  const s = currentSkillIdx !== null ? u.skills[currentSkillIdx] : u.skills[0];
+  const ls = currentSkillIdx !== null ? (lessonData[currentSkillIdx]||lessonData[0]) : lessonData[0];
+  const l = currentLessonIdx !== null ? ls[currentLessonIdx] : ls[0];
+
+  const templates = {
+    'lesson-plan':{ type:'Lesson plan', title:l.n+' — Teacher guide', meta:'PDF · 3 pages',
+      html:`<div class="modal-doc"><div class="mdoc-eyebrow">Teacher guide</div><div class="mdoc-title">${l.n}</div><div class="mdoc-sub">${s} · Grade ${currentGrade} · 15 minutes</div>
+        <div class="mdoc-sec"><div class="mdoc-sec-title" style="color:${u.color};">Lesson overview</div><div class="mdoc-text">${l.d}</div></div>
+        <div class="mdoc-sec"><div class="mdoc-sec-title" style="color:${u.color};">Timing</div><ul class="mdoc-list"><li>0–3 min — Introduction and warmup</li><li>3–8 min — Main activity</li><li>8–13 min — Reflection and discussion</li><li>13–15 min — Close and preview next lesson</li></ul></div>
+        <div class="mdoc-sec"><div class="mdoc-sec-title" style="color:${u.color};">Discussion questions</div><ul class="mdoc-list"><li>What did you notice during this lesson?</li><li>How does this connect to your daily life?</li><li>What's one thing you want to remember?</li></ul></div>
+      </div>` },
+    'worksheet':{ type:'Printable activity', title:l.n+' — Worksheet', meta:'PDF · 1 page · Colour + B&W',
+      html:`<div class="modal-doc" style="text-align:center;"><div class="mdoc-eyebrow">Printable activity</div><div class="mdoc-title">${l.n}</div><div class="mdoc-sub">One per student · Grade ${currentGrade}</div>
+        <div style="background:${u.bg};border-radius:10px;padding:24px;margin:16px 0;min-height:120px;display:flex;align-items:center;justify-content:center;">
+          <div style="text-align:center;">${u.icon}<div style="font-size:14px;font-weight:500;color:${u.color};margin-top:8px;">${l.n}</div><div style="font-size:11px;color:${u.color};opacity:.6;margin-top:4px;">Student activity sheet</div></div>
+        </div>
+        <div class="mdoc-text" style="text-align:left;">Complete the activity, share with a partner, and reflect on what you discovered.</div>
+      </div>` },
+    'parent-1':{ type:'Parent guide', title:'Understanding '+s+' — Parent guide', meta:'PDF · 2 pages',
+      html:`<div class="modal-doc"><div class="mdoc-eyebrow">Parent guide</div><div class="mdoc-title">Understanding ${s}</div><div class="mdoc-sub">What your child learned today</div>
+        <div class="mdoc-sec"><div class="mdoc-sec-title" style="color:${u.color};">What we covered in class</div><div class="mdoc-text">Today your child explored <em>${l.n.toLowerCase()}</em>. ${l.d} This is part of our ${u.name} unit in the GrowthMinded curriculum.</div></div>
+        <div class="mdoc-sec"><div class="mdoc-sec-title" style="color:${u.color};">How to support at home</div><ul class="mdoc-list"><li>Ask your child what they learned today</li><li>Share a related experience of your own</li><li>Encourage them to practice the skill this week</li></ul></div>
+      </div>` },
+    'parent-2':{ type:'Parent guide', title:s+' at home — Activity guide', meta:'PDF · 2 pages',
+      html:`<div class="modal-doc"><div class="mdoc-eyebrow">Parent activity guide</div><div class="mdoc-title">${s} at home</div><div class="mdoc-sub">Simple activities to try this week</div>
+        <div class="mdoc-sec"><div class="mdoc-sec-title" style="color:${u.color};">Daily check-in</div><div class="mdoc-text">At dinner or bedtime, ask your child to share one moment connected to what they've been learning. Keep it light and conversational — the goal is connection, not assessment.</div></div>
+        <div class="mdoc-sec"><div class="mdoc-sec-title" style="color:${u.color};">In the moment</div><div class="mdoc-text">When you notice your child facing a relevant situation, gently reference what they've been learning. 'Remember what you practiced at school? What might help here?'</div></div>
+      </div>` },
+    'newsletter':{ type:'Newsletter blurb', title:l.n+' — Newsletter blurb', meta:'PDF · 1 page',
+      html:`<div class="modal-doc"><div class="mdoc-eyebrow">Newsletter blurb · Ready to copy &amp; paste</div><div class="mdoc-title">${l.n}</div><div class="mdoc-sub">Class newsletter · ${u.name}</div>
+        <div class="mdoc-sec"><div class="mdoc-sec-title" style="color:${u.color};">Suggested text</div>
+        <div class="mdoc-text" style="background:#faf9f7;padding:14px;border-radius:8px;border-left:3px solid ${u.color};line-height:1.8;">
+          This week in class we explored <em>${l.n.toLowerCase()}</em> as part of our ${u.name} unit in the GrowthMinded Life Skills curriculum. ${l.d.charAt(0).toUpperCase()+l.d.slice(1)}.<br><br>
+          You can reinforce this at home by asking your child about what they learned. We hope these skills carry on beyond the classroom.
+        </div></div>
+        <div class="mdoc-text" style="font-size:11px;color:#999;margin-top:10px;">Adapt this text to match your school's newsletter style.</div>
+      </div>` }
+  };
+
+  const c = templates[key];
+  if (!c) return;
+  document.getElementById('mType').textContent = c.type;
+  document.getElementById('mTitle').textContent = c.title;
+  document.getElementById('mMeta').textContent = c.meta;
+  document.getElementById('mBody').innerHTML = c.html;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function openPosterModal(uid, idx) {
+  const u = units[uid];
+  const p = u.posters[idx];
+  document.getElementById('mType').textContent = 'Classroom poster';
+  document.getElementById('mTitle').textContent = p.name;
+  document.getElementById('mMeta').textContent = 'PDF · A3 and Letter size';
+  document.getElementById('mBody').innerHTML = '<div style="display:flex;justify-content:center;">'
+    + '<div style="background:'+u.bg+';border-radius:12px;padding:36px;text-align:center;width:210px;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;">'
+    + '<div style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;">'+u.icon+'</div>'
+    + '<div style="font-size:9px;text-transform:uppercase;color:'+u.color+';opacity:.6;">'+u.name+' · Grade '+currentGrade+'</div>'
+    + '<div style="font-size:17px;font-weight:500;color:'+u.color+';line-height:1.2;">'+p.name+'</div>'
+    + '<div style="width:28px;height:2px;background:'+u.color+';opacity:.25;border-radius:2px;"></div>'
+    + '<div style="font-size:10px;color:'+u.color+';opacity:.5;">GrowthMinded Life Skills</div>'
+    + '</div></div>';
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function openDocModal(type, uid) {
+  const u = units[uid];
+  const isParent = type==='parent';
+  document.getElementById('mType').textContent = isParent ? 'Parent overview' : 'Newsletter blurb';
+  document.getElementById('mTitle').textContent = isParent ? u.name+' — What your child will learn' : 'Starting '+u.name;
+  document.getElementById('mMeta').textContent = 'PDF · 2 pages';
+  document.getElementById('mBody').innerHTML = '<div class="modal-doc">'
+    + '<div class="mdoc-eyebrow">' + (isParent ? 'Unit overview for parents' : 'Newsletter blurb') + '</div>'
+    + '<div class="mdoc-title">' + (isParent ? u.name : 'Starting ' + u.name) + '</div>'
+    + '<div class="mdoc-sub">' + (isParent ? 'Grade ' + currentGrade + ' · 5 skills' : 'Ready to copy &amp; paste') + '</div>'
+    + (isParent
+      ? '<div class="mdoc-sec"><div class="mdoc-sec-title" style="color:' + u.color + ';">What your child will learn</div><ul class="mdoc-list">' + u.skills.map(s => '<li>' + s + '</li>').join('') + '</ul></div><div class="mdoc-sec"><div class="mdoc-sec-title" style="color:' + u.color + ';">How to support at home</div><div class="mdoc-text">Ask your child each day about what they are learning.</div></div>'
+      : '<div class="mdoc-sec"><div class="mdoc-sec-title" style="color:' + u.color + ';">Suggested text</div><div class="mdoc-text" style="background:#faf9f7;padding:14px;border-radius:8px;border-left:3px solid ' + u.color + ';line-height:1.8;">We are excited to begin our ' + u.name + ' unit. Students will explore ' + u.skills.slice(0,3).map(s => s.toLowerCase()).join(', ') + ' and more.</div></div>')
+    + '</div>';
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+// ══════════════════════════════
+// CLASS MANAGEMENT
+// ══════════════════════════════
+const classColors = ['#185FA5','#3B6D11','#993556','#534AB7','#854F0B'];
+let classes = [];
+let activeClassIdx = null;
+let classColorIdx = 0;
+let lastOpenedLesson = null;   // last OPENED lesson { title, path, uid, skillIdx, lessonIdx }
+let lastTaughtLesson = null;   // last MARKED DONE lesson { title, path, uid, skillIdx, lessonIdx }
+
+function openCreateClass() {
+  isEditingClass = false;
+  document.getElementById('ccModalTitle').textContent = 'Create a class to track progress';
+  document.getElementById('ccModalSub').textContent = 'Give it a name — a whole classroom, a small group, or one student.';
+  document.getElementById('ccSubmitBtn').textContent = 'Create class';
+  document.getElementById('ccNameInput').value = '';
+  document.getElementById('ccModalOverlay').classList.add('open');
+  document.getElementById('ccNameInput').focus();
+}
+
+function closeCreateClass() {
+  document.getElementById('ccModalOverlay').classList.remove('open');
+}
+
+function ccSelectGrade(el) {
+  document.querySelectorAll('.cc-grade-opt').forEach(g => g.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function createClass() {
+  const name = document.getElementById('ccNameInput').value.trim() || 'My class';
+  const grade = document.querySelector('.cc-grade-opt.active')?.textContent || '3–5';
+  const color = classColors[classColorIdx % classColors.length];
+  classColorIdx++;
+  const initials = name.split(' ').filter(w=>w).map(w=>w[0]).join('').toUpperCase().slice(0,2) || '??';
+  classes.push({ name, grade, color, initials, taught: {}, createdAt: new Date().toISOString(), lastTaughtAt: null });
+  activeClassIdx = classes.length - 1;
+  closeCreateClass();
+  updateClassSwitcher();
+  refreshOverview();
+  // Refresh page state for new class context
+  if (document.getElementById('view-lesson').classList.contains('active') && currentUnit) {
+    navLesson(currentUnit, currentSkillIdx, currentLessonIdx);
+  } else if (document.getElementById('view-unit').classList.contains('active') && currentUnit) {
+    navUnit(currentUnit);
+  }
+  loadClassView(activeClassIdx);
+}
+
+function updateClassesSidebar() {
+  // Classes now live in the top bar dropdown — sidebar only has curriculum
+  updateClassSwitcher();
+}
+
+function switchClass(idx) {
+  activeClassIdx = idx;
+  updateClassSwitcher();
+  loadClassView(idx);
+  // Refresh overview in background so it's ready
+  refreshOverview();
+}
+
+function navMyClasses() {
+  clearActive();
+  if (classes.length === 0) {
+    showView('view-classes-empty');
+  } else {
+    loadClassView(activeClassIdx !== null ? activeClassIdx : 0);
+  }
+}
+
+function loadClassView(idx) {
+  if (idx === null || !classes[idx]) return;
+  activeClassIdx = idx;
+  const c = classes[idx];
+
+  // Sync grade pill to class default grade
+  if (c.grade && c.grade !== currentGrade) {
+    currentGrade = c.grade;
+    document.querySelectorAll('.grade-pill').forEach(p => {
+      p.classList.toggle('active', p.textContent === c.grade);
+    });
+  }
+
+  updateClassSwitcher();
+  document.getElementById('classAvatarLg').style.background = c.color;
+  document.getElementById('classAvatarLg').textContent = c.initials;
+  document.getElementById('classDetailName').textContent = c.name;
+  const totalTaught = Object.values(c.taught).reduce((sum, gradeData) => sum + Object.values(gradeData||{}).reduce((a,b)=>a+b,0), 0);
+  document.getElementById('classDetailMeta').textContent = 'Grade '+c.grade+(totalTaught > 0 ? ' · '+totalTaught+' lesson'+(totalTaught!==1?'s':'')+' taught' : ' · No lessons taught yet');
+
+  if (lastOpenedLesson) {
+    document.getElementById('noResume').style.display = 'none';
+    document.getElementById('resumeCard').style.display = 'flex';
+  } else if (totalTaught > 0) {
+    // Has taught lessons but no resume yet — hide the empty state, show nothing
+    document.getElementById('noResume').style.display = 'none';
+    document.getElementById('resumeCard').style.display = 'none';
+    document.getElementById('resumeTitle').textContent = lastOpenedLesson.title;
+    document.getElementById('resumePath').textContent = lastOpenedLesson.path;
+  } else {
+    document.getElementById('noResume').style.display = totalTaught > 0 ? 'none' : 'block';
+    document.getElementById('resumeCard').style.display = 'none';
+  }
+
+
+
+  
+  showView('view-class');
+}
+
+function updateActiveBanner() {
+  updateClassSwitcher();
+}
+
+function updateClassSwitcher() {
+  const dot = document.getElementById('csDot');
+  const label = document.getElementById('csLabel');
+  const name = document.getElementById('csName');
+  if (!dot || !label || !name) return;
+
+  const chev = document.querySelector('.cs-chevron');
+  if (activeClassIdx !== null && classes[activeClassIdx]) {
+    const c = classes[activeClassIdx];
+    dot.style.background = c.color;
+    dot.style.display = 'block';
+    label.style.display = 'block';
+    name.textContent = c.name;
+    name.style.color = '#1a1a1a';
+    if (chev) chev.style.display = 'block';
+  } else {
+    dot.style.display = 'none';
+    label.style.display = 'none';
+    name.textContent = '+ Create a class';
+    name.style.color = '#185FA5';
+    if (chev) chev.style.display = archivedClasses.length > 0 ? 'block' : 'none';
+  }
+}
+
+// Flash class button in welcome banner
+function flashClassBtn() {
+  openCreateClass();
+}
+
+// Refresh taught counts in skill accordion headers
+function refreshSkillCounts(uid) {
+  if (!uid) return;
+  const u = units[uid];
+  if (!u) return;
+  u.skills.forEach((s, i) => {
+    const ls = lessonData[i] || lessonData[0];
+    const taughtCount = ls.filter((l, j) => isDone(currentGrade, uid, i, j)).length;
+    const el = document.getElementById('sacount-'+uid+'-'+i);
+    if (el) {
+      el.textContent = taughtCount > 0
+        ? taughtCount+' / '+ls.length+' taught'
+        : ls.length+' lessons';
+      el.style.color = taughtCount > 0 ? '#3B6D11' : '';
+    }
+    // Also refresh checkbox states in open accordions
+    ls.forEach((l, j) => {
+      const key = uid+'-'+i+'-'+j;
+      // Checkboxes refresh when accordion is re-rendered
+    });
+  });
+}
+
+// Toggle taught state directly from accordion row
+function toggleTaught(uid, skillIdx, lessonIdx) {
+  if (activeClassIdx === null || !classes[activeClassIdx]) {
+    openCreateClass();
+    return;
+  }
+  const c = classes[activeClassIdx];
+  if (!c.taught[currentGrade]) c.taught[currentGrade] = {};
+  const checkEl = document.getElementById('lcheck-'+uid+'-'+skillIdx+'-'+lessonIdx);
+  const svgCheck = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const wasDone = isDone(currentGrade, uid, skillIdx, lessonIdx);
+  setDone(currentGrade, uid, skillIdx, lessonIdx, !wasDone);
+  if (!wasDone) {
+    c.lastTaughtAt = new Date().toISOString();
+    // Store last taught lesson
+    lastTaughtLesson = {
+      title: document.getElementById('lessonTitle') ? document.getElementById('lessonTitle').textContent : '',
+      path: units[currentUnit].name + ' · ' + units[currentUnit].skills[currentSkillIdx] + ' · Lesson ' + (currentLessonIdx+1),
+      uid: currentUnit, skillIdx: currentSkillIdx, lessonIdx: currentLessonIdx,
+      grade: currentGrade,
+      taughtAt: new Date().toISOString()
+    };
+  }
+  if (wasDone) {
+    if (checkEl) { checkEl.classList.remove('taught'); checkEl.innerHTML = ''; }
+    if (c.taught[currentGrade][uid] > 0) c.taught[currentGrade][uid]--;
+  } else {
+    if (checkEl) { checkEl.classList.add('taught'); checkEl.innerHTML = svgCheck; }
+    c.taught[currentGrade][uid] = (c.taught[currentGrade][uid]||0) + 1;
+    if (!c.lastTaughtByUnit) c.lastTaughtByUnit = {};
+    c.lastTaughtByUnit[uid] = new Date().toISOString();
+    checkMilestone(uid, skillIdx);
+    const ls2 = lessonData[skillIdx]||lessonData[0];
+    lastTaughtLesson = {
+      title: ls2[lessonIdx] ? ls2[lessonIdx].n : '',
+      path: units[uid].name + ' · ' + units[uid].skills[skillIdx] + ' · Lesson ' + (lessonIdx+1),
+      uid: uid, skillIdx: skillIdx, lessonIdx: lessonIdx,
+      grade: currentGrade,
+      taughtAt: new Date().toISOString()
+    };
+  }
+  refreshSkillCounts(uid);
+}
+
+// ══════════════════════════════
+// MARK AS DONE
+// ══════════════════════════════
+// doneLessons: Map of "grade:uid-skillIdx-lessonIdx" -> true
+let doneLessons = new Map();
+
+
+// Grade-aware lesson key
+function doneKey(grade, uid, skillIdx, lessonIdx) {
+  return grade + ':' + uid + '-' + skillIdx + '-' + lessonIdx;
+}
+function isDone(grade, uid, skillIdx, lessonIdx) {
+  return doneLessons.has(doneKey(grade, uid, skillIdx, lessonIdx));
+}
+function setDone(grade, uid, skillIdx, lessonIdx, done) {
+  const k = doneKey(grade, uid, skillIdx, lessonIdx);
+  if (done) doneLessons.set(k, true);
+  else doneLessons.delete(k);
+}
+function markDone() {
+  if (activeClassIdx === null || !classes[activeClassIdx]) {
+    openCreateClass();
+    return;
+  }
+  const btn = document.getElementById('markDoneBtn');
+  const lbl = document.getElementById('markDoneLabel');
+  const c = classes[activeClassIdx];
+  if (!c.taught[currentGrade]) c.taught[currentGrade] = {};
+  const wasDone = isDone(currentGrade, currentUnit, currentSkillIdx, currentLessonIdx);
+  setDone(currentGrade, currentUnit, currentSkillIdx, currentLessonIdx, !wasDone);
+  if (!wasDone) {
+    c.lastTaughtAt = new Date().toISOString();
+    // Store last taught lesson
+    lastTaughtLesson = {
+      title: document.getElementById('lessonTitle') ? document.getElementById('lessonTitle').textContent : '',
+      path: units[currentUnit].name + ' · ' + units[currentUnit].skills[currentSkillIdx] + ' · Lesson ' + (currentLessonIdx+1),
+      uid: currentUnit, skillIdx: currentSkillIdx, lessonIdx: currentLessonIdx,
+      grade: currentGrade,
+      taughtAt: new Date().toISOString()
+    };
+  }
+  if (wasDone) {
+    btn.classList.remove('done');
+    lbl.textContent = 'Mark as taught';
+      if (c.taught[currentGrade][currentUnit] > 0) c.taught[currentGrade][currentUnit]--;
+  } else {
+    btn.classList.add('done');
+    lbl.textContent = 'Done';
+    c.taught[currentGrade][currentUnit] = (c.taught[currentGrade][currentUnit]||0) + 1;
+    if (!c.lastTaughtByUnit) c.lastTaughtByUnit = {};
+    c.lastTaughtByUnit[currentUnit] = new Date().toISOString();
+    checkMilestone(currentUnit, currentSkillIdx);
+  }
+  refreshSkillCounts(currentUnit);
+  // Refresh overview cards if visible
+  if (document.getElementById('view-overview').classList.contains('active')) {
+    refreshOverview();
+  }
+  // Also update lesson checkbox in unit view if visible
+  const checkEl = document.getElementById('lcheck-'+currentUnit+'-'+currentSkillIdx+'-'+currentLessonIdx);
+  if (checkEl) {
+    const nowDone = isDone(currentGrade, currentUnit, currentSkillIdx, currentLessonIdx);
+    const svgCheck = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    checkEl.classList.toggle('taught', nowDone);
+    checkEl.innerHTML = nowDone ? svgCheck : '';
+  }
+  // Update class meta taught count
+  if (activeClassIdx !== null && classes[activeClassIdx]) {
+    const c2 = classes[activeClassIdx];
+    const total = Object.values(c2.taught).reduce((sum, g) => sum + Object.values(g||{}).reduce((a,b)=>a+b,0), 0);
+    const metaEl = document.getElementById('classDetailMeta');
+    if (metaEl) metaEl.textContent = 'Grade '+c2.grade+(total > 0 ? ' · '+total+' lesson'+(total!==1?'s':'')+' taught' : ' · No lessons taught yet');
+
+  }
+}
+
+function hidePrompt() {
+  document.getElementById('createClassPrompt').classList.remove('show');
+}
+
+
+// ══════════════════════════════
+// SIDEBAR TOGGLE
+// ══════════════════════════════
+let sidebarCollapsed = false;
+function toggleSidebar() {
+  sidebarCollapsed = !sidebarCollapsed;
+  document.getElementById('sidebar').classList.toggle('collapsed', sidebarCollapsed);
+}
+
+// ══════════════════════════════
+// SLIDES PLAYER
+// ══════════════════════════════
+const SLIDES = [
+  { title: "What are feelings?", body: "An introduction to emotions and why we have them" },
+  { title: "All feelings are valid", body: "Happy, sad, angry, scared — all feelings are normal" },
+  { title: "Where do feelings live?", body: "Feelings show up in our body and our mind" },
+  { title: "The feelings wheel", body: "Naming our emotions more precisely" },
+  { title: "Discussion time", body: "Can you name a feeling you had today?" },
+  { title: "Feelings and the brain", body: "How our brain processes emotions" },
+  { title: "When feelings are big", body: "What to do when emotions feel overwhelming" },
+  { title: "Calm-down strategies", body: "Breathing, grounding, and pausing" },
+  { title: "Empathy", body: "Understanding how others feel" },
+  { title: "Activity time", body: "Complete your feelings wheel worksheet" },
+  { title: "Share and reflect", body: "Share one feeling you noticed today" },
+  { title: "Great work!", body: "See you next lesson" },
+];
+let currentSlide = 1;
+
+function openSlidesPlayer() {
+  currentSlide = 1;
+  const title = document.getElementById('slideCardTitle') ? document.getElementById('slideCardTitle').textContent : 'Presentation';
+  const eyebrow = document.getElementById('slideEyebrow') ? document.getElementById('slideEyebrow').textContent : '';
+  document.getElementById('slidesBarTitle').textContent = title;
+  document.getElementById('slideEyebrowS').textContent = eyebrow;
+  renderSlide();
+  document.getElementById('slidesOverlay').classList.add('open');
+}
+
+function closeSlidesPlayer() {
+  document.getElementById('slidesOverlay').classList.remove('open');
+}
+
+function slideNav(dir) {
+  currentSlide = Math.max(1, Math.min(SLIDES.length, currentSlide + dir));
+  renderSlide();
+}
+
+function renderSlide() {
+  const s = SLIDES[currentSlide - 1];
+  document.getElementById('slideTitleS').textContent = s.title;
+  document.getElementById('slideBodyS').textContent = s.body;
+  const label = 'Slide ' + currentSlide + ' of ' + SLIDES.length;
+  document.getElementById('slideNumS').textContent = label;
+  document.getElementById('slidesCounter').textContent = label;
+}
+
+document.addEventListener('keydown', function(e) {
+  if (!document.getElementById('slidesOverlay').classList.contains('open')) return;
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); slideNav(1); }
+  if (e.key === 'ArrowLeft') slideNav(-1);
+  if (e.key === 'Escape') closeSlidesPlayer();
+});
+
+
+
+let isEditingClass = false;
+
+function submitClassModal() {
+  if (isEditingClass) {
+    saveEditClass();
+  } else {
+    createClass();
+  }
+}
+
+function saveEditClass() {
+  if (activeClassIdx === null || !classes[activeClassIdx]) return;
+  const name = document.getElementById('ccNameInput').value.trim() || classes[activeClassIdx].name;
+  const grade = document.querySelector('.cc-grade-opt.active')?.textContent || classes[activeClassIdx].grade;
+  const c = classes[activeClassIdx];
+  c.name = name;
+  c.grade = grade;
+  // Update initials
+  c.initials = name.split(' ').filter(w=>w).map(w=>w[0]).join('').toUpperCase().slice(0,2) || '??';
+  closeCreateClass();
+  updateClassSwitcher();
+  loadClassView(activeClassIdx);
+  isEditingClass = false;
+}
+
+function openEditClass() {
+  if (activeClassIdx === null || !classes[activeClassIdx]) return;
+  const c = classes[activeClassIdx];
+  isEditingClass = true;
+  document.getElementById('ccNameInput').value = c.name;
+  document.querySelectorAll('.cc-grade-opt').forEach(el => {
+    el.classList.toggle('active', el.textContent === c.grade);
+  });
+  document.getElementById('ccModalTitle').textContent = 'Edit class';
+  document.getElementById('ccModalSub').textContent = 'Update the name or grade for this class.';
+  document.getElementById('ccSubmitBtn').textContent = 'Save changes';
+  document.getElementById('ccModalOverlay').classList.add('open');
+}
+
+
+
+function resumeLesson() {
+  if (lastOpenedLesson) {
+    navLesson(lastOpenedLesson.uid, lastOpenedLesson.skillIdx, lastOpenedLesson.lessonIdx);
+  }
+}
+
+function toggleCpUnit(id) {
+  const el = document.getElementById('cpunit-'+id);
+  if (el) el.classList.toggle('open');
+}
+
+
+// ══════════════════════════════
+// ARCHIVE
+// ══════════════════════════════
+let archivedClasses = [];
+let archivedSidebarOpen = false;
+
+function archiveClass(idx) {
+  const archIdx = (idx !== undefined) ? idx : activeClassIdx;
+  if (archIdx === null || !classes[archIdx]) return;
+  const className = classes[archIdx].name;
+  const archived = classes.splice(archIdx, 1)[0];
+  archived.archivedAt = new Date().toISOString();
+  archivedClasses.push(archived);
+
+  activeClassIdx = classes.length > 0 ? Math.min(archIdx, classes.length - 1) : null;
+  lastOpenedLesson = null;
+  cdArchivedOpen = true; // auto-expand so teacher can find it
+
+  updateClassSwitcher();
+  refreshOverview();
+
+  if (classes.length > 0) {
+    loadClassView(activeClassIdx);
+  } else {
+    showView('view-classes-empty');
+  }
+
+  showMilestone('📦', className + ' archived', 'Open the class switcher ▾ to restore it anytime');
+}
+
+function restoreClass(archivedIdx) {
+  const c = archivedClasses.splice(archivedIdx, 1)[0];
+  delete c.archivedAt;
+  classes.push(c);
+  activeClassIdx = classes.length - 1;
+  updateClassSwitcher();
+  refreshOverview();
+  loadClassView(activeClassIdx);
+  showMilestone('✓', c.name + ' restored', 'Now active in your class switcher');
+}
+
+function updateArchivedSidebar() { return; } // now handled by renderClassDropdown
+
+function toggleArchivedSidebar() {
+  archivedSidebarOpen = !archivedSidebarOpen;
+  updateArchivedSidebar();
+}
+
+
+// ══════════════════════════════
+// CLASS SWITCHER DROPDOWN
+// ══════════════════════════════
+let dropdownOpen = false;
+let cdArchivedOpen = false;
+
+function handleSwitcherClick() {
+  if (classes.length === 0 && archivedClasses.length === 0) {
+    openCreateClass();
+    return;
+  }
+  toggleClassDropdown();
+}
+
+function toggleClassDropdown() {
+  dropdownOpen = !dropdownOpen;
+  const dd = document.getElementById('classDropdown');
+  const btn = document.getElementById('classSwitcher');
+  dd.classList.toggle('open', dropdownOpen);
+  btn.classList.toggle('open', dropdownOpen);
+  if (dropdownOpen) {
+    // Position dropdown below the switcher button
+    const rect = btn.getBoundingClientRect();
+    dd.style.left = rect.left + 'px';
+    dd.style.top = (rect.bottom + 4) + 'px';
+    renderClassDropdown();
+    const si = document.getElementById('classSearch');
+    if (si) { si.value = ''; if (classes.length > 0) setTimeout(() => si.focus(), 50); }
+  }
+}
+
+function closeClassDropdown() {
+  dropdownOpen = false;
+  document.getElementById('classDropdown').classList.remove('open');
+  document.getElementById('classSwitcher').classList.remove('open');
+}
+
+function renderClassDropdown(filter) {
+  const list = document.getElementById('cdClassList');
+  const search = document.getElementById('classSearch');
+  const searchWrap = search ? search.closest('.cd-search') : null;
+  if (searchWrap) searchWrap.style.display = classes.length > 0 ? 'flex' : 'none';
+  const filtered = classes.filter(c => !filter || c.name.toLowerCase().includes(filter.toLowerCase()));
+
+  if (filtered.length === 0 && classes.length > 0) {
+    list.innerHTML = '<div class="cd-empty">No classes match your search</div>';
+    list.onclick = null;
+  } else if (filtered.length === 0) {
+    list.innerHTML = '';
+    list.onclick = null;
+  } else {
+    list.innerHTML = filtered.map((c, i) => {
+      const realIdx = classes.indexOf(c);
+      const isActive = realIdx === activeClassIdx;
+      return '<div class="cd-class-item' + (isActive ? ' active' : '') + '" data-idx="' + realIdx + '">'
+        + '<div class="cd-avatar" style="background:' + c.color + ';">' + c.initials + '</div>'
+        + '<div class="cd-class-name" style="cursor:pointer;" data-action="select" data-idx="' + realIdx + '">' + c.name + '</div>'
+        + '<div class="cd-class-meta">Grade ' + c.grade + '</div>'
+        + '<div class="cd-class-actions">'
+        + '<div class="cd-action-btn" title="Edit class" data-action="edit" data-idx="' + realIdx + '">✏</div>'
+        + '<div class="cd-action-btn" title="Archive" data-action="archive" data-idx="' + realIdx + '"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="2" rx="0.5" stroke="currentColor" stroke-width="1.2"/><path d="M2.5 5v6a1 1 0 001 1h7a1 1 0 001-1V5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M5.5 8h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div>'
+        + '</div>'
+        + '</div>';
+    }).join('');
+
+    list.onclick = function(e) {
+      const actionEl = e.target.closest('[data-action]');
+      const rowEl = e.target.closest('.cd-class-item');
+      if (!rowEl) return;
+      const rowIdx = parseInt(rowEl.dataset.idx);
+      if (actionEl) {
+        const action = actionEl.dataset.action;
+        const idx2 = parseInt(actionEl.dataset.idx);
+        e.stopPropagation();
+        if (action === 'edit') {
+          closeClassDropdown();
+          switchClass(idx2);
+          setTimeout(() => openEditClass(), 50);
+        } else if (action === 'archive') {
+          closeClassDropdown();
+          archiveClass(idx2);
+        }
+      } else {
+        selectClassFromDropdown(rowIdx);
+      }
+    };
+  }
+
+  // Archived section — always rendered regardless of active classes
+  const archToggle = document.getElementById('cdArchivedToggle');
+  const archList = document.getElementById('cdArchivedList');
+  if (archivedClasses.length > 0) {
+    archToggle.style.display = 'flex';
+    document.getElementById('cdArchivedLabel').textContent = 'Archived (' + archivedClasses.length + ')';
+    archList.innerHTML = archivedClasses.map((c, i) =>
+      '<div class="cd-archived-item" onclick="restoreFromDropdown(' + i + ')">'
+      + '<div class="cd-avatar" style="background:' + c.color + ';filter:grayscale(0.5);opacity:0.7;">' + c.initials + '</div>'
+      + '<div class="cd-archived-name">' + c.name + '</div>'
+      + '<div class="cd-archived-restore">Restore →</div>'
+      + '</div>'
+    ).join('');
+    archList.classList.toggle('open', cdArchivedOpen);
+  } else {
+    archToggle.style.display = 'none';
+    archList.innerHTML = '';
+  }
+}
+function filterClasses(val) {
+  renderClassDropdown(val);
+}
+
+function selectClassFromDropdown(idx) {
+  closeClassDropdown();
+  switchClass(idx);
+}
+
+function restoreFromDropdown(archivedIdx) {
+  restoreClass(archivedIdx);
+  cdArchivedOpen = false; // collapse archived section after restoring
+  closeClassDropdown();
+}
+
+function toggleCdArchived() {
+  cdArchivedOpen = !cdArchivedOpen;
+  document.getElementById('cdArchivedList').classList.toggle('open', cdArchivedOpen);
+  document.getElementById('cdArchivedChev').style.transform = cdArchivedOpen ? 'rotate(90deg)' : '';
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#classDropdown') && !e.target.closest('#classSwitcher')) {
+    closeClassDropdown();
+  }
+});
+
+
+// ══════════════════════════════
+// SKILL VIDEO MODAL
+// ══════════════════════════════
+let watchedVideos = new Set(); // "uid-skillIdx"
+let currentVideoKey = null;
+let videoPlaying = false;
+
+function openVideoModal(uid, skillIdx) {
+  currentVideoKey = uid + '-' + skillIdx;
+  const u = units[uid];
+  const skillName = u.skills[skillIdx];
+
+  document.getElementById('vmEyebrow').textContent = u.name + ' · Skill intro';
+  document.getElementById('vmTitle').textContent = 'Understanding ' + skillName;
+
+  const isWatched = watchedVideos.has(currentVideoKey);
+  updateWatchedBtn(isWatched);
+
+  videoPlaying = false;
+  resetPlayBtn();
+  document.getElementById('videoModalOverlay').classList.add('open');
+}
+
+function closeVideoModal() {
+  document.getElementById('videoModalOverlay').classList.remove('open');
+  videoPlaying = false;
+  resetPlayBtn();
+  // Refresh skill intro link state
+  if (currentVideoKey) refreshSkillIntroLink();
+}
+
+function toggleVideoPlay() {
+  videoPlaying = !videoPlaying;
+  const btn = document.getElementById('vmPlayBtn');
+  if (videoPlaying) {
+    btn.style.background = 'rgba(255,255,255,0.6)';
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="3" y="2" width="3" height="10" rx="1" fill="#1a1a1a"/><rect x="8" y="2" width="3" height="10" rx="1" fill="#1a1a1a"/></svg>';
+  } else {
+    resetPlayBtn();
+  }
+}
+
+function resetPlayBtn() {
+  const btn = document.getElementById('vmPlayBtn');
+  btn.style.background = 'rgba(255,255,255,0.9)';
+  btn.innerHTML = '<div class="vm-play-icon"></div>';
+}
+
+function toggleVideoWatched() {
+  if (!currentVideoKey) return;
+  const isWatched = watchedVideos.has(currentVideoKey);
+  if (isWatched) {
+    watchedVideos.delete(currentVideoKey);
+    updateWatchedBtn(false);
+  } else {
+    watchedVideos.add(currentVideoKey);
+    updateWatchedBtn(true);
+  }
+  refreshSkillIntroLink();
+}
+
+function updateWatchedBtn(isWatched) {
+  const btn = document.getElementById('vmWatchedBtn');
+  const lbl = document.getElementById('vmWatchedLabel');
+  btn.classList.toggle('watched', isWatched);
+  lbl.textContent = isWatched ? 'Watched ✓' : 'Mark as watched';
+}
+
+function refreshSkillIntroLink() {
+  const link = document.getElementById('skillIntroLink');
+  if (!link || !currentVideoKey) return;
+  const isWatched = watchedVideos.has(currentVideoKey);
+  if (isWatched) {
+    link.innerHTML = '<span style="color:#3B6D11;font-weight:500;">✓ Watched</span> — <span style="text-decoration:underline;cursor:pointer;">watch again</span>';
+    link.className = '';
+    link.onclick = function() { openVideoModal(currentVideoKey.split('-')[0], parseInt(currentVideoKey.split('-')[1])); };
+  } else {
+    link.innerHTML = 'Watch the skill intro video';
+    link.className = '';
+  }
+}
+
+
+// ══════════════════════════════
+// MILESTONE ACKNOWLEDGEMENT
+// ══════════════════════════════
+let milestoneTimer = null;
+
+function checkMilestone(uid, skillIdx) {
+  if (activeClassIdx === null || !classes[activeClassIdx]) return;
+  const c = classes[activeClassIdx];
+  const ls = lessonData[skillIdx] || lessonData[0];
+  const allTaught = ls.every((l, li) => isDone(currentGrade, uid, skillIdx, li));
+  if (!allTaught) return;
+
+  const u = units[uid];
+  const skillName = u.skills[skillIdx];
+
+  // Check if this is a unit completion
+  const allSkillsDone = u.skills.every((s, si) => {
+    const sls = lessonData[si] || lessonData[0];
+    return sls.every((l, li) => isDone(currentGrade, uid, si, li));
+  });
+
+  if (allSkillsDone) {
+    showMilestone('🏆', u.name + ' complete!', 'All skills taught to ' + c.name);
+  } else {
+    showMilestone('⭐', skillName + ' complete!', 'All ' + ls.length + ' lessons taught to ' + c.name);
+  }
+}
+
+function showMilestone(icon, title, sub) {
+  const toast = document.getElementById('milestoneToast');
+  document.getElementById('milestoneIcon').textContent = icon;
+  document.getElementById('milestoneTitle').textContent = title;
+  document.getElementById('milestoneSub').textContent = sub;
+  toast.classList.add('show');
+  if (milestoneTimer) clearTimeout(milestoneTimer);
+  milestoneTimer = setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+
+function fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+
+// ══════════════════════════════
+// PLAN NEXT LESSON + CLASS NOTE
+// ══════════════════════════════
+
+function openPlanPicker() { return; // replaced by lesson-page Plan next button
+  /*
+  if (!classes[activeClassIdx]) return;
+  const body = document.getElementById('planModalBody');
+  const clearBtn = document.getElementById('planClear');
+  const c = classes[activeClassIdx];
+  clearBtn.style.display = c.plannedNext ? 'flex' : 'none';
+
+  const allLessons = [];
+  body.innerHTML = Object.entries(units).map(([uid, u]) => {
+    const lessonRows = u.skills.map((s, si) => {
+      const ls = lessonData[si] || lessonData[0];
+      return ls.map((l, li) => {
+        const idx2 = allLessons.length;
+        allLessons.push({uid, si, li, name: l.n, skill: s});
+        return '<div class="plan-lesson-row" data-idx="' + idx2 + '">'
+          + '<div class="plan-lesson-swatch" style="background:' + u.color + ';"></div>'
+          + '<div class="plan-lesson-name">' + l.n + '</div>'
+          + '<div class="plan-lesson-skill">' + s + '</div>'
+          + '</div>';
+      }).join('');
+    }).join('');
+    return '<div class="plan-unit-label">' + u.name + '</div>' + lessonRows;
+  }).join('');
+
+  body.onclick = function(e) {
+    const row = e.target.closest('.plan-lesson-row');
+    if (!row) return;
+    const item = allLessons[parseInt(row.dataset.idx)];
+    if (item) setPlanLesson(item.uid, item.si, item.li, item.name, item.skill);
+  };
+
+  */
+}
+function closePlanPicker() {
+  document.getElementById('planModalOverlay').classList.remove('open');
+}
+
+function setPlanLesson(uid, si, li, name, skill) {
+  if (!classes[activeClassIdx]) return;
+  const u = units[uid];
+  classes[activeClassIdx].plannedNext = {
+    uid, skillIdx: si, lessonIdx: li,
+    title: name,
+    path: u.name + ' · ' + skill + ' · Lesson ' + (li+1)
+  };
+  closePlanPicker();
+  refreshOverview();
+}
+
+function clearPlannedLesson() {
+  if (!classes[activeClassIdx]) return;
+  classes[activeClassIdx].plannedNext = null;
+  closePlanPicker();
+  refreshOverview();
+}
+
+// Class note — inline auto-save
+let noteTimer = null;
+function autoSaveNote() {
+  if (!classes[activeClassIdx]) return;
+  clearTimeout(noteTimer);
+  noteTimer = setTimeout(() => {
+    const el = document.getElementById('classNoteInline');
+    if (el) classes[activeClassIdx].note = el.innerText.trim();
+  }, 500);
+}
+
+function editClassNote() {} // legacy stub
+function closeNoteEditor() {}
+function saveNote() {}
+
+
+function togglePlanNext() {
+  if (activeClassIdx === null || !classes[activeClassIdx]) {
+    openCreateClass();
+    return;
+  }
+  const c = classes[activeClassIdx];
+  const btn = document.getElementById('planNextBtn');
+  const lbl = document.getElementById('planNextLabel');
+  const u = units[currentUnit];
+  const ls = lessonData[currentSkillIdx] || lessonData[0];
+  const l = ls[currentLessonIdx];
+
+  // Check if this lesson is already planned
+  const already = c.plannedNext &&
+    c.plannedNext.uid === currentUnit &&
+    c.plannedNext.skillIdx === currentSkillIdx &&
+    c.plannedNext.lessonIdx === currentLessonIdx;
+
+  if (already) {
+    c.plannedNext = null;
+    btn.classList.remove('planned');
+    lbl.textContent = 'Plan next';
+  } else {
+    c.plannedNext = {
+      uid: currentUnit,
+      skillIdx: currentSkillIdx,
+      lessonIdx: currentLessonIdx,
+      title: l ? l.n : '',
+      path: u.name + ' · ' + u.skills[currentSkillIdx] + ' · Lesson ' + (currentLessonIdx + 1)
+    };
+    btn.classList.add('planned');
+    lbl.textContent = '✓ Planned';
+  }
+  refreshOverview();
+}
+
+function refreshPlanNextBtn() {
+  const btn = document.getElementById('planNextBtn');
+  const lbl = document.getElementById('planNextLabel');
+  if (!btn || !lbl) return;
+  const c = activeClassIdx !== null ? classes[activeClassIdx] : null;
+  if (!c) {
+    btn.classList.remove('planned');
+    lbl.textContent = 'Plan next';
+    return;
+  }
+  const isPlanned = c.plannedNext &&
+    c.plannedNext.uid === currentUnit &&
+    c.plannedNext.skillIdx === currentSkillIdx &&
+    c.plannedNext.lessonIdx === currentLessonIdx;
+  btn.classList.toggle('planned', !!isPlanned);
+  lbl.textContent = isPlanned ? '✓ Planned' : 'Plan next';
+}
+
+
+function unitColor(uid) {
+  return uid && units[uid] ? units[uid].color : '#bbb';
+}
+
+// ══════════════════════════════
+// START
+// ══════════════════════════════
+init();
+</script>
+
+<!-- ══ SLIDES PLAYER ══ -->
+<div class="slides-overlay" id="slidesOverlay">
+  <div class="slides-bar">
+    <div class="slides-bar-title" id="slidesBarTitle">Presentation</div>
+    <div class="slides-bar-right">
+      <div class="slides-nav-row">
+        <div class="slides-nav-btn" onclick="slideNav(-1)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="slides-counter" id="slidesCounter">Slide 1 of 12</div>
+        <div class="slides-nav-btn" onclick="slideNav(1)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+      <div class="slides-close" onclick="closeSlidesPlayer()">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Exit presentation
+      </div>
+    </div>
+  </div>
+  <div class="slides-stage">
+    <div class="slides-slide">
+      <div class="slide-s-eyebrow" id="slideEyebrowS"></div>
+      <div class="slide-s-title" id="slideTitleS">What are feelings?</div>
+      <div class="slide-s-body" id="slideBodyS">An introduction to emotions and why we have them</div>
+      <div class="slide-s-num" id="slideNumS">Slide 1 of 12</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ SKILL VIDEO MODAL ══ -->
+<div class="video-modal-overlay" id="videoModalOverlay" onclick="if(event.target===this)closeVideoModal()">
+  <div class="video-modal">
+    <div class="vm-header">
+      <div>
+        <div class="vm-eyebrow" id="vmEyebrow">Skill intro</div>
+        <div class="vm-title" id="vmTitle">Understanding Naming my feelings</div>
+      </div>
+      <button class="vm-close" onclick="closeVideoModal()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="vm-player" onclick="toggleVideoPlay()">
+      <div class="vm-play-btn" id="vmPlayBtn">
+        <div class="vm-play-icon"></div>
+      </div>
+      <div class="vm-duration">4:00</div>
+      <div class="vm-slide-hint">Simulated player — real video via embed URL</div>
+    </div>
+    <div class="vm-footer">
+      <div class="vm-watched-btn" id="vmWatchedBtn" onclick="toggleVideoWatched()">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" id="vmWatchedIcon"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 7l2 2 3.5-3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="vmWatchedLabel">Mark as watched</span>
+      </div>
+      <div class="vm-done-btn" onclick="closeVideoModal()">Close</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ MILESTONE TOAST ══ -->
+<div class="milestone-toast" id="milestoneToast">
+  <div class="milestone-toast-icon" id="milestoneIcon">🎉</div>
+  <div class="milestone-toast-body">
+    <div class="milestone-toast-title" id="milestoneTitle">Skill complete!</div>
+    <div class="milestone-toast-sub" id="milestoneSub">You've taught all lessons in this skill</div>
+  </div>
+</div>
+
+
+<!-- Plan picker removed — planning done from lesson page -->
+
+<!-- ══ NOTE EDITOR ══ -->
+<div class="plan-modal-overlay" id="noteModalOverlay" onclick="if(event.target===this)closeNoteEditor()">
+  <div class="plan-modal" style="max-height:300px;">
+    <div class="plan-modal-hdr">
+      <div class="plan-modal-title">Class note</div>
+      <button class="plan-modal-close" onclick="closeNoteEditor()">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div style="padding:16px 20px;flex:1;">
+      <textarea id="noteTextarea" style="width:100%;height:120px;border:0.5px solid #e8e6e0;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;resize:none;outline:none;color:#555;line-height:1.6;" placeholder="Add notes about this class — what worked, what to revisit, upcoming plans..."></textarea>
+    </div>
+    <div style="padding:10px 20px;border-top:0.5px solid #f0ede8;display:flex;justify-content:flex-end;gap:8px;">
+      <div onclick="closeNoteEditor()" style="font-size:12px;color:#888;padding:7px 14px;border-radius:7px;cursor:pointer;background:#f5f4f0;">Cancel</div>
+      <div onclick="saveNote()" style="font-size:12px;font-weight:500;color:#fff;padding:7px 16px;border-radius:7px;cursor:pointer;background:#185FA5;">Save note</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
