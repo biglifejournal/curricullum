@@ -87,6 +87,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 /* ── OVERVIEW ── */
 .page-title-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+.page-class-name { font-size: 18px; font-weight: 500; color: #185FA5; margin-top: 2px; letter-spacing: 0.01em; }
 .page-title { font-size: 22px; font-weight: 500; color: #1a1a1a; }
 .about-link { font-size: 12px; color: #185FA5; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; transition: opacity .12s; }
 .about-link:hover { opacity: .75; }
@@ -96,11 +97,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .grade-link { color: #185FA5; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; }
 .grade-link:hover { opacity: .75; }
 
-.overview-grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; }
-.ov-card { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 12px; padding: 16px; cursor: pointer; transition: all .15s; }
+.overview-grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; margin-top: 24px; }
+.ov-card { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 12px; padding: 16px; cursor: pointer; transition: all .15s; display: flex; flex-direction: column; }
 .ov-card:hover { border-color: #185FA5; transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
 .ov-icon { width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
-.ov-name { font-size: 13px; font-weight: 500; color: #1a1a1a; line-height: 1.3; margin-bottom: 5px; }
+.ov-name { font-size: 13px; font-weight: 500; color: #1a1a1a; line-height: 1.3; margin-bottom: 8px; }
+.ov-desc { font-size: 11px; color: #aaa; line-height: 1.55; flex: 1; }
 .ov-meta { font-size: 11px; color: #bbb; }
 .ov-cta { font-size: 11px; color: #185FA5; font-weight: 500; margin-top: 10px; display: none; }
 .ov-card:hover .ov-cta { display: block; }
@@ -511,16 +513,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .ov-prog-label { font-size: 10px; color: #bbb; margin-top: 4px; }
 .ov-prog-label.has-progress { color: #3B6D11; font-weight: 500; }
 
-.class-grade-group-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; padding: 10px 0 4px; display: block; }
-.class-sec-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; margin-bottom: 10px; margin-top: 20px; display: block; }
-.class-unit-row { display: flex; align-items: center; gap: 12px; background: #fff; border: 0.5px solid #e8e6e0; border-radius: 10px; padding: 12px 16px; margin-bottom: 8px; cursor: pointer; transition: border-color .12s; }
 .class-unit-row:hover { border-color: #185FA5; }
-.class-unit-swatch { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
-.class-unit-name { font-size: 13px; font-weight: 500; color: #1a1a1a; flex: 1; }
-.class-unit-count { font-size: 11px; font-weight: 500; color: #3B6D11; }
-.class-unit-bar { width: 80px; height: 4px; background: #f0ede8; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
-.class-unit-bar-fill { height: 100%; border-radius: 10px; }
-.class-browse-prompt { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 10px; border: 0.5px dashed #ddd; color: #888; font-size: 13px; cursor: pointer; margin-top: 8px; transition: all .12s; }
 .class-browse-prompt:hover { border-color: #185FA5; color: #185FA5; background: #f0f7fe; }
 
 
@@ -613,6 +606,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .skill-intro-watched { color: #3B6D11 !important; }
 .skill-intro-watched::before { content: '✓ '; }
 
+
+/* ── OVERVIEW ACTION CARDS ── */
+.ov-action-card { background: #fff; border: 0.5px solid #e8e6e0; border-radius: 12px; padding: 16px 18px; cursor: pointer; transition: all .12s; }
+.ov-action-card:hover { border-color: #185FA5; transform: translateY(-1px); box-shadow: 0 3px 12px rgba(0,0,0,0.06); }
+.ov-taught-card { border-color: #c8e6c4; background: #fafff9; }
+.ov-taught-card:hover { border-color: #3B6D11; }
+.oac-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #185FA5; margin-bottom: 7px; display: flex; align-items: center; gap: 5px; }
+.oac-taught-eyebrow { color: #3B6D11; }
+.oac-title { font-size: 15px; font-weight: 500; color: #1a1a1a; margin-bottom: 4px; line-height: 1.3; }
+.oac-path { font-size: 11px; color: #bbb; }
+
 </style>
 </head>
 <body>
@@ -697,16 +701,41 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         <div class="wb-icon"><svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 2l1.8 4.2 4.5.5-3.3 3.1.9 4.7L9 12l-3.9 2.5.9-4.7L2.7 6.7l4.5-.5L9 2z" stroke="#185FA5" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
         <div class="wb-body">
           <div class="wb-title">Welcome to the GrowthMinded curriculum</div>
-          <div class="wb-line">Ready-to-use lessons for your classroom — select any unit in the sidebar to get started.</div>
-          <div class="wb-line"><a onclick="flashClassBtn()">Create a class</a> to track progress for any group or individual student.</div>
-          <div class="wb-line">Looking for something specific? <a onclick="openAI()">Find a lesson by student need.</a></div>
+          <div class="wb-line">Select any unit below to get started.</div>
         </div>
         <button class="wb-dismiss" onclick="this.closest('.welcome-banner').classList.add('dismissed')">×</button>
       </div>
 
       <div class="page-title-row">
-        <div class="page-title">GrowthMinded Life Skills Curriculum</div>
+        <div>
+          <div class="page-title">GrowthMinded Life Skills Curriculum</div>
+          <div class="page-class-name" id="ovClassName" style="display:none;"></div>
+        </div>
         <div class="about-link" onclick="openAbout()"><div class="about-icon">i</div>About this curriculum</div>
+      </div>
+
+      <!-- Resume + Last taught cards -->
+      <div id="ovCardsWrap" style="display:none;margin-bottom:24px;display:none;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" id="ovCardsGrid">
+          <!-- Continue card -->
+          <div class="ov-action-card" id="ovResumeCard" onclick="resumeLesson()" style="display:none;">
+            <div class="oac-eyebrow">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5h5M5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Continue where you left off
+            </div>
+            <div class="oac-title" id="ovResumeTitle"></div>
+            <div class="oac-path" id="ovResumePath"></div>
+          </div>
+          <!-- Last taught card -->
+          <div class="ov-action-card ov-taught-card" id="ovTaughtCard" onclick="if(lastTaughtLesson)navLesson(lastTaughtLesson.uid,lastTaughtLesson.skillIdx,lastTaughtLesson.lessonIdx)" style="display:none;">
+            <div class="oac-eyebrow oac-taught-eyebrow">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Last taught
+            </div>
+            <div class="oac-title" id="ovTaughtTitle"></div>
+            <div class="oac-path" id="ovTaughtPath"></div>
+          </div>
+        </div>
       </div>
 
       <div class="overview-grid" id="overviewGrid"></div>
@@ -746,8 +775,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           <span id="lessonBackLabel">Back</span>
         </div>
         <div class="breadcrumb">
-          <span class="bc-unit" id="bcUnit"></span>
-          <span class="bc-sep">›</span>
           <span class="bc-skill" id="bcSkill"></span>
           <span class="bc-sep">›</span>
           <span class="bc-lesson" id="bcLesson"></span>
@@ -765,7 +792,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       </div>
       <div class="lesson-body">
         <div class="lesson-cw lesson-intro">
-          <div class="lesson-num-row"><span class="lesson-num-badge" id="lessonNumBadge">Lesson 1</span><span id="lessonSkillPath"></span></div>
+          
           <div class="lesson-title" id="lessonTitle"></div>
           <div class="lesson-desc" id="lessonDesc"></div>
         </div>
@@ -924,27 +951,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         </div>
       </div>
 
-      <!-- Resume card -->
-      <div id="resumeCardWrap">
-        <div class="no-resume" id="noResume">
-          <div class="no-resume-text">Ready to start teaching?</div>
-          <div class="no-resume-sub">Open any lesson from the curriculum to get started. Your last lesson will appear here when you return.</div>
-        </div>
-        <div class="resume-card" id="resumeCard" style="display:none;" onclick="resumeLesson()">
-          <div style="flex:1;">
-            <div class="resume-eyebrow">
-              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h5M5 2l3 3-3 3" stroke="#185FA5" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Continue where you left off
-            </div>
-            <div class="resume-title" id="resumeTitle">What are feelings?</div>
-            <div class="resume-path" id="resumePath">Emotional intelligence · Naming my feelings · Lesson 1</div>
-          </div>
-          <div class="resume-btn">Open lesson →</div>
-        </div>
-      </div>
 
-      <!-- Taught units -->
-      <div id="classTaughtSection"></div>
 
     </div>
 
@@ -1090,23 +1097,23 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 // DATA
 // ══════════════════════════════
 const units = {
-  ei:  { name:'Emotional intelligence', color:'#185FA5', bg:'#E6F1FB',
+  ei:  { name:'Emotional intelligence', desc:'Help students name, understand and manage their emotions with confidence.', color:'#185FA5', bg:'#E6F1FB',
     icon:`<svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M8 2C5.8 2 4 3.8 4 6c0 1.5.8 2.8 2 3.5V11h4V9.5C11.2 8.8 12 7.5 12 6c0-2.2-1.8-4-4-4z" stroke="#185FA5" stroke-width="1.3" stroke-linejoin="round"/></svg>`,
     skills:['Naming my feelings','Body signals','Emotion thermometer','Feelings journal','Mirror of emotions'],
     posters:[{name:'All feelings are welcome',desc:'A3/Letter'},{name:'The feelings wheel',desc:'A3/Letter'},{name:'Name it to tame it',desc:'A3/Letter'}] },
-  gm:  { name:'Growth mindset', color:'#3B6D11', bg:'#EAF3DE',
+  gm:  { name:'Growth mindset', desc:'Build the belief that effort and practice lead to growth and learning.', color:'#3B6D11', bg:'#EAF3DE',
     icon:`<svg width="20" height="20" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="#3B6D11" stroke-width="1.2"/><path d="M5.5 8l2 2 3-3" stroke="#3B6D11" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
     skills:['Power of yet','Mistakes are lessons','Challenge accepted','Brain gym','Effort tracker'],
     posters:[{name:'The power of yet',desc:'A3/Letter'},{name:'Mistakes help us grow',desc:'A3/Letter'},{name:'My brain can grow',desc:'A3/Letter'}] },
-  res: { name:'Resilience', color:'#993556', bg:'#FBEAF0',
+  res: { name:'Resilience', desc:'Teach students how to bounce back from setbacks and keep going.', color:'#993556', bg:'#FBEAF0',
     icon:`<svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M8 3C5.5 3 4 5 4 7c0 1.5 1 3 4 5 3-2 4-3.5 4-5 0-2-1.5-4-4-4z" stroke="#993556" stroke-width="1.1" stroke-linejoin="round"/></svg>`,
     skills:['Bounce back stories','Problem solving','Coping toolbox','Inner strength','Setback superpower'],
     posters:[{name:'Bounce back like a ball',desc:'A3/Letter'},{name:'My coping toolbox',desc:'A3/Letter'},{name:'Setbacks make us stronger',desc:'A3/Letter'}] },
-  ada: { name:'Adaptability', color:'#534AB7', bg:'#EEEDFE',
+  ada: { name:'Adaptability', desc:'Help students navigate change, uncertainty and unexpected challenges.', color:'#534AB7', bg:'#EEEDFE',
     icon:`<svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M4 12V7l4-4 4 4v5H4z" stroke="#534AB7" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
     skills:['Flex & flow','New perspectives','Change champions','Pivot practice','Comfort zone map'],
     posters:[{name:'Comfort zone map',desc:'A3/Letter'},{name:'Change is how we grow',desc:'A3/Letter'},{name:'Flexible thinking',desc:'A3/Letter'}] },
-  con: { name:'Confidence', color:'#854F0B', bg:'#FAEEDA',
+  con: { name:'Confidence', desc:'Develop a strong sense of self-worth and the courage to try new things.', color:'#854F0B', bg:'#FAEEDA',
     icon:`<svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M8 2l1.5 3.5L13 6l-2.5 2.5.5 3.5L8 10.5 5 12l.5-3.5L3 6l3.5-.5L8 2z" stroke="#854F0B" stroke-width="1.1" stroke-linejoin="round"/></svg>`,
     skills:['My strengths shield','Positive self-talk','Brave moments','Public speaking','Celebration wall'],
     posters:[{name:'I am brave enough',desc:'A3/Letter'},{name:'My strengths',desc:'A3/Letter'},{name:'Flip the script',desc:'A3/Letter'}] }
@@ -1158,9 +1165,9 @@ function init() {
 function navOverview() {
   clearActive();
   document.getElementById('nav-all-units').classList.add('active');
-  // Collapse all unit children
   document.querySelectorAll('.nav-children').forEach(c => c.classList.remove('open'));
   document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('open'));
+  refreshOverview();
   showView('overview');
 }
 
@@ -1200,6 +1207,58 @@ function buildOverview() {
 
 function refreshOverview() {
   const c = activeClassIdx !== null ? classes[activeClassIdx] : null;
+
+  // Show/hide class name under title
+  const ovClassName = document.getElementById('ovClassName');
+  if (ovClassName) {
+    if (c) {
+      ovClassName.textContent = c.name.toUpperCase();
+      ovClassName.style.display = 'block';
+    } else {
+      ovClassName.style.display = 'none';
+    }
+  }
+
+  // Show/hide resume + last taught cards
+  const ovWrap = document.getElementById('ovCardsWrap');
+  const resumeCard = document.getElementById('ovResumeCard');
+  const taughtCard = document.getElementById('ovTaughtCard');
+  const grid = document.getElementById('ovCardsGrid');
+
+  if (ovWrap && resumeCard && taughtCard) {
+    const hasResume = c && lastOpenedLesson;
+    const hasTaught = c && lastTaughtLesson;
+
+    // Don't show resume if it's the same lesson as last taught
+    const resumeIsSameTaught = hasResume && hasTaught &&
+      lastOpenedLesson.uid === lastTaughtLesson.uid &&
+      lastOpenedLesson.skillIdx === lastTaughtLesson.skillIdx &&
+      lastOpenedLesson.lessonIdx === lastTaughtLesson.lessonIdx;
+
+    const showResume = hasResume && !resumeIsSameTaught;
+    const showTaught = hasTaught;
+
+    if (showResume || showTaught) {
+      ovWrap.style.display = 'block';
+      // Single card gets full width, two cards get grid
+      grid.style.gridTemplateColumns = (showResume && showTaught) ? '1fr 1fr' : '1fr';
+
+      resumeCard.style.display = showResume ? 'block' : 'none';
+      if (showResume) {
+        document.getElementById('ovResumeTitle').textContent = lastOpenedLesson.title;
+        document.getElementById('ovResumePath').textContent = lastOpenedLesson.path;
+      }
+
+      taughtCard.style.display = showTaught ? 'block' : 'none';
+      if (showTaught) {
+        document.getElementById('ovTaughtTitle').textContent = lastTaughtLesson.title;
+        document.getElementById('ovTaughtPath').textContent = lastTaughtLesson.path;
+      }
+    } else {
+      ovWrap.style.display = 'none';
+    }
+  }
+
   const useGrade = c ? (Object.keys(c.taught).filter(g => Object.values(c.taught[g]||{}).some(v=>v>0))[0] || currentGrade) : currentGrade;
   const gradeData = c ? (c.taught[useGrade] || {}) : {};
 
@@ -1211,9 +1270,10 @@ function refreshOverview() {
     return '<div class="ov-card" onclick="navUnit(\'' + uid + '\')">'
       + '<div class="ov-icon" style="background:' + u.bg + ';">' + u.icon + '</div>'
       + '<div class="ov-name">' + u.name + '</div>'
-      + '<div class="ov-prog" style="margin-top:12px;">'
+      + '<div class="ov-desc">' + (u.desc || '') + '</div>'
+      + '<div class="ov-prog" style="margin-top:auto;padding-top:12px;">'
       + '<div class="ov-prog-bar"><div class="ov-prog-fill" style="width:' + pct + '%;background:' + u.color + ';"></div></div>'
-      + (progLabel ? '<div class="ov-prog-label has-progress">' + progLabel + '</div>' : '<div class="ov-prog-label">20 lessons</div>')
+      + (progLabel ? '<div class="ov-prog-label has-progress">' + progLabel + '</div>' : '<div class="ov-prog-label">5 skills</div>')
       + '</div>'
       + '</div>';
   }).join('');
@@ -1264,7 +1324,7 @@ function navUnit(uid, fromClass) {
   document.getElementById('unitIcon').innerHTML = u.icon;
   document.getElementById('unitName').textContent = u.name;
   document.getElementById('unitName').style.color = u.color;
-  document.getElementById('unitMeta').textContent = 'Grade '+currentGrade+' · 5 skills · 20 lessons';
+  document.getElementById('unitMeta').textContent = 'Grade '+currentGrade+' · 5 skills';
 
   // Build skill accordions
   document.getElementById('skillAccordions').innerHTML = u.skills.map((s,i) => {
@@ -1355,6 +1415,7 @@ function navLesson(uid, skillIdx, lessonIdx) {
     lessonIdx: lessonIdx
   };
   updateActiveBanner();
+  refreshOverview(); // keep overview resume card in sync
 
   // Reset mark done button + taught badge
   const btn = document.getElementById('markDoneBtn');
@@ -1371,13 +1432,9 @@ function navLesson(uid, skillIdx, lessonIdx) {
   switchMode('prep');
 
   // Header
-  document.getElementById('bcUnit').textContent = u.name;
-  document.getElementById('bcUnit').style.color = u.color;
   document.getElementById('bcSkill').textContent = s;
   document.getElementById('bcLesson').textContent = l.n;
   document.getElementById('lessonBackLabel').textContent = u.name;
-  document.getElementById('lessonNumBadge').textContent = 'Lesson '+(lessonIdx+1);
-  document.getElementById('lessonSkillPath').textContent = s+' · '+u.name;
   document.getElementById('lessonTitle').textContent = l.n;
   document.getElementById('lessonDesc').textContent = l.d;
   document.getElementById('lessonNavLbl').textContent = 'Lesson '+(lessonIdx+1)+' of '+ls.length;
@@ -1635,7 +1692,8 @@ const classColors = ['#185FA5','#3B6D11','#993556','#534AB7','#854F0B'];
 let classes = [];
 let activeClassIdx = null;
 let classColorIdx = 0;
-let lastOpenedLesson = null; // { title, path, unitColor }
+let lastOpenedLesson = null;   // last OPENED lesson { title, path, uid, skillIdx, lessonIdx }
+let lastTaughtLesson = null;   // last MARKED DONE lesson { title, path, uid, skillIdx, lessonIdx }
 
 function openCreateClass() {
   isEditingClass = false;
@@ -1666,6 +1724,7 @@ function createClass() {
   activeClassIdx = classes.length - 1;
   closeCreateClass();
   updateClassSwitcher();
+  refreshOverview();
   loadClassView(activeClassIdx);
 }
 
@@ -1678,6 +1737,8 @@ function switchClass(idx) {
   activeClassIdx = idx;
   updateClassSwitcher();
   loadClassView(idx);
+  // Refresh overview in background so it's ready
+  refreshOverview();
 }
 
 function navMyClasses() {
@@ -1716,64 +1777,8 @@ function loadClassView(idx) {
   }
 
 
-  // Taught units section — grouped by grade
-  const taughtSection = document.getElementById('classTaughtSection');
-  if (taughtSection) {
-    const uids = ['ei','gm','res','ada','con'];
-    const uColors = {ei:'#185FA5',gm:'#3B6D11',res:'#993556',ada:'#534AB7',con:'#854F0B'};
-    const uNames = {ei:'Emotional intelligence',gm:'Growth mindset',res:'Resilience',ada:'Adaptability',con:'Confidence'};
 
-    // Find all grades with at least one lesson taught
-    const taughtGrades = Object.keys(c.taught).filter(g =>
-      Object.values(c.taught[g]||{}).some(v => v > 0)
-    );
-
-    if (taughtGrades.length === 0) {
-      taughtSection.innerHTML = '';
-      taughtSection.onclick = null;
-    } else {
-      const multiGrade = taughtGrades.length > 1;
-      let html = '<span class="class-sec-label">Lessons taught</span>';
-
-      taughtGrades.forEach(grade => {
-        const gradeData = c.taught[grade] || {};
-        const taughtUnits = uids.filter(uid => (gradeData[uid]||0) > 0);
-        if (taughtUnits.length === 0) return;
-
-        if (multiGrade) {
-          html += '<div class="class-grade-group-label">Grade ' + grade + '</div>';
-        }
-
-        taughtUnits.forEach(uid => {
-          const taught = gradeData[uid] || 0;
-          const pct = Math.round((taught/20)*100);
-          html += '<div class="class-unit-row" data-uid="' + uid + '" data-grade="' + grade + '">'
-            + '<div class="class-unit-swatch" style="background:' + uColors[uid] + ';"></div>'
-            + '<div class="class-unit-name">' + uNames[uid] + '</div>'
-            + '<div class="class-unit-bar"><div class="class-unit-bar-fill" style="width:' + pct + '%;background:' + uColors[uid] + ';"></div></div>'
-            + '<div class="class-unit-count">' + taught + ' taught</div>'
-            + '</div>';
-        });
-      });
-
-      taughtSection.innerHTML = html;
-      taughtSection.onclick = function(e) {
-        const row = e.target.closest('.class-unit-row');
-        if (row && row.dataset.uid) {
-          const grade = row.dataset.grade;
-          if (grade && grade !== currentGrade) {
-            // Switch grade pill to match
-            document.querySelectorAll('.grade-pill').forEach(p => {
-              p.classList.toggle('active', p.textContent === grade);
-            });
-            currentGrade = grade;
-          }
-          navUnit(row.dataset.uid, true);
-        }
-      };
-    }
-  }
-
+  
   showView('view-class');
 }
 
@@ -1845,13 +1850,27 @@ function toggleTaught(uid, skillIdx, lessonIdx) {
   const svgCheck = `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
   const wasDone = isDone(currentGrade, uid, skillIdx, lessonIdx);
   setDone(currentGrade, uid, skillIdx, lessonIdx, !wasDone);
-  if (!wasDone) c.lastTaughtAt = new Date().toISOString();
+  if (!wasDone) {
+    c.lastTaughtAt = new Date().toISOString();
+    // Store last taught lesson
+    lastTaughtLesson = {
+      title: document.getElementById('lessonTitle') ? document.getElementById('lessonTitle').textContent : '',
+      path: units[currentUnit].name + ' · ' + units[currentUnit].skills[currentSkillIdx] + ' · Lesson ' + (currentLessonIdx+1),
+      uid: currentUnit, skillIdx: currentSkillIdx, lessonIdx: currentLessonIdx
+    };
+  }
   if (wasDone) {
     if (checkEl) { checkEl.classList.remove('taught'); checkEl.innerHTML = ''; }
     if (c.taught[currentGrade][uid] > 0) c.taught[currentGrade][uid]--;
   } else {
     if (checkEl) { checkEl.classList.add('taught'); checkEl.innerHTML = svgCheck; }
     c.taught[currentGrade][uid] = (c.taught[currentGrade][uid]||0) + 1;
+    const ls2 = lessonData[skillIdx]||lessonData[0];
+    lastTaughtLesson = {
+      title: ls2[lessonIdx] ? ls2[lessonIdx].n : '',
+      path: units[uid].name + ' · ' + units[uid].skills[skillIdx] + ' · Lesson ' + (lessonIdx+1),
+      uid: uid, skillIdx: skillIdx, lessonIdx: lessonIdx
+    };
   }
   refreshSkillCounts(uid);
 }
@@ -1886,7 +1905,15 @@ function markDone() {
   if (!c.taught[currentGrade]) c.taught[currentGrade] = {};
   const wasDone = isDone(currentGrade, currentUnit, currentSkillIdx, currentLessonIdx);
   setDone(currentGrade, currentUnit, currentSkillIdx, currentLessonIdx, !wasDone);
-  if (!wasDone) c.lastTaughtAt = new Date().toISOString();
+  if (!wasDone) {
+    c.lastTaughtAt = new Date().toISOString();
+    // Store last taught lesson
+    lastTaughtLesson = {
+      title: document.getElementById('lessonTitle') ? document.getElementById('lessonTitle').textContent : '',
+      path: units[currentUnit].name + ' · ' + units[currentUnit].skills[currentSkillIdx] + ' · Lesson ' + (currentLessonIdx+1),
+      uid: currentUnit, skillIdx: currentSkillIdx, lessonIdx: currentLessonIdx
+    };
+  }
   if (wasDone) {
     btn.classList.remove('done');
     lbl.textContent = 'Mark as done';
@@ -1897,6 +1924,10 @@ function markDone() {
     c.taught[currentGrade][currentUnit] = (c.taught[currentGrade][currentUnit]||0) + 1;
   }
   refreshSkillCounts(currentUnit);
+  // Refresh overview cards if visible
+  if (document.getElementById('view-overview').classList.contains('active')) {
+    refreshOverview();
+  }
   // Also update lesson checkbox in unit view if visible
   const checkEl = document.getElementById('lcheck-'+currentUnit+'-'+currentSkillIdx+'-'+currentLessonIdx);
   if (checkEl) {
@@ -1911,10 +1942,7 @@ function markDone() {
     const total = Object.values(c2.taught).reduce((sum, g) => sum + Object.values(g||{}).reduce((a,b)=>a+b,0), 0);
     const metaEl = document.getElementById('classDetailMeta');
     if (metaEl) metaEl.textContent = 'Grade '+c2.grade+(total > 0 ? ' · '+total+' lesson'+(total!==1?'s':'')+' taught' : ' · No lessons taught yet');
-    // Refresh class view if visible
-    if (document.getElementById('view-class').classList.contains('active')) {
-      loadClassView(activeClassIdx);
-    }
+
   }
 }
 
