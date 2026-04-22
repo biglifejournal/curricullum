@@ -86,7 +86,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .wb-dismiss:hover { color: #888; }
 
 /* ── OVERVIEW ── */
-.page-title-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+.page-title-row { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 16px; }
 .page-class-name { font-size: 18px; font-weight: 500; color: #185FA5; margin-top: 2px; letter-spacing: 0.01em; }
 .page-title { font-size: 22px; font-weight: 500; color: #1a1a1a; }
 .about-link { font-size: 12px; color: #185FA5; cursor: pointer; display: flex; align-items: center; gap: 4px; white-space: nowrap; transition: opacity .12s; }
@@ -112,7 +112,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .unit-title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
 .unit-hero-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .unit-hero-name { font-size: 22px; font-weight: 500; }
-.unit-hero-meta { font-size: 12px; color: #bbb; }
+.unit-hero-meta { font-size: 12px; color: #bbb; padding-left: 56px; }
 
 /* Unit tabs */
 .unit-tabs-wrap { border-bottom: 0.5px solid #e8e6e0; margin: 0 -40px 22px; padding: 0 40px; }
@@ -217,7 +217,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .mark-done-btn { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; padding: 6px 12px; border-radius: 7px; cursor: pointer; transition: all .15s; white-space: nowrap; margin-left: 12px; border: 0.5px solid #e8e6e0; background: #fff; color: #888; flex-shrink: 0; }
 .mark-done-btn:hover { border-color: #3B6D11; color: #3B6D11; background: #EAF3DE; }
 .mark-done-btn.done { background: #EAF3DE; border-color: #3B6D11; color: #3B6D11; }
-.mark-done-btn svg { flex-shrink: 0; }
+.mark-done-icon { display: none; flex-shrink: 0; }
+.mark-done-btn.done .mark-done-icon { display: block; }
 /* Create class prompt */
 .create-class-prompt { position: fixed; bottom: 24px; right: 24px; background: #fff; border: 0.5px solid #e8e6e0; border-radius: 12px; padding: 14px 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); max-width: 280px; z-index: 80; display: none; animation: slideUp .2s ease; }
 .create-class-prompt.show { display: block; }
@@ -615,7 +616,53 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .oac-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #185FA5; margin-bottom: 7px; display: flex; align-items: center; gap: 5px; }
 .oac-taught-eyebrow { color: #3B6D11; }
 .oac-title { font-size: 15px; font-weight: 500; color: #1a1a1a; margin-bottom: 4px; line-height: 1.3; }
-.oac-path { font-size: 11px; color: #bbb; }
+.oac-path { font-size: 11px; color: #bbb; margin-bottom: 4px; }
+.oac-date { font-size: 10px; color: #ddd; margin-top: 5px; font-weight: 400; font-style: italic; }
+
+
+/* Also taught indicator */
+.also-taught { font-size: 11px; color: #bbb; white-space: nowrap; flex-shrink: 0; margin-right: 4px; }
+.also-taught.visible { color: #854F0B; }
+
+/* Milestone toast */
+.milestone-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: #1a1a1a; color: #fff; padding: 14px 20px; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 500; z-index: 999; transition: transform .4s cubic-bezier(0.34,1.56,0.64,1), opacity .3s; opacity: 0; pointer-events: none; max-width: 360px; }
+.milestone-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.milestone-toast-icon { font-size: 22px; flex-shrink: 0; }
+.milestone-toast-body { flex: 1; }
+.milestone-toast-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.milestone-toast-sub { font-size: 11px; color: rgba(255,255,255,0.6); font-weight: 400; }
+
+
+/* Planned card */
+.ov-planned-card { border-color: #e8e0f5; background: #faf8ff; }
+.ov-planned-card:hover { border-color: #534AB7; }
+.oac-planned-eyebrow { color: #534AB7; }
+.oac-plan-btn { font-size: 11px; font-weight: 500; color: #534AB7; cursor: pointer; text-decoration: underline; }
+.oac-plan-btn.has-plan { color: #888; font-weight: 400; text-decoration: none; }
+
+/* Class note */
+.class-note-wrap { }
+.class-note { display: flex; align-items: flex-start; gap: 8px; background: #fffde7; border: 0.5px solid #f5e642; border-radius: 10px; padding: 10px 14px; cursor: pointer; transition: border-color .12s; min-height: 38px; }
+.class-note:hover { border-color: #e0c800; }
+.class-note-text { font-size: 12px; color: #888; line-height: 1.5; flex: 1; font-style: italic; white-space: pre-wrap; }
+.class-note-text.has-content { color: #555; font-style: normal; }
+
+/* Plan picker modal */
+.plan-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 400; display: none; align-items: center; justify-content: center; }
+.plan-modal-overlay.open { display: flex; }
+.plan-modal { background: #fff; border-radius: 14px; width: min(520px, 90vw); max-height: 70vh; display: flex; flex-direction: column; box-shadow: 0 16px 48px rgba(0,0,0,0.15); overflow: hidden; }
+.plan-modal-hdr { padding: 16px 20px; border-bottom: 0.5px solid #f0ede8; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; }
+.plan-modal-title { font-size: 15px; font-weight: 500; color: #1a1a1a; }
+.plan-modal-close { width: 28px; height: 28px; border-radius: 7px; border: none; background: #f5f4f0; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #888; }
+.plan-modal-body { overflow-y: auto; padding: 8px 0; }
+.plan-unit-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: #bbb; padding: 10px 20px 4px; }
+.plan-lesson-row { display: flex; align-items: center; gap: 12px; padding: 10px 20px; cursor: pointer; transition: background .1s; border-bottom: 0.5px solid #f5f4f0; }
+.plan-lesson-row:hover { background: #f0f7fe; }
+.plan-lesson-swatch { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.plan-lesson-name { font-size: 13px; font-weight: 500; color: #1a1a1a; flex: 1; }
+.plan-lesson-skill { font-size: 11px; color: #bbb; }
+.plan-clear { display: flex; align-items: center; justify-content: center; padding: 12px; border-top: 0.5px solid #f0ede8; font-size: 12px; color: #993556; cursor: pointer; flex-shrink: 0; }
+.plan-clear:hover { background: #fbeaf0; }
 
 </style>
 </head>
@@ -701,7 +748,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         <div class="wb-icon"><svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 2l1.8 4.2 4.5.5-3.3 3.1.9 4.7L9 12l-3.9 2.5.9-4.7L2.7 6.7l4.5-.5L9 2z" stroke="#185FA5" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
         <div class="wb-body">
           <div class="wb-title">Welcome to the GrowthMinded curriculum</div>
-          <div class="wb-line">Select any unit below to get started.</div>
+          <div class="wb-line">Select your grade in the sidebar, then pick any unit to get started.</div>
         </div>
         <button class="wb-dismiss" onclick="this.closest('.welcome-banner').classList.add('dismissed')">×</button>
       </div>
@@ -715,25 +762,51 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       </div>
 
       <!-- Resume + Last taught cards -->
-      <div id="ovCardsWrap" style="display:none;margin-bottom:24px;display:none;">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" id="ovCardsGrid">
-          <!-- Continue card -->
-          <div class="ov-action-card" id="ovResumeCard" onclick="resumeLesson()" style="display:none;">
+      <div id="ovCardsWrap" style="margin-bottom:20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;" id="ovCardsGrid">
+
+          <!-- Last opened card -->
+          <div class="ov-action-card" id="ovResumeCard" style="display:none;" onclick="resumeLesson()">
             <div class="oac-eyebrow">
               <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5h5M5 2l3 3-3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Continue where you left off
+              Last opened
             </div>
-            <div class="oac-title" id="ovResumeTitle"></div>
+            <div class="oac-title" id="ovResumeTitle">—</div>
             <div class="oac-path" id="ovResumePath"></div>
+            <div class="oac-date" id="ovResumeDate"></div>
           </div>
+
           <!-- Last taught card -->
-          <div class="ov-action-card ov-taught-card" id="ovTaughtCard" onclick="if(lastTaughtLesson)navLesson(lastTaughtLesson.uid,lastTaughtLesson.skillIdx,lastTaughtLesson.lessonIdx)" style="display:none;">
+          <div class="ov-action-card ov-taught-card" id="ovTaughtCard" style="display:none;" onclick="if(lastTaughtLesson)navLesson(lastTaughtLesson.uid,lastTaughtLesson.skillIdx,lastTaughtLesson.lessonIdx)">
             <div class="oac-eyebrow oac-taught-eyebrow">
               <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
               Last taught
             </div>
-            <div class="oac-title" id="ovTaughtTitle"></div>
+            <div class="oac-title" id="ovTaughtTitle">—</div>
             <div class="oac-path" id="ovTaughtPath"></div>
+            <div class="oac-date" id="ovTaughtDate"></div>
+          </div>
+
+          <!-- Next planned card -->
+          <div class="ov-action-card ov-planned-card" id="ovPlannedCard" style="display:none;">
+            <div class="oac-eyebrow oac-planned-eyebrow">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 1v4l2.5 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Next planned
+            </div>
+            <div class="oac-title" id="ovPlannedTitle">No lesson planned yet</div>
+            <div class="oac-path" id="ovPlannedPath"></div>
+            <div style="margin-top:8px;">
+              <span class="oac-plan-btn" id="ovPlanBtn" onclick="openPlanPicker()">Plan →</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Class note -->
+        <div class="class-note-wrap" id="classNoteWrap" style="display:none;margin-top:10px;">
+          <div class="class-note" id="classNote" onclick="editClassNote()">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 9V7l5-5 2 2-5 5H2z" stroke="#bbb" stroke-width="1.2" stroke-linejoin="round"/></svg>
+            <span id="classNoteText" class="class-note-text">Add a note about this class...</span>
           </div>
         </div>
       </div>
@@ -785,7 +858,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           <div class="nav-btn" id="nextBtn"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3 2l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
         <div class="mark-done-btn" id="markDoneBtn" onclick="markDone()">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="mark-done-icon" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span id="markDoneLabel">Mark as done</span>
         </div>
 
@@ -1032,7 +1105,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div class="cc-modal">
     <div class="cc-modal-hdr">
       <div class="cc-modal-title" id="ccModalTitle">Create a class</div>
-      <div class="cc-modal-sub" id="ccModalSub">A class can be a whole classroom, a small group, or one student — just give it a name.</div>
+      <div class="cc-modal-sub" id="ccModalSub">Give it a name — a whole classroom, a small group, or one student.</div>
     </div>
     <div class="cc-modal-body">
       <label class="cc-form-label">Class name</label>
@@ -1235,50 +1308,121 @@ function refreshOverview() {
       lastOpenedLesson.skillIdx === lastTaughtLesson.skillIdx &&
       lastOpenedLesson.lessonIdx === lastTaughtLesson.lessonIdx;
 
-    const showResume = hasResume && !resumeIsSameTaught;
-    const showTaught = hasTaught;
+    // Always show all 3 cards + note when class active
+    const plannedCard = document.getElementById('ovPlannedCard');
+    const noteWrap = document.getElementById('classNoteWrap');
 
-    if (showResume || showTaught) {
+    if (c) {
       ovWrap.style.display = 'block';
-      // Single card gets full width, two cards get grid
-      grid.style.gridTemplateColumns = (showResume && showTaught) ? '1fr 1fr' : '1fr';
 
-      resumeCard.style.display = showResume ? 'block' : 'none';
-      if (showResume) {
+      // Last opened
+      resumeCard.style.display = 'block';
+      if (lastOpenedLesson) {
         document.getElementById('ovResumeTitle').textContent = lastOpenedLesson.title;
         document.getElementById('ovResumePath').textContent = lastOpenedLesson.path;
+        const rd = document.getElementById('ovResumeDate');
+        if (rd) rd.textContent = lastOpenedLesson.openedAt ? fmtDate(lastOpenedLesson.openedAt) : '';
+        resumeCard.style.opacity = '1'; resumeCard.style.cursor = 'pointer';
+      } else {
+        document.getElementById('ovResumeTitle').textContent = 'No lesson opened yet';
+        document.getElementById('ovResumePath').textContent = '';
+        const rd = document.getElementById('ovResumeDate'); if (rd) rd.textContent = '';
+        resumeCard.style.opacity = '0.5'; resumeCard.style.cursor = 'default';
       }
 
-      taughtCard.style.display = showTaught ? 'block' : 'none';
-      if (showTaught) {
+      // Last taught
+      taughtCard.style.display = 'block';
+      if (lastTaughtLesson) {
         document.getElementById('ovTaughtTitle').textContent = lastTaughtLesson.title;
         document.getElementById('ovTaughtPath').textContent = lastTaughtLesson.path;
+        const td = document.getElementById('ovTaughtDate');
+        if (td) td.textContent = lastTaughtLesson.taughtAt ? fmtDate(lastTaughtLesson.taughtAt) : '';
+        taughtCard.style.opacity = '1'; taughtCard.style.cursor = 'pointer';
+      } else {
+        document.getElementById('ovTaughtTitle').textContent = 'No lessons taught yet';
+        document.getElementById('ovTaughtPath').textContent = '';
+        const td = document.getElementById('ovTaughtDate'); if (td) td.textContent = '';
+        taughtCard.style.opacity = '0.5'; taughtCard.style.cursor = 'default';
+      }
+
+      // Next planned
+      if (plannedCard) {
+        plannedCard.style.display = 'block';
+        const planned = c.plannedNext;
+        const planBtn = document.getElementById('ovPlanBtn');
+        if (planned) {
+          document.getElementById('ovPlannedTitle').textContent = planned.title;
+          document.getElementById('ovPlannedPath').textContent = planned.path;
+          if (planBtn) { planBtn.textContent = 'Change'; planBtn.className = 'oac-plan-btn has-plan'; }
+          plannedCard.onclick = function(e) { if (!e.target.classList.contains('oac-plan-btn')) navLesson(planned.uid, planned.skillIdx, planned.lessonIdx); };
+        } else {
+          document.getElementById('ovPlannedTitle').textContent = 'No lesson planned yet';
+          document.getElementById('ovPlannedPath').textContent = '';
+          if (planBtn) { planBtn.textContent = 'Plan →'; planBtn.className = 'oac-plan-btn'; }
+          plannedCard.onclick = null;
+        }
+      }
+
+      // Class note
+      if (noteWrap) {
+        noteWrap.style.display = 'block';
+        const noteEl = document.getElementById('classNoteText');
+        const note = c.note || '';
+        if (noteEl) {
+          noteEl.textContent = note || 'Add a note about this class...';
+          noteEl.classList.toggle('has-content', !!note);
+        }
       }
     } else {
       ovWrap.style.display = 'none';
+      if (noteWrap) noteWrap.style.display = 'none';
     }
-  }
-
-  const useGrade = c ? (Object.keys(c.taught).filter(g => Object.values(c.taught[g]||{}).some(v=>v>0))[0] || currentGrade) : currentGrade;
-  const gradeData = c ? (c.taught[useGrade] || {}) : {};
 
   document.getElementById('overviewGrid').innerHTML = Object.entries(units).map(([uid, u]) => {
-    const taught = gradeData[uid] || 0;
-    const pct = Math.round((taught/20)*100);
+    // Sum taught across ALL grades for this unit
+    const taughtByGrade = c ? Object.keys(c.taught).filter(g => (c.taught[g]||{})[uid] > 0) : [];
+    const taughtTotal = taughtByGrade.reduce((sum, g) => sum + ((c.taught[g]||{})[uid]||0), 0);
+    const taught = taughtTotal;
+    const pct = Math.round((taughtTotal/20)*100);
     const hasProgress = c && taught > 0;
-    const progLabel = hasProgress ? taught + ' / 20 taught' : '';
+    // Multi-grade: show breakdown; single grade: show count
+    const progLabel = taughtByGrade.length > 1
+      ? taughtByGrade.map(g => (c.taught[g][uid]||0) + ' (' + g + ')').join(' · ')
+      : (taught > 0 ? taught + ' taught' : '');
     return '<div class="ov-card" onclick="navUnit(\'' + uid + '\')">'
       + '<div class="ov-icon" style="background:' + u.bg + ';">' + u.icon + '</div>'
       + '<div class="ov-name">' + u.name + '</div>'
       + '<div class="ov-desc">' + (u.desc || '') + '</div>'
       + '<div class="ov-prog" style="margin-top:auto;padding-top:12px;">'
       + '<div class="ov-prog-bar"><div class="ov-prog-fill" style="width:' + pct + '%;background:' + u.color + ';"></div></div>'
-      + (progLabel ? '<div class="ov-prog-label has-progress">' + progLabel + '</div>' : '<div class="ov-prog-label">5 skills</div>')
+      + (() => {
+        if (!c) return '';
+        // Gather per-grade counts for this unit
+        const gradeCounts = Object.entries(c.taught)
+          .filter(([g, gd]) => (gd[uid]||0) > 0)
+          .map(([g, gd]) => ({ grade: g, count: gd[uid] }));
+        if (gradeCounts.length === 0) return '';
+        if (gradeCounts.length === 1) {
+          const {grade, count} = gradeCounts[0];
+          return '<div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:3px;">'
+            + '<div class="ov-prog-label has-progress">' + count + ' taught</div>'
+            + (c.lastTaughtByUnit && c.lastTaughtByUnit[uid] ? '<div class="ov-last-taught">' + fmtDate(c.lastTaughtByUnit[uid]) + '</div>' : '')
+            + '</div>';
+        }
+        // Multi-grade: show breakdown
+        return '<div style="margin-top:4px;">'
+          + gradeCounts.map(({grade, count}) =>
+              '<div class="ov-prog-label has-progress" style="margin-top:1px;">Gr ' + grade + ': ' + count + ' taught</div>'
+            ).join('')
+          + (c.lastTaughtByUnit && c.lastTaughtByUnit[uid] ? '<div class="ov-last-taught">' + fmtDate(c.lastTaughtByUnit[uid]) + '</div>' : '')
+          + '</div>';
+      })()
       + '</div>'
       + '</div>';
   }).join('');
 }
 
+}
 // ══════════════════════════════
 // NAVIGATION
 // ══════════════════════════════
@@ -1351,12 +1495,21 @@ function navUnit(uid, fromClass) {
         ${ls.map((l,j) => {
           const key = uid+'-'+i+'-'+j;
           const isTaught = isDone(currentGrade, uid, i, j);
+          // Count other classes that have taught this lesson (any grade)
+          const othersTaught = !isTaught ? classes.filter((cls, ci) => {
+            if (ci === activeClassIdx) return false;
+            return Object.keys(cls.taught).some(g => doneLessons.has(g+':'+uid+'-'+i+'-'+j));
+          }).length : 0;
+          const alsoLabel = othersTaught > 0
+            ? (othersTaught === 1 ? 'Also taught to 1 other class' : 'Also taught to '+othersTaught+' other classes')
+            : '';
           return `<div class="lesson-row" onclick="navLesson('${uid}',${i},${j})">
             <div class="l-check${isTaught?' taught':''}" id="lcheck-${uid}-${i}-${j}"
               onclick="event.stopPropagation();toggleTaught('${uid}',${i},${j})">
               ${isTaught ? `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>` : ''}
             </div>
             <div class="l-info"><div class="l-name">${l.n}</div><div class="l-desc">${l.d}</div></div>
+            ${alsoLabel ? `<div class="also-taught visible">${alsoLabel}</div>` : ''}
             <div class="l-open">Open →</div>
           </div>`;
         }).join('')}
@@ -1410,9 +1563,9 @@ function navLesson(uid, skillIdx, lessonIdx) {
     title: l.n,
     path: u.name + ' · ' + u.skills[skillIdx] + ' · Lesson ' + (lessonIdx+1),
     unitColor: u.color,
-    uid: uid,
-    skillIdx: skillIdx,
-    lessonIdx: lessonIdx
+    uid: uid, skillIdx: skillIdx, lessonIdx: lessonIdx,
+    grade: currentGrade,
+    openedAt: new Date().toISOString()
   };
   updateActiveBanner();
   refreshOverview(); // keep overview resume card in sync
@@ -1420,11 +1573,20 @@ function navLesson(uid, skillIdx, lessonIdx) {
   // Reset mark done button + taught badge
   const btn = document.getElementById('markDoneBtn');
   const lbl = document.getElementById('markDoneLabel');
-  const wasTaught = isDone(currentGrade, uid, skillIdx, lessonIdx);
-  if (wasTaught) {
-    btn.classList.add('done'); lbl.textContent = 'Done ✓';
+  if (activeClassIdx === null || !classes[activeClassIdx]) {
+    btn.classList.remove('done');
+    lbl.textContent = 'Create a class to mark done';
+    btn.style.color = '#185FA5';
+    btn.style.borderColor = '#b5d4f4';
   } else {
-    btn.classList.remove('done'); lbl.textContent = 'Mark as done';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+    const wasTaught = isDone(currentGrade, uid, skillIdx, lessonIdx);
+    if (wasTaught) {
+      btn.classList.add('done'); lbl.textContent = 'Done';
+    } else {
+      btn.classList.remove('done'); lbl.textContent = 'Mark as done';
+    }
   }
 
   // Lesson view
@@ -1621,14 +1783,14 @@ function openModal(key) {
     'parent-2':{ type:'Parent guide', title:s+' at home — Activity guide', meta:'PDF · 2 pages',
       html:`<div class="modal-doc"><div class="mdoc-eyebrow">Parent activity guide</div><div class="mdoc-title">${s} at home</div><div class="mdoc-sub">Simple activities to try this week</div>
         <div class="mdoc-sec"><div class="mdoc-sec-title" style="color:${u.color};">Daily check-in</div><div class="mdoc-text">At dinner or bedtime, ask your child to share one moment connected to what they've been learning. Keep it light and conversational — the goal is connection, not assessment.</div></div>
-        <div class="mdoc-sec"><div class="mdoc-sec-title" style="color:${u.color};">In the moment</div><div class="mdoc-text">When you notice your child facing a relevant situation, gently reference what they've been learning. "Remember what you practiced at school? What might help here?"</div></div>
+        <div class="mdoc-sec"><div class="mdoc-sec-title" style="color:${u.color};">In the moment</div><div class="mdoc-text">When you notice your child facing a relevant situation, gently reference what they've been learning. 'Remember what you practiced at school? What might help here?'</div></div>
       </div>` },
     'newsletter':{ type:'Newsletter blurb', title:l.n+' — Newsletter blurb', meta:'PDF · 1 page',
       html:`<div class="modal-doc"><div class="mdoc-eyebrow">Newsletter blurb · Ready to copy &amp; paste</div><div class="mdoc-title">${l.n}</div><div class="mdoc-sub">Class newsletter · ${u.name}</div>
         <div class="mdoc-sec"><div class="mdoc-sec-title" style="color:${u.color};">Suggested text</div>
         <div class="mdoc-text" style="background:#faf9f7;padding:14px;border-radius:8px;border-left:3px solid ${u.color};line-height:1.8;">
           This week in class we explored <em>${l.n.toLowerCase()}</em> as part of our ${u.name} unit in the GrowthMinded Life Skills curriculum. ${l.d.charAt(0).toUpperCase()+l.d.slice(1)}.<br><br>
-          You can reinforce this at home by asking your child about what they learned. We'd love for these skills to carry on beyond the classroom.
+          You can reinforce this at home by asking your child about what they learned. We hope these skills carry on beyond the classroom.
         </div></div>
         <div class="mdoc-text" style="font-size:11px;color:#999;margin-top:10px;">Adapt this text to match your school's newsletter style.</div>
       </div>` }
@@ -1649,16 +1811,14 @@ function openPosterModal(uid, idx) {
   document.getElementById('mType').textContent = 'Classroom poster';
   document.getElementById('mTitle').textContent = p.name;
   document.getElementById('mMeta').textContent = 'PDF · A3 and Letter size';
-  document.getElementById('mBody').innerHTML = `
-    <div style="display:flex;justify-content:center;">
-      <div style="background:${u.bg};border-radius:12px;padding:36px;text-align:center;width:210px;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
-        <div style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;">${u.icon}</div>
-        <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.07em;color:${u.color};opacity:.6;">${u.name} · Grade ${currentGrade}</div>
-        <div style="font-size:17px;font-weight:500;color:${u.color};line-height:1.2;">${p.name}</div>
-        <div style="width:28px;height:2px;background:${u.color};opacity:.25;border-radius:2px;"></div>
-        <div style="font-size:10px;color:${u.color};opacity:.5;">GrowthMinded Life Skills</div>
-      </div>
-    </div>`;
+  document.getElementById('mBody').innerHTML = '<div style="display:flex;justify-content:center;">'
+    + '<div style="background:'+u.bg+';border-radius:12px;padding:36px;text-align:center;width:210px;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;">'
+    + '<div style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;">'+u.icon+'</div>'
+    + '<div style="font-size:9px;text-transform:uppercase;color:'+u.color+';opacity:.6;">'+u.name+' · Grade '+currentGrade+'</div>'
+    + '<div style="font-size:17px;font-weight:500;color:'+u.color+';line-height:1.2;">'+p.name+'</div>'
+    + '<div style="width:28px;height:2px;background:'+u.color+';opacity:.25;border-radius:2px;"></div>'
+    + '<div style="font-size:10px;color:'+u.color+';opacity:.5;">GrowthMinded Life Skills</div>'
+    + '</div></div>';
   document.getElementById('modalOverlay').classList.add('open');
 }
 
@@ -1668,20 +1828,14 @@ function openDocModal(type, uid) {
   document.getElementById('mType').textContent = isParent ? 'Parent overview' : 'Newsletter blurb';
   document.getElementById('mTitle').textContent = isParent ? u.name+' — What your child will learn' : 'Starting '+u.name;
   document.getElementById('mMeta').textContent = 'PDF · 2 pages';
-  document.getElementById('mBody').innerHTML = `<div class="modal-doc">
-    <div class="mdoc-eyebrow">${isParent?'Unit overview for parents':'Newsletter blurb'}</div>
-    <div class="mdoc-title">${isParent?u.name:'Starting '+u.name}</div>
-    <div class="mdoc-sub">${isParent?'Grade '+currentGrade+' · 5 skills':'Ready to copy &amp; paste'}</div>
-    ${isParent?`
-      <div class="mdoc-sec"><div class="mdoc-sec-title" style="color:${u.color};">What your child will learn</div><ul class="mdoc-list">${u.skills.map(s=>`<li>${s}</li>`).join('')}</ul></div>
-      <div class="mdoc-sec"><div class="mdoc-sec-title" style="color:${u.color};">How to support at home</div><div class="mdoc-text">Ask your child each day about what they're learning. A simple "What did you practice today?" opens the conversation. All responses are welcome.</div></div>
-    `:`
-      <div class="mdoc-sec"><div class="mdoc-sec-title" style="color:${u.color};">Suggested text</div>
-      <div class="mdoc-text" style="background:#faf9f7;padding:14px;border-radius:8px;border-left:3px solid ${u.color};line-height:1.8;">
-        We're excited to begin our <em>${u.name}</em> unit as part of the GrowthMinded Life Skills curriculum. Over the coming weeks, students will explore ${u.skills.slice(0,3).map(s=>s.toLowerCase()).join(', ')} and more.<br><br>
-        You'll receive a parent guide with each lesson with simple ways to reinforce learning at home.
-      </div></div>`}
-  </div>`;
+  document.getElementById('mBody').innerHTML = '<div class="modal-doc">'
+    + '<div class="mdoc-eyebrow">' + (isParent ? 'Unit overview for parents' : 'Newsletter blurb') + '</div>'
+    + '<div class="mdoc-title">' + (isParent ? u.name : 'Starting ' + u.name) + '</div>'
+    + '<div class="mdoc-sub">' + (isParent ? 'Grade ' + currentGrade + ' · 5 skills' : 'Ready to copy &amp; paste') + '</div>'
+    + (isParent
+      ? '<div class="mdoc-sec"><div class="mdoc-sec-title" style="color:' + u.color + ';">What your child will learn</div><ul class="mdoc-list">' + u.skills.map(s => '<li>' + s + '</li>').join('') + '</ul></div><div class="mdoc-sec"><div class="mdoc-sec-title" style="color:' + u.color + ';">How to support at home</div><div class="mdoc-text">Ask your child each day about what they are learning.</div></div>'
+      : '<div class="mdoc-sec"><div class="mdoc-sec-title" style="color:' + u.color + ';">Suggested text</div><div class="mdoc-text" style="background:#faf9f7;padding:14px;border-radius:8px;border-left:3px solid ' + u.color + ';line-height:1.8;">We are excited to begin our ' + u.name + ' unit. Students will explore ' + u.skills.slice(0,3).map(s => s.toLowerCase()).join(', ') + ' and more.</div></div>')
+    + '</div>';
   document.getElementById('modalOverlay').classList.add('open');
 }
 
@@ -1697,8 +1851,8 @@ let lastTaughtLesson = null;   // last MARKED DONE lesson { title, path, uid, sk
 
 function openCreateClass() {
   isEditingClass = false;
-  document.getElementById('ccModalTitle').textContent = 'Create a class';
-  document.getElementById('ccModalSub').textContent = 'A class can be a whole classroom, a small group, or one student — just give it a name.';
+  document.getElementById('ccModalTitle').textContent = 'Create a class to track progress';
+  document.getElementById('ccModalSub').textContent = 'Give it a name — a whole classroom, a small group, or one student.';
   document.getElementById('ccSubmitBtn').textContent = 'Create class';
   document.getElementById('ccNameInput').value = '';
   document.getElementById('ccModalOverlay').classList.add('open');
@@ -1725,6 +1879,12 @@ function createClass() {
   closeCreateClass();
   updateClassSwitcher();
   refreshOverview();
+  // Refresh page state for new class context
+  if (document.getElementById('view-lesson').classList.contains('active') && currentUnit) {
+    navLesson(currentUnit, currentSkillIdx, currentLessonIdx);
+  } else if (document.getElementById('view-unit').classList.contains('active') && currentUnit) {
+    navUnit(currentUnit);
+  }
   loadClassView(activeClassIdx);
 }
 
@@ -1754,6 +1914,14 @@ function loadClassView(idx) {
   if (idx === null || !classes[idx]) return;
   activeClassIdx = idx;
   const c = classes[idx];
+
+  // Sync grade pill to class default grade
+  if (c.grade && c.grade !== currentGrade) {
+    currentGrade = c.grade;
+    document.querySelectorAll('.grade-pill').forEach(p => {
+      p.classList.toggle('active', p.textContent === c.grade);
+    });
+  }
 
   updateClassSwitcher();
   document.getElementById('classAvatarLg').style.background = c.color;
@@ -1841,13 +2009,13 @@ function refreshSkillCounts(uid) {
 // Toggle taught state directly from accordion row
 function toggleTaught(uid, skillIdx, lessonIdx) {
   if (activeClassIdx === null || !classes[activeClassIdx]) {
-    document.getElementById('createClassPrompt').classList.add('show');
+    openCreateClass();
     return;
   }
   const c = classes[activeClassIdx];
   if (!c.taught[currentGrade]) c.taught[currentGrade] = {};
   const checkEl = document.getElementById('lcheck-'+uid+'-'+skillIdx+'-'+lessonIdx);
-  const svgCheck = `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const svgCheck = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 4-4" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const wasDone = isDone(currentGrade, uid, skillIdx, lessonIdx);
   setDone(currentGrade, uid, skillIdx, lessonIdx, !wasDone);
   if (!wasDone) {
@@ -1856,7 +2024,9 @@ function toggleTaught(uid, skillIdx, lessonIdx) {
     lastTaughtLesson = {
       title: document.getElementById('lessonTitle') ? document.getElementById('lessonTitle').textContent : '',
       path: units[currentUnit].name + ' · ' + units[currentUnit].skills[currentSkillIdx] + ' · Lesson ' + (currentLessonIdx+1),
-      uid: currentUnit, skillIdx: currentSkillIdx, lessonIdx: currentLessonIdx
+      uid: currentUnit, skillIdx: currentSkillIdx, lessonIdx: currentLessonIdx,
+      grade: currentGrade,
+      taughtAt: new Date().toISOString()
     };
   }
   if (wasDone) {
@@ -1865,11 +2035,16 @@ function toggleTaught(uid, skillIdx, lessonIdx) {
   } else {
     if (checkEl) { checkEl.classList.add('taught'); checkEl.innerHTML = svgCheck; }
     c.taught[currentGrade][uid] = (c.taught[currentGrade][uid]||0) + 1;
+    if (!c.lastTaughtByUnit) c.lastTaughtByUnit = {};
+    c.lastTaughtByUnit[uid] = new Date().toISOString();
+    checkMilestone(uid, skillIdx);
     const ls2 = lessonData[skillIdx]||lessonData[0];
     lastTaughtLesson = {
       title: ls2[lessonIdx] ? ls2[lessonIdx].n : '',
       path: units[uid].name + ' · ' + units[uid].skills[skillIdx] + ' · Lesson ' + (lessonIdx+1),
-      uid: uid, skillIdx: skillIdx, lessonIdx: lessonIdx
+      uid: uid, skillIdx: skillIdx, lessonIdx: lessonIdx,
+      grade: currentGrade,
+      taughtAt: new Date().toISOString()
     };
   }
   refreshSkillCounts(uid);
@@ -1896,7 +2071,7 @@ function setDone(grade, uid, skillIdx, lessonIdx, done) {
 }
 function markDone() {
   if (activeClassIdx === null || !classes[activeClassIdx]) {
-    document.getElementById('createClassPrompt').classList.add('show');
+    openCreateClass();
     return;
   }
   const btn = document.getElementById('markDoneBtn');
@@ -1911,7 +2086,9 @@ function markDone() {
     lastTaughtLesson = {
       title: document.getElementById('lessonTitle') ? document.getElementById('lessonTitle').textContent : '',
       path: units[currentUnit].name + ' · ' + units[currentUnit].skills[currentSkillIdx] + ' · Lesson ' + (currentLessonIdx+1),
-      uid: currentUnit, skillIdx: currentSkillIdx, lessonIdx: currentLessonIdx
+      uid: currentUnit, skillIdx: currentSkillIdx, lessonIdx: currentLessonIdx,
+      grade: currentGrade,
+      taughtAt: new Date().toISOString()
     };
   }
   if (wasDone) {
@@ -1920,8 +2097,11 @@ function markDone() {
       if (c.taught[currentGrade][currentUnit] > 0) c.taught[currentGrade][currentUnit]--;
   } else {
     btn.classList.add('done');
-    lbl.textContent = 'Done ✓';
+    lbl.textContent = 'Done';
     c.taught[currentGrade][currentUnit] = (c.taught[currentGrade][currentUnit]||0) + 1;
+    if (!c.lastTaughtByUnit) c.lastTaughtByUnit = {};
+    c.lastTaughtByUnit[currentUnit] = new Date().toISOString();
+    checkMilestone(currentUnit, currentSkillIdx);
   }
   refreshSkillCounts(currentUnit);
   // Refresh overview cards if visible
@@ -2102,31 +2282,7 @@ function restoreClass(archivedIdx) {
   loadClassView(activeClassIdx);
 }
 
-function updateArchivedSidebar() { return; // now handled by renderClassDropdown
-  /*
-  const el = document.getElementById('archivedSidebarSection');
-  if (!el || archivedClasses.length === 0) {
-    if (el) el.innerHTML = '';
-    return;
-  }
-  el.innerHTML = '<div class="archived-toggle' + (archivedSidebarOpen ? ' open' : '') + '" onclick="toggleArchivedSidebar()">'
-    + '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3 1l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-    + 'Archived (' + archivedClasses.length + ')'
-    + '</div>'
-    + '<div class="archived-list' + (archivedSidebarOpen ? ' open' : '') + '" id="archivedList">'
-    + archivedClasses.map((c, i) => 
-        '<div class="archived-class-row" onclick="restoreClass(' + i + ')">'
-        + '<div class="archived-avatar" style="background:' + c.color + ';">' + c.initials + '</div>'
-        + '<div class="archived-name">' + c.name + '</div>'
-        + '<div class="archived-restore">Restore →</div>'
-        + '</div>'
-      ).join('')
-    + '</div>';
-}
-
-*/
-}
-
+function updateArchivedSidebar() { return; } // now handled by renderClassDropdown
 
 function toggleArchivedSidebar() {
   archivedSidebarOpen = !archivedSidebarOpen;
@@ -2325,6 +2481,133 @@ function refreshSkillIntroLink() {
   }
 }
 
+
+// ══════════════════════════════
+// MILESTONE ACKNOWLEDGEMENT
+// ══════════════════════════════
+let milestoneTimer = null;
+
+function checkMilestone(uid, skillIdx) {
+  if (activeClassIdx === null || !classes[activeClassIdx]) return;
+  const c = classes[activeClassIdx];
+  const ls = lessonData[skillIdx] || lessonData[0];
+  const allTaught = ls.every((l, li) => isDone(currentGrade, uid, skillIdx, li));
+  if (!allTaught) return;
+
+  const u = units[uid];
+  const skillName = u.skills[skillIdx];
+
+  // Check if this is a unit completion
+  const allSkillsDone = u.skills.every((s, si) => {
+    const sls = lessonData[si] || lessonData[0];
+    return sls.every((l, li) => isDone(currentGrade, uid, si, li));
+  });
+
+  if (allSkillsDone) {
+    showMilestone('🏆', u.name + ' complete!', 'All skills taught to ' + c.name);
+  } else {
+    showMilestone('⭐', skillName + ' complete!', 'All ' + ls.length + ' lessons taught to ' + c.name);
+  }
+}
+
+function showMilestone(icon, title, sub) {
+  const toast = document.getElementById('milestoneToast');
+  document.getElementById('milestoneIcon').textContent = icon;
+  document.getElementById('milestoneTitle').textContent = title;
+  document.getElementById('milestoneSub').textContent = sub;
+  toast.classList.add('show');
+  if (milestoneTimer) clearTimeout(milestoneTimer);
+  milestoneTimer = setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+
+function fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+
+// ══════════════════════════════
+// PLAN NEXT LESSON + CLASS NOTE
+// ══════════════════════════════
+
+function openPlanPicker() {
+  if (!classes[activeClassIdx]) return;
+  const body = document.getElementById('planModalBody');
+  const clearBtn = document.getElementById('planClear');
+  const c = classes[activeClassIdx];
+  clearBtn.style.display = c.plannedNext ? 'flex' : 'none';
+
+  const allLessons = [];
+  body.innerHTML = Object.entries(units).map(([uid, u]) => {
+    const lessonRows = u.skills.map((s, si) => {
+      const ls = lessonData[si] || lessonData[0];
+      return ls.map((l, li) => {
+        const idx2 = allLessons.length;
+        allLessons.push({uid, si, li, name: l.n, skill: s});
+        return '<div class="plan-lesson-row" data-idx="' + idx2 + '">'
+          + '<div class="plan-lesson-swatch" style="background:' + u.color + ';"></div>'
+          + '<div class="plan-lesson-name">' + l.n + '</div>'
+          + '<div class="plan-lesson-skill">' + s + '</div>'
+          + '</div>';
+      }).join('');
+    }).join('');
+    return '<div class="plan-unit-label">' + u.name + '</div>' + lessonRows;
+  }).join('');
+
+  body.onclick = function(e) {
+    const row = e.target.closest('.plan-lesson-row');
+    if (!row) return;
+    const item = allLessons[parseInt(row.dataset.idx)];
+    if (item) setPlanLesson(item.uid, item.si, item.li, item.name, item.skill);
+  };
+
+  document.getElementById('planModalOverlay').classList.add('open');
+}
+function closePlanPicker() {
+  document.getElementById('planModalOverlay').classList.remove('open');
+}
+
+function setPlanLesson(uid, si, li, name, skill) {
+  if (!classes[activeClassIdx]) return;
+  const u = units[uid];
+  classes[activeClassIdx].plannedNext = {
+    uid, skillIdx: si, lessonIdx: li,
+    title: name,
+    path: u.name + ' · ' + skill + ' · Lesson ' + (li+1)
+  };
+  closePlanPicker();
+  refreshOverview();
+}
+
+function clearPlannedLesson() {
+  if (!classes[activeClassIdx]) return;
+  classes[activeClassIdx].plannedNext = null;
+  closePlanPicker();
+  refreshOverview();
+}
+
+// Class note
+function editClassNote() {
+  if (!classes[activeClassIdx]) return;
+  const note = classes[activeClassIdx].note || '';
+  document.getElementById('noteTextarea').value = note;
+  document.getElementById('noteModalOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('noteTextarea').focus(), 50);
+}
+
+function closeNoteEditor() {
+  document.getElementById('noteModalOverlay').classList.remove('open');
+}
+
+function saveNote() {
+  if (!classes[activeClassIdx]) return;
+  classes[activeClassIdx].note = document.getElementById('noteTextarea').value.trim();
+  closeNoteEditor();
+  refreshOverview();
+}
+
 // ══════════════════════════════
 // START
 // ══════════════════════════════
@@ -2383,6 +2666,52 @@ init();
         <span id="vmWatchedLabel">Mark as watched</span>
       </div>
       <div class="vm-done-btn" onclick="closeVideoModal()">Close</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ MILESTONE TOAST ══ -->
+<div class="milestone-toast" id="milestoneToast">
+  <div class="milestone-toast-icon" id="milestoneIcon">🎉</div>
+  <div class="milestone-toast-body">
+    <div class="milestone-toast-title" id="milestoneTitle">Skill complete!</div>
+    <div class="milestone-toast-sub" id="milestoneSub">You've taught all lessons in this skill</div>
+  </div>
+</div>
+
+
+<!-- ══ PLAN PICKER MODAL ══ -->
+<div class="plan-modal-overlay" id="planModalOverlay" onclick="if(event.target===this)closePlanPicker()">
+  <div class="plan-modal">
+    <div class="plan-modal-hdr">
+      <div class="plan-modal-title">Plan next lesson</div>
+      <button class="plan-modal-close" onclick="closePlanPicker()">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="plan-modal-body" id="planModalBody"></div>
+    <div class="plan-clear" id="planClear" onclick="clearPlannedLesson()" style="display:none;">
+      Remove planned lesson
+    </div>
+  </div>
+</div>
+
+<!-- ══ NOTE EDITOR ══ -->
+<div class="plan-modal-overlay" id="noteModalOverlay" onclick="if(event.target===this)closeNoteEditor()">
+  <div class="plan-modal" style="max-height:300px;">
+    <div class="plan-modal-hdr">
+      <div class="plan-modal-title">Class note</div>
+      <button class="plan-modal-close" onclick="closeNoteEditor()">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div style="padding:16px 20px;flex:1;">
+      <textarea id="noteTextarea" style="width:100%;height:120px;border:0.5px solid #e8e6e0;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;resize:none;outline:none;color:#555;line-height:1.6;" placeholder="Add notes about this class — what worked, what to revisit, upcoming plans..."></textarea>
+    </div>
+    <div style="padding:10px 20px;border-top:0.5px solid #f0ede8;display:flex;justify-content:flex-end;gap:8px;">
+      <div onclick="closeNoteEditor()" style="font-size:12px;color:#888;padding:7px 14px;border-radius:7px;cursor:pointer;background:#f5f4f0;">Cancel</div>
+      <div onclick="saveNote()" style="font-size:12px;font-weight:500;color:#fff;padding:7px 16px;border-radius:7px;cursor:pointer;background:#185FA5;">Save note</div>
     </div>
   </div>
 </div>
